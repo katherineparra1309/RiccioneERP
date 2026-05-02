@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Riccione · ERP Central</title>
+<style>
+:root {
+  --gold:#C9A84C;--gold-l:#E8C96A;--gold-d:#7A6230;--gold-g:rgba(201,168,76,0.16);
+  --bk:#080808;--d:#101010;--d2:#161616;--d3:#1E1E1E;--sf:#222;--sf2:#2A2A2A;
+  --br:rgba(201,168,76,0.18);--brs:rgba(201,168,76,0.45);
+  --tx:#F0EAD6;--txd:#5A5040;--txm:#A89870;
+  --red:#D95555;--grn:#50A870;--org:#D08840;--blu:#5A8DD9;--wine:#9B3A5A;
+  --r:14px;--rl:22px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bk);color:var(--tx);min-height:100vh;overflow-x:hidden}
+.screen{display:none;min-height:100vh}
+.screen.active{display:flex}
+#login{flex-direction:column;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(201,168,76,.13) 0%,transparent 65%)}
+.lw{width:100%;max-width:420px}
+.brand{text-align:center;margin-bottom:44px}
+.brand-ring{width:72px;height:72px;border:1.5px solid var(--gold);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:16px;box-shadow:0 0 40px rgba(201,168,76,.2)}
+.brand-name{font-size:34px;font-weight:700;color:var(--gold);letter-spacing:4px;display:block}
+.brand-sub{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--txd);margin-top:5px}
+.il{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--txd);display:block;margin-bottom:9px}
+.bi{width:100%;background:var(--d3);border:1.5px solid var(--br);border-radius:var(--r);padding:15px 17px;font-size:16px;color:var(--tx);outline:none;transition:.2s}
+.bi:focus{border-color:var(--gold)}
+.ib{margin-bottom:18px}
+.role-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
+.rc{background:var(--d3);border:1.5px solid var(--br);border-radius:var(--rl);padding:20px 12px;text-align:center;cursor:pointer;transition:.2s;user-select:none}
+.rc:hover{border-color:var(--gold-d)}
+.rc.on{border-color:var(--gold);background:rgba(201,168,76,.09)}
+.rc .ico{font-size:30px;display:block;margin-bottom:8px}
+.rc .lbl{font-size:13px;font-weight:500;color:var(--txm)}
+.rc.on .lbl{color:var(--gold)}
+.cta{width:100%;background:var(--gold);color:var(--bk);border:none;border-radius:var(--r);padding:17px;font-size:15px;font-weight:700;letter-spacing:2px;text-transform:uppercase;cursor:pointer;transition:.2s}
+.cta:hover:not(:disabled){background:var(--gold-l);transform:translateY(-2px)}
+.cta:disabled{opacity:.35;cursor:not-allowed}
+#app{flex-direction:column}
+.topbar{background:var(--d2);border-bottom:1px solid var(--br);height:56px;display:flex;align-items:center;padding:0 20px;gap:14px;position:sticky;top:0;z-index:100}
+.tlogo{font-size:22px;font-weight:700;color:var(--gold);letter-spacing:3px;flex:1}
+.who{background:rgba(201,168,76,.12);border:1px solid var(--br);border-radius:100px;padding:4px 13px;font-size:12px;color:var(--gold)}
+.btn-exit{background:transparent;border:1px solid var(--br);border-radius:10px;padding:6px 12px;font-size:12px;color:var(--txd);cursor:pointer;transition:.2s}
+.btn-exit:hover{color:var(--red);border-color:rgba(217,85,85,.4)}
+.layout{display:flex;flex:1;min-height:0}
+.sidebar{width:210px;background:var(--d2);border-right:1px solid var(--br);padding:14px 10px;flex-shrink:0;overflow-y:auto}
+.ngt{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--txd);padding:8px 12px 5px}
+.nb{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:11px;cursor:pointer;font-size:13px;color:var(--txm);border:1px solid transparent;transition:.15s;user-select:none}
+.nb:hover{background:var(--d3);color:var(--tx)}
+.nb.active{background:rgba(201,168,76,.1);border-color:var(--br);color:var(--gold);font-weight:500}
+.nb[data-s="barra"].active,.nb[data-s="vinos_barra"].active{background:rgba(90,141,217,.1);border-color:rgba(90,141,217,.3);color:#5A8DD9}
+.nb[data-s="vinos"].active{background:rgba(155,58,90,.12);border-color:rgba(155,58,90,.35);color:#C06080}
+.nb[data-s="gerencia"].active{background:rgba(80,168,112,.1);border-color:rgba(80,168,112,.25);color:var(--grn)}
+.ni{width:20px;text-align:center;font-size:14px}
+.content{flex:1;padding:26px 30px;overflow-y:auto;background:var(--d)}
+.view{display:none}
+.view.active{display:block}
+.ph{margin-bottom:24px}
+.ph-title{font-size:26px;font-weight:600;line-height:1.1;color:var(--tx)}
+.ph-sub{font-size:13px;color:var(--txd);margin-top:4px}
+.card{background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);padding:22px 24px;margin-bottom:16px}
+.card-hd{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:18px;display:flex;align-items:center;gap:7px}
+.card-hd.blu{color:#5A8DD9}
+.card-hd.win{color:#C06080}
+.card-hd.grn{color:var(--grn)}
+.section-bar{height:3px;border-radius:100px;margin-bottom:20px;width:60px}
+.sb-barra,.sb-vinos_barra{background:#5A8DD9}
+.sb-cocina{background:var(--gold)}
+.sb-vinos{background:#9B3A5A}
+.sb-gerencia{background:var(--grn)}
+.fg{display:grid;gap:12px;margin-bottom:12px}
+.fg.c2{grid-template-columns:1fr 1fr}
+.fg.c3{grid-template-columns:1fr 1fr 1fr}
+.fg.c4{grid-template-columns:1fr 1fr 1fr 1fr}
+.f{display:flex;flex-direction:column;gap:6px}
+.f label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--txd)}
+.f input,.f select{background:var(--d3);border:1.5px solid rgba(201,168,76,.13);border-radius:12px;padding:13px 15px;font-size:15px;color:var(--tx);outline:none;transition:.2s;width:100%}
+.f input:focus,.f select:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.09)}
+.f input[type=number]{font-size:20px;font-weight:600;text-align:center;padding:14px}
+.f select option{background:var(--d3)}
+.f.blu input:focus,.f.blu select:focus{border-color:#5A8DD9;box-shadow:0 0 0 3px rgba(90,141,217,.1)}
+.f.win input:focus,.f.win select:focus{border-color:#9B3A5A;box-shadow:0 0 0 3px rgba(155,58,90,.1)}
+.rb{background:rgba(201,168,76,.08);border:1.5px solid var(--br);border-radius:12px;padding:13px 15px;display:flex;flex-direction:column;gap:2px}
+.rb.blu{background:rgba(90,141,217,.07);border-color:rgba(90,141,217,.3)}
+.rl2{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txd)}
+.rv{font-size:24px;font-weight:700;color:var(--gold);line-height:1}
+.rv.blu{color:#5A8DD9}
+.ru{font-size:11px;color:var(--txd)}
+.orig-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px}
+.ob{background:var(--d3);border:2px solid var(--br);border-radius:var(--rl);padding:20px 15px;text-align:center;cursor:pointer;transition:.2s;user-select:none}
+.ob:hover{border-color:var(--gold-d)}
+.ob.on{border-color:var(--gold);background:var(--gold-g)}
+.ob .oi{font-size:30px;display:block;margin-bottom:8px}
+.ob .ol{font-size:14px;font-weight:600;color:var(--txm)}
+.ob .os{font-size:11px;color:var(--txd);margin-top:3px}
+.ob.on .ol{color:var(--gold)}
+.mv{display:flex;align-items:center;gap:12px;padding:14px;background:var(--d3);border-radius:12px;margin-top:8px}
+.mvi{text-align:center}
+.mvn{font-size:26px;font-weight:600}
+.mvl{font-size:9px;letter-spacing:1px;color:var(--txd);text-transform:uppercase}
+.mva{font-size:20px;color:var(--txd);flex:1;text-align:center}
+.btn{border:none;border-radius:12px;padding:12px 20px;font-size:13px;font-weight:600;cursor:pointer;transition:.15s;display:inline-flex;align-items:center;gap:7px}
+.bg{background:var(--gold);color:var(--bk)}
+.bg:hover{background:var(--gold-l);transform:translateY(-1px)}
+.bb{background:#5A8DD9;color:#fff}
+.bb:hover{background:#6A9DE9;transform:translateY(-1px)}
+.bw2{background:#9B3A5A;color:#fff}
+.bw2:hover{background:#B04A6A;transform:translateY(-1px)}
+.bgg{background:var(--grn);color:#fff}
+.bgg:hover{background:#60B880;transform:translateY(-1px)}
+.bo{background:transparent;border:1.5px solid var(--br);color:var(--txm)}
+.bo:hover{border-color:var(--gold-d);color:var(--tx)}
+.bxl{padding:16px 28px;font-size:15px;border-radius:14px;width:100%;justify-content:center}
+.btn-row{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+.al{border-radius:12px;padding:12px 15px;font-size:13px;display:flex;align-items:flex-start;gap:9px;margin-top:12px;line-height:1.5}
+.al.hidden{display:none}
+.aok{background:rgba(80,168,112,.12);border:1px solid rgba(80,168,112,.3);color:var(--grn)}
+.aw{background:rgba(208,136,64,.12);border:1px solid rgba(208,136,64,.3);color:var(--org)}
+.ae{background:rgba(217,85,85,.12);border:1px solid rgba(217,85,85,.3);color:var(--red)}
+.ai{background:rgba(201,168,76,.08);border:1px solid var(--br);color:var(--txm)}
+.aib{background:rgba(90,141,217,.08);border:1px solid rgba(90,141,217,.3);color:#5A8DD9}
+.divider{height:1px;background:var(--br);margin:18px 0}
+.hidden{display:none!important}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
+.kpi{background:var(--sf);border:1px solid var(--br);border-radius:var(--rl);padding:18px}
+.kl{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--txd);margin-bottom:8px}
+.kv{font-size:30px;color:var(--gold);line-height:1;font-weight:700}
+.kv.blu{color:#5A8DD9}
+.kv.grn{color:var(--grn)}
+.kv.win{color:#C06080}
+.ks{font-size:11px;color:var(--txd);margin-top:4px}
+.dt{width:100%;border-collapse:collapse}
+.dt th{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txd);padding:9px 11px;text-align:left;border-bottom:1px solid var(--br)}
+.dt td{padding:11px 11px;font-size:12px;color:var(--txm);border-bottom:1px solid rgba(201,168,76,.06)}
+.dt tr:hover td{background:rgba(201,168,76,.03)}
+.dt td.g{color:var(--gold);font-weight:600}
+.dt td.gr{color:var(--grn)}
+.dt td.re{color:var(--red)}
+.dt td.or{color:var(--org)}
+.dt td.bl{color:#5A8DD9}
+.dt td.wi{color:#C06080}
+.badge{display:inline-block;padding:3px 9px;border-radius:100px;font-size:10px;font-weight:500}
+.bok{background:rgba(80,168,112,.12);color:var(--grn);border:1px solid rgba(80,168,112,.25)}
+.bw{background:rgba(208,136,64,.12);color:var(--org);border:1px solid rgba(208,136,64,.25)}
+.be{background:rgba(217,85,85,.12);color:var(--red);border:1px solid rgba(217,85,85,.25)}
+.bbl{background:rgba(90,141,217,.12);color:#5A8DD9;border:1px solid rgba(90,141,217,.25)}
+.tabs{display:flex;gap:4px;background:var(--d3);padding:4px;border-radius:12px;width:fit-content;margin-bottom:20px;flex-wrap:wrap}
+.tab{padding:8px 16px;border-radius:9px;font-size:12px;cursor:pointer;color:var(--txd);transition:.15s;font-weight:500}
+.tab.active{background:var(--sf2);color:var(--gold)}
+.pw{background:var(--d3);border-radius:100px;height:5px;overflow:hidden;margin-top:5px}
+.pf{height:100%;border-radius:100px;transition:width .4s ease}
+.chart{display:flex;align-items:flex-end;gap:7px;height:150px;padding-top:10px}
+.cb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.cbf{width:100%;border-radius:4px 4px 0 0;min-height:4px}
+.cbl{font-size:9px;color:var(--txd);text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;max-width:65px}
+.cbv{font-size:10px;font-weight:600}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--sf2);border:1px solid var(--br);border-radius:var(--r);padding:13px 18px;font-size:13px;box-shadow:0 12px 40px rgba(0,0,0,.7);z-index:999;transform:translateY(80px);opacity:0;transition:all .3s;max-width:300px;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+.tok{border-color:rgba(80,168,112,.5);color:var(--grn)}
+.terr{border-color:rgba(217,85,85,.5);color:var(--red)}
+.tw{border-color:rgba(208,136,64,.5);color:var(--org)}
+.iw{overflow-x:auto}
+.it{width:100%;border-collapse:separate;border-spacing:0;min-width:900px}
+.it thead th{background:var(--d3);padding:9px 10px;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txd);border-bottom:1px solid var(--br)}
+.it thead th:first-child{min-width:200px;text-align:left}
+.dh{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;font-size:8px;color:var(--txd);margin-top:3px}
+.dh span{text-align:center}
+.it tbody td{border-bottom:1px solid rgba(201,168,76,.05);padding:0}
+.it tbody td:first-child{padding:11px 13px;font-size:12px;color:var(--txm);font-weight:500;vertical-align:middle;border-right:1px solid var(--br)}
+.dc{display:grid;grid-template-columns:1fr 1fr 1fr}
+.sc{padding:9px 5px;text-align:center;font-size:12px;border-right:1px solid rgba(201,168,76,.04)}
+.sc.si{color:var(--txd)}
+.sc.inp{color:var(--grn);font-weight:600}
+.sc.cons{color:var(--org)}
+.cat-header td{background:var(--d3);color:var(--txd);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:7px 13px!important;font-weight:600;border-bottom:1px solid var(--br)!important}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--d)}
+::-webkit-scrollbar-thumb{background:var(--d3);border-radius:3px}
+@media(max-width:768px){.sidebar{display:none}.content{padding:18px 14px}.fg.c2,.fg.c3,.fg.c4{grid-template-columns:1fr}.kpi-grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login" class="screen active">
+  <div class="lw">
+    <div class="brand">
+      <div class="brand-ring">🍽</div>
+      <span class="brand-name">RICCIONE</span>
+      <span class="brand-sub">Sistema Central · ERP</span>
+    </div>
+    <div class="ib">
+      <label class="il">Nombre</label>
+      <input class="bi" id="ln" type="text" placeholder="¿Quién eres?" autocomplete="off" oninput="chkL()">
+    </div>
+    <div class="ib">
+      <label class="il">Sección</label>
+      <div class="role-grid">
+        <div class="rc" data-r="barra" onclick="pickR(this)"><span class="ico">🍹</span><span class="lbl">Barra</span></div>
+        <div class="rc" data-r="cocina" onclick="pickR(this)"><span class="ico">👨‍🍳</span><span class="lbl">Cocina</span></div>
+        <div class="rc" data-r="vinos" onclick="pickR(this)" style="border-color:rgba(155,58,90,.35)"><span class="ico">🍷</span><span class="lbl" style="color:#C06080">Vinos</span></div>
+        <div class="rc" data-r="gerencia" onclick="pickR(this)"><span class="ico">👩‍💼</span><span class="lbl">Gerencia</span></div>
+      </div>
+    </div>
+    <button class="cta" id="lbtn" onclick="login()" disabled>Entrar al Sistema</button>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="screen">
+  <div class="topbar">
+    <div class="tlogo">RICCIONE</div>
+    <div class="who" id="who"></div>
+    <button class="btn-exit" onclick="logout()">Salir</button>
+  </div>
+  <div class="layout">
+    <nav class="sidebar" id="sb"></nav>
+    <main class="content">
+
+      <!-- COCINA · INGRESO -->
+      <div class="view" id="v-coc-ingreso">
+        <div class="section-bar sb-cocina"></div>
+        <div class="ph"><div class="ph-title">Ingreso de Insumos</div><div class="ph-sub">Registra el ingreso · menos de 10 segundos</div></div>
+        <div class="card">
+          <div class="card-hd">① Datos básicos</div>
+          <div class="fg c3">
+            <div class="f"><label>Fecha</label><input type="date" id="ci-fecha"></div>
+            <div class="f"><label>Insumo</label>
+              <select id="ci-ins" onchange="chkBodegaStock()">
+                <option value="">— Elegir —</option>
+                <optgroup label="Proteínas Mar">
+                  <option>ATUN</option><option>PULPO</option><option>SALMÓN</option>
+                  <option>MERLUZA</option><option>OSTIONES</option><option>CAMARÓN</option>
+                  <option>CENTOLLA</option><option>LANGOSTINO</option><option>CALAMAR</option>
+                </optgroup>
+                <optgroup label="Carnes">
+                  <option>FILETE</option><option>FLAT IRON</option><option>ENTRAÑA</option>
+                  <option>VACUNO (GENERAL)</option><option>SOBRECOSTILLA</option>
+                  <option>OSOBUCO</option><option>PATO</option><option>POLLO</option>
+                  <option>PIERNA CORDERO</option>
+                </optgroup>
+
+              </select>
+            </div>
+            <div class="f"><label>Proveedor</label><input type="text" id="ci-prov" placeholder="Ej: La Flor" style="font-size:15px;text-align:left;padding:13px 15px"></div>
+          </div>
+          <label class="il" style="margin-bottom:10px;display:block">② ¿De dónde viene?</label>
+          <div class="orig-grid">
+            <div class="ob" id="ob-prov" onclick="setOrig('prov')"><span class="oi">🚚</span><span class="ol">Desde Proveedor</span><span class="os">Llegó hoy</span></div>
+            <div class="ob" id="ob-bod" onclick="setOrig('bod')"><span class="oi">🏪</span><span class="ol">Desde Bodega</span><span class="os" id="ob-bod-stock">Ver stock →</span></div>
+          </div>
+          <div id="blq-prov" class="hidden">
+            <div class="card-hd" style="margin-top:4px">③ Cantidades</div>
+            <div class="fg c3">
+              <div class="f"><label>KG Ingresados</label><input type="number" id="cp-tot" min="0" step=".1" placeholder="0.0" oninput="calcCocProv()"></div>
+              <div class="f"><label>KG → Bodega</label><input type="number" id="cp-bod" min="0" step=".1" placeholder="0.0" oninput="calcCocProv()"></div>
+              <div class="f"><label>KG → Producción</label><div class="rb"><span class="rl2">Automático</span><span class="rv" id="cp-prod">—</span><span class="ru">ingresados − bodega</span></div></div>
+            </div>
+            <div class="fg c2">
+              <div class="f"><label>Merma (KG)</label><input type="number" id="cp-mer" min="0" step=".1" placeholder="0.0" oninput="calcCocProv()"></div>
+              <div class="f"><label>✅ KG Limpio</label><div class="rb" style="border-color:var(--gold)"><span class="rl2">Para producción</span><span class="rv" id="cp-limp" style="font-size:30px">—</span><span class="ru" id="cp-pct"></span></div></div>
+            </div>
+            <div id="cp-mv" class="hidden">
+              <div class="mv">
+                <div class="mvi"><div class="mvn" id="mv-tot" style="color:var(--txm)">0</div><div class="mvl">Total</div></div>
+                <div class="mva">→</div>
+                <div class="mvi"><div class="mvn" id="mv-bod" style="color:var(--txd)">0</div><div class="mvl">Bodega</div></div>
+                <div class="mva">+</div>
+                <div class="mvi"><div class="mvn" id="mv-mer" style="color:var(--red)">0</div><div class="mvl">Merma</div></div>
+                <div class="mva">→</div>
+                <div class="mvi"><div class="mvn" id="mv-limp" style="color:var(--gold)">0</div><div class="mvl">Limpio</div></div>
+              </div>
+            </div>
+          </div>
+          <div id="blq-bod" class="hidden">
+            <div class="al aib" id="bod-info" style="margin-bottom:14px">📦 Stock en bodega: <strong id="bod-kgd">—</strong> kg disponibles</div>
+            <div class="fg c2">
+              <div class="f"><label>KG desde Bodega → Producción</label><input type="number" id="cb-prod" min="0" step=".1" placeholder="0.0" oninput="calcCocBod()"></div>
+              <div class="f"><label>Merma (KG)</label><input type="number" id="cb-mer" min="0" step=".1" placeholder="0.0" oninput="calcCocBod()"></div>
+            </div>
+            <div class="fg c2">
+              <div class="f"><label>✅ KG Limpio Final</label><div class="rb" style="border-color:var(--gold)"><span class="rl2">Para producción</span><span class="rv" id="cb-limp" style="font-size:30px">—</span><span class="ru" id="cb-pct"></span></div></div>
+              <div class="f"><label>Stock bodega tras retiro</label><div class="rb"><span class="rl2">Quedará</span><span class="rv" id="cb-rest">—</span><span class="ru">kg</span></div></div>
+            </div>
+          </div>
+          <div id="ci-al" class="al hidden"></div>
+          <div id="blq-save" class="hidden">
+            <div class="divider"></div>
+            <button class="btn bg bxl" onclick="guardarCocIngreso()">💾 &nbsp;Guardar Ingreso</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd">📋 Registros de hoy</div>
+          <table class="dt"><thead><tr><th>Insumo</th><th>Origen</th><th>KG Prod.</th><th>Merma</th><th>KG Limpio</th><th>% Merma</th><th>Estado</th></tr></thead>
+          <tbody id="ci-log"><tr><td colspan="7" style="text-align:center;color:var(--txd);padding:20px">Sin registros</td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- COCINA · PRODUCCIÓN -->
+      <div class="view" id="v-coc-prod">
+        <div class="section-bar sb-cocina"></div>
+        <div class="ph"><div class="ph-title">Producción</div><div class="ph-sub">Registra porciones producidas con gramaje por porción</div></div>
+        <div class="card">
+          <div class="card-hd">⚙️ Configurar</div>
+          <div class="fg c3">
+            <div class="f"><label>Fecha</label><input type="date" id="pr-f"></div>
+            <div class="f"><label>Insumo base</label>
+              <select id="pr-ins" onchange="loadProd()">
+                <option value="">— Elegir —</option>
+                <option>ATUN</option><option>PULPO</option><option>FLAT IRON</option>
+                <option>FILETE</option><option>MERLUZA</option><option>SALMÓN</option>
+                <option>VACUNO (GENERAL)</option><option>PATO</option><option>OSTIONES</option>
+                <option>CAMARÓN</option>                <option>CENTOLLA</option><option>CALAMAR</option>
+                <option>FRUTTI DI MARE</option>
+                <option>SOBRECOSTILLA</option><option>PIERNA CORDERO</option>
+              </select>
+            </div>
+            <div class="f"><label>KG Limpio disponible</label><div class="rb"><span class="rl2">Calculado</span><span class="rv" id="pr-disp">—</span><span class="ru">kg</span></div></div>
+          </div>
+          <div id="pr-nostock" class="al aw hidden">⚠️ Sin insumo limpio en esta fecha. Registra el ingreso primero.</div>
+        </div>
+        <div class="card">
+          <div class="card-hd">🍽 Porciones a producir</div>
+          <div id="pr-list" style="font-size:12px;color:var(--txd);padding:10px 0">Selecciona un insumo para ver las preparaciones</div>
+          <div class="divider"></div>
+          <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+            <div><div style="font-size:9px;letter-spacing:2px;color:var(--txd);margin-bottom:3px">TOTAL USADO</div>
+              <div style="font-size:28px;font-weight:700;color:var(--gold)" id="pr-tot">0.000 kg</div></div>
+            <div style="flex:1;min-width:180px">
+              <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--txd);margin-bottom:3px"><span>Utilizado</span><span id="pr-pct">0%</span></div>
+              <div class="pw"><div class="pf" id="pr-prog" style="width:0%;background:var(--gold)"></div></div>
+              <div style="font-size:11px;margin-top:5px" id="pr-diff"></div>
+            </div>
+          </div>
+          <div id="pr-al" class="al hidden" style="margin-top:12px"></div>
+          <div class="btn-row"><button class="btn bg bxl" onclick="guardarProd()">💾 &nbsp;Guardar Producción</button></div>
+        </div>
+      </div>
+
+      <!-- COCINA · CONTEO -->
+      <div class="view" id="v-coc-conteo">
+        <div class="section-bar sb-cocina"></div>
+        <div class="ph"><div class="ph-title">Conteo Final · Cocina</div><div class="ph-sub">Stock real al cierre de turno</div></div>
+        <div class="card">
+          <div class="fg c2">
+            <div class="f"><label>Fecha</label><input type="date" id="cc-fecha"></div>
+            <div style="display:flex;align-items:flex-end"><button class="btn bg" style="width:100%" onclick="loadCocConteo()">Cargar preparaciones →</button></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd">🗂 Stock por preparación</div>
+          <div style="display:grid;grid-template-columns:1fr 120px 120px 90px;gap:8px;padding-bottom:9px;border-bottom:1px solid var(--br);margin-bottom:4px">
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd)">PREPARACIÓN</div>
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">COCINA</div>
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">BODEGA</div>
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">TOTAL</div>
+          </div>
+          <div id="cc-list"></div>
+          <div class="btn-row" style="margin-top:18px"><button class="btn bg bxl" onclick="guardarCocConteo()">💾 &nbsp;Guardar Conteo</button></div>
+        </div>
+      </div>
+
+      <!-- BARRA · INGRESO -->
+      <div class="view" id="v-bar-ingreso">
+        <div class="section-bar sb-barra"></div>
+        <div class="ph"><div class="ph-title">Ingreso de Bebidas</div><div class="ph-sub">Registra las unidades recibidas en barra hoy</div></div>
+        <div class="card">
+          <div class="card-hd blu">① Datos del ingreso</div>
+          <div class="fg c3">
+            <div class="f blu"><label>Fecha</label><input type="date" id="bi-fecha"></div>
+            <div class="f blu"><label>Categoría</label>
+              <select id="bi-cat" onchange="filterBarProd()">
+                <option value="">— Todas —</option>
+                <option>Gin</option><option>Pisco</option><option>Vodka</option><option>Ron</option>
+                <option>Whisky</option><option>Tequila</option><option>Aperitivos/Licores</option>
+                <option>Cerveza</option><option>Espumante</option><option>Gaseosas</option>
+                <option>Mixers/Jugos</option><option>Aguas</option><option>Energéticas</option>
+              </select>
+            </div>
+            <div class="f blu"><label>Producto</label>
+              <select id="bi-prod"><option value="">— Elegir —</option></select>
+            </div>
+          </div>
+          <div class="fg c3">
+            <div class="f blu"><label>ML por botella/lata</label><input type="number" id="bi-ml" min="0" placeholder="750" oninput="calcBar()"></div>
+            <div class="f blu"><label>Unidades Recibidas</label><input type="number" id="bi-uds" min="0" placeholder="0" oninput="calcBar()"></div>
+            <div class="f"><label>✅ ML Totales</label><div class="rb blu"><span class="rl2">Calculado</span><span class="rv blu" id="bi-ml-total">—</span><span class="ru">uds × ml/bot.</span></div></div>
+          </div>
+          <div class="btn-row"><button class="btn bb bxl" onclick="guardarBarIngreso()">💾 &nbsp;Guardar Ingreso Barra</button></div>
+        </div>
+        <div class="card">
+          <div class="card-hd blu">📋 Ingresos del día</div>
+          <table class="dt"><thead><tr><th>Producto</th><th>Categoría</th><th>Unidades</th><th>ML/Bot.</th><th>ML Total</th><th>Hora</th></tr></thead>
+          <tbody id="bi-tbody"><tr><td colspan="6" style="text-align:center;color:var(--txd);padding:20px">Sin ingresos hoy</td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- BARRA · CONTEO -->
+      <div class="view" id="v-bar-conteo">
+        <div class="section-bar sb-barra"></div>
+        <div class="ph"><div class="ph-title">Conteo Final · Barra</div><div class="ph-sub">Botellas abiertas + llenas + bodega al cierre</div></div>
+        <div class="card">
+          <div class="fg c2">
+            <div class="f blu"><label>Fecha</label><input type="date" id="bc-fecha"></div>
+            <div style="display:flex;align-items:flex-end"><button class="btn bb" style="width:100%" onclick="loadBarConteo()">Cargar productos →</button></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd blu">🍶 Stock por producto</div>
+          <div style="display:grid;grid-template-columns:1fr 90px 90px 90px 90px;gap:8px;padding-bottom:10px;border-bottom:1px solid var(--br);margin-bottom:4px">
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd)">PRODUCTO</div>
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">BOT. ABIERTA</div>
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">BOT. LLENAS</div>
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">BODEGA</div>
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">TOTAL (ml)</div>
+          </div>
+          <div id="bc-list"></div>
+          <div class="btn-row" style="margin-top:18px"><button class="btn bb bxl" onclick="guardarBarConteo()">💾 &nbsp;Guardar Conteo Barra</button></div>
+        </div>
+      </div>
+
+      <!-- BARRA · INVENTARIO SEMANAL -->
+      <div class="view" id="v-bar-inv">
+        <div class="section-bar sb-barra"></div>
+        <div class="ph"><div class="ph-title">Inventario Semanal · Barra</div><div class="ph-sub">SI = Stock Inicial · I = Ingresos · C = Consumo</div></div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <button class="btn bo" style="padding:7px 12px" onclick="barSemAnt()">◀</button>
+              <span id="bar-sem-lbl" style="font-size:13px;color:var(--txm);min-width:160px;text-align:center"></span>
+              <button class="btn bo" style="padding:7px 12px" onclick="barSemSig()">▶</button>
+            </div>
+            <button class="btn bo" style="font-size:12px" onclick="syncVentas('bar')">🔄 Sincronizar Toteat</button>
+          </div>
+          <div class="iw"><table class="it"><thead id="bar-inv-thead"></thead><tbody id="bar-inv-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- VINOS BARRA · INGRESO -->
+      <div class="view" id="v-vinos_barra-ingreso">
+        <div class="section-bar sb-vinos_barra"></div>
+        <div class="ph"><div class="ph-title">Ingreso de Vinos</div><div class="ph-sub">Registra botellas recibidas por cepa</div></div>
+        <div class="card">
+          <div class="card-hd blu">① Datos del ingreso</div>
+          <div class="fg c3">
+            <div class="f blu"><label>Fecha</label><input type="date" id="vi-fecha"></div>
+            <div class="f blu"><label>Cepa / Categoría</label>
+              <select id="vi-cepa" onchange="filterVinoProd()">
+                <option value="">— Todas —</option>
+                <option>Por copa</option><option>Cabernet Sauvignon</option><option>Carmenere</option>
+                <option>Pinot Noir</option><option>Merlot</option><option>Syrah</option>
+                <option>Ensamblaje</option><option>Chardonnay</option><option>Otros blancos</option>
+                <option>Rosados</option><option>Otros tintos</option><option>Íconos</option>
+              </select>
+            </div>
+            <div class="f blu"><label>Vino</label>
+              <select id="vi-prod"><option value="">— Elegir —</option></select>
+            </div>
+          </div>
+          <div class="fg c3">
+            <div class="f blu"><label>ML por botella</label><input type="number" id="vi-ml" min="0" placeholder="750" oninput="calcVino()"></div>
+            <div class="f blu"><label>Botellas recibidas</label><input type="number" id="vi-uds" min="0" placeholder="0" oninput="calcVino()"></div>
+            <div class="f"><label>✅ ML Totales</label><div class="rb blu"><span class="rl2">Calculado</span><span class="rv blu" id="vi-ml-total">—</span><span class="ru">bot × ml</span></div></div>
+          </div>
+          <div class="btn-row"><button class="btn bb bxl" onclick="guardarVinoIngreso()">💾 &nbsp;Guardar Ingreso Vinos</button></div>
+        </div>
+        <div class="card">
+          <div class="card-hd blu">📋 Ingresos del día</div>
+          <table class="dt"><thead><tr><th>Vino</th><th>Cepa</th><th>Botellas</th><th>ML Total</th><th>Hora</th></tr></thead>
+          <tbody id="vi-tbody"><tr><td colspan="5" style="text-align:center;color:var(--txd);padding:20px">Sin ingresos hoy</td></tr></tbody></table>
+        </div>
+      </div>
+
+      <!-- VINOS BARRA · CONTEO -->
+      <div class="view" id="v-vinos_barra-conteo">
+        <div class="section-bar sb-vinos_barra"></div>
+        <div class="ph"><div class="ph-title">Conteo Final · Vinos</div><div class="ph-sub">Stock por cepa al cierre</div></div>
+        <div class="card">
+          <div class="fg c2">
+            <div class="f blu"><label>Fecha</label><input type="date" id="vc-fecha"></div>
+            <div style="display:flex;align-items:flex-end"><button class="btn bb" style="width:100%" onclick="loadVinoConteo()">Cargar vinos →</button></div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-hd blu">🍷 Stock por vino</div>
+          <div style="display:grid;grid-template-columns:1fr 90px 90px 90px 90px;gap:8px;padding-bottom:10px;border-bottom:1px solid var(--br);margin-bottom:4px">
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd)">VINO</div>
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">BOT. ABIERTA</div>
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">BOT. LLENAS</div>
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">BODEGA</div>
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">TOTAL</div>
+          </div>
+          <div id="vc-list"></div>
+          <div class="btn-row" style="margin-top:18px"><button class="btn bb bxl" onclick="guardarVinoConteo()">💾 &nbsp;Guardar Conteo Vinos</button></div>
+        </div>
+      </div>
+
+      <!-- VINOS BARRA · INVENTARIO -->
+      <div class="view" id="v-vinos_barra-inv">
+        <div class="section-bar sb-vinos_barra"></div>
+        <div class="ph"><div class="ph-title">Inventario Semanal · Vinos</div><div class="ph-sub">Por cepa · SI / Ingresos / Consumo</div></div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <button class="btn bo" style="padding:7px 12px" onclick="winSemAnt()">◀</button>
+              <span id="win-sem-lbl" style="font-size:13px;color:var(--txm);min-width:160px;text-align:center"></span>
+              <button class="btn bo" style="padding:7px 12px" onclick="winSemSig()">▶</button>
+            </div>
+            <button class="btn bo" style="font-size:12px" onclick="syncVentas('win')">🔄 Sincronizar Toteat</button>
+          </div>
+          <div class="iw"><table class="it"><thead id="win-inv-thead"></thead><tbody id="win-inv-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- GERENCIA · DASHBOARD -->
+      <div class="view" id="v-ger-dash">
+        <div class="section-bar sb-gerencia"></div>
+        <div class="ph"><div class="ph-title">Dashboard</div><div class="ph-sub">Resumen ejecutivo · Barra + Cocina + Vinos</div></div>
+        <div class="kpi-grid">
+          <div class="kpi"><div class="kl">Porciones Cocina</div><div class="kv">247</div><div class="ks">stock activo</div></div>
+          <div class="kpi"><div class="kl">Stock Barra (bot.)</div><div class="kv blu">94</div><div class="ks">botellas disponibles</div></div>
+          <div class="kpi"><div class="kl">Stock Vinos (bot.)</div><div class="kv win">68</div><div class="ks">botellas disponibles</div></div>
+          <div class="kpi"><div class="kl">Ventas Semana</div><div class="kv grn">$14.2M</div><div class="ks">barra + cocina + vinos</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
+          <div class="card"><div class="card-hd grn">📊 Top cocina</div><div class="chart" id="ger-chart-coc"></div></div>
+          <div class="card"><div class="card-hd blu">📊 Top barra</div><div class="chart" id="ger-chart-bar"></div></div>
+          <div class="card"><div class="card-hd win">📊 Top vinos</div><div class="chart" id="ger-chart-win"></div></div>
+        </div>
+        <div class="card">
+          <div class="card-hd">⚠️ Alertas de stock</div>
+          <table class="dt"><thead><tr><th>Sección</th><th>Ítem</th><th>Stock</th><th>Nivel</th><th>Acción</th></tr></thead>
+          <tbody id="ger-alertas"></tbody></table>
+        </div>
+      </div>
+
+      <!-- GERENCIA · VENTAS -->
+      <div class="view" id="v-ger-ventas">
+        <div class="section-bar sb-gerencia"></div>
+        <div class="ph"><div class="ph-title">Ventas · Toteat</div><div class="ph-sub">Centralizado: Barra + Cocina + Vinos</div></div>
+        <div class="card">
+          <div class="card-hd grn">🔄 Sincronización central</div>
+          <div class="al ai" style="margin-bottom:14px">El Apps Script importa ventas desde Toteat, separa automáticamente productos de barra, cocina y vinos, y actualiza el campo <strong>Consumo</strong> en todos los inventarios.</div>
+          <button class="btn bgg" style="font-size:15px;padding:16px 28px" onclick="syncVentas('all')">🔄 &nbsp;Sincronizar Barra + Cocina + Vinos</button>
+          <div id="sync-res" class="al hidden" style="margin-top:12px"></div>
+        </div>
+        <div class="card">
+          <div class="card-hd">📊 Ventas por sección</div>
+          <div class="tabs">
+            <div class="tab active" onclick="switchVtab(this,'vt-todos')">Todos</div>
+            <div class="tab" onclick="switchVtab(this,'vt-coc')">Cocina</div>
+            <div class="tab" onclick="switchVtab(this,'vt-bar')">Barra</div>
+            <div class="tab" onclick="switchVtab(this,'vt-win')">Vinos</div>
+          </div>
+          <div id="vt-todos"><table class="dt"><thead><tr><th>Sección</th><th>Producto</th><th>Uds.</th><th>Venta Total</th></tr></thead><tbody id="v-all-tbody"></tbody></table></div>
+          <div id="vt-coc" class="hidden"><table class="dt"><thead><tr><th>Producto</th><th>Uds.</th><th>Venta Total</th><th>Margen</th></tr></thead><tbody id="v-coc-tbody"></tbody></table></div>
+          <div id="vt-bar" class="hidden"><table class="dt"><thead><tr><th>Producto</th><th>Uds.</th><th>Venta Total</th></tr></thead><tbody id="v-bar-tbody"></tbody></table></div>
+          <div id="vt-win" class="hidden"><table class="dt"><thead><tr><th>Vino</th><th>Copas/Botellas</th><th>Venta Total</th></tr></thead><tbody id="v-win-tbody"></tbody></table></div>
+        </div>
+      </div>
+
+      <!-- GERENCIA · INV COCINA -->
+      <div class="view" id="v-ger-inv-coc">
+        <div class="section-bar sb-gerencia"></div>
+        <div class="ph"><div class="ph-title">Inventario Cocina</div><div class="ph-sub">Porciones · SI / Producción / Consumo / SF</div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="btn bo" style="padding:7px 12px" onclick="cocSemAnt()">◀</button>
+            <span id="coc-sem-lbl" style="font-size:13px;color:var(--txm);min-width:160px;text-align:center"></span>
+            <button class="btn bo" style="padding:7px 12px" onclick="cocSemSig()">▶</button>
+          </div>
+          <button class="btn bo" style="font-size:12px" onclick="syncVentas('coc')">🔄 Sincronizar Toteat</button>
+        </div>
+        <div class="card" style="padding:16px"><div class="iw"><table class="it"><thead id="coc-inv-thead"></thead><tbody id="coc-inv-tbody"></tbody></table></div></div>
+      </div>
+
+      <!-- GERENCIA · INV BARRA -->
+      <div class="view" id="v-ger-inv-bar">
+        <div class="section-bar sb-gerencia"></div>
+        <div class="ph"><div class="ph-title">Inventario Barra</div><div class="ph-sub">Botellas · SI / Ingresos / Consumo / SF</div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="btn bo" style="padding:7px 12px" onclick="barSemAnt2()">◀</button>
+            <span id="bar2-sem-lbl" style="font-size:13px;color:var(--txm);min-width:160px;text-align:center"></span>
+            <button class="btn bo" style="padding:7px 12px" onclick="barSemSig2()">▶</button>
+          </div>
+        </div>
+        <div class="card" style="padding:16px"><div class="iw"><table class="it"><thead id="bar2-inv-thead"></thead><tbody id="bar2-inv-tbody"></tbody></table></div></div>
+      </div>
+
+      <!-- GERENCIA · INV VINOS -->
+      <div class="view" id="v-ger-inv-win">
+        <div class="section-bar sb-gerencia"></div>
+        <div class="ph"><div class="ph-title">Inventario Vinos</div><div class="ph-sub">Por cepa · SI / Ingresos / Consumo / SF</div></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="btn bo" style="padding:7px 12px" onclick="winSemAnt2()">◀</button>
+            <span id="win2-sem-lbl" style="font-size:13px;color:var(--txm);min-width:160px;text-align:center"></span>
+            <button class="btn bo" style="padding:7px 12px" onclick="winSemSig2()">▶</button>
+          </div>
+        </div>
+        <div class="card" style="padding:16px"><div class="iw"><table class="it"><thead id="win2-inv-thead"></thead><tbody id="win2-inv-tbody"></tbody></table></div></div>
+      </div>
+
+    </main>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwG9Tlnd3v0-VsCMqQ_GfxRDfwHY_X2Vef97DKewXyw_d5yTn_lrOLripHwBPU7hesj/exec';
+
+// ── DATOS BARRA POR CATEGORÍA ──
+const BAR_CATS = {
+  'Gin':['GIN GORDON´S 750ml','TANQUERAY 43,1º 750ml','HENDRICK 41º 700ml','GIN BEEFEATER PINK 37,5º 750ml','GIN BEEFEATER LONDO DRY 750ml','MALFI ROSA 750ml','BOMBAY SAPPHIRE 750ml','Bulldog 750ml','Monkey 47 700ml'],
+  'Pisco':['ALTO DEL CARMEN 35º 750ml','ALTO DEL CARMEN RESERVADO 750ml','ALTO DEL CARMEN TRANSPARENTE 750ml','MISTRAL NOBEL 40º 750ml','Mistral 35° 750ml','HORCON QUEMADO 40º 750ml','Espíritu de los Andes 750ml','PISCO PERUANO GRAN PEREZ CRUZ 2000ml'],
+  'Vodka':['STOLICHNAYA VODKA 1000ml','ABSOLUT MANGO 40º 750ml','Absolut Blue 750ml','GREY GOOSE 750ml','WYBOROWA 700ml'],
+  'Ron':['RON BLANCO BAYOU 750ml','RON PAMPERO SELECCIÓN 750ml','PAMPERO ANIVERSARIO 750ml','Zacapa 23 Años 750ml'],
+  'Whisky':['JOHNNIE RED LABEL 1000ml','JOHNNIE WALKER DOBLE BLACK 40º 750ml','JACKS DANIEL N7 750ml','JACK APPLE 750ml','JACKS DANIEL FIRE 750ml','Chivas regal 12 750ml','Chivas regal 18 750ml','TEQUILA DON JULIO 38° 750ml'],
+  'Tequila':['TEQUILA DON JULIO 38° 750ml','DON JULIO DORADO 38º 700ml','DON JULIO REPOSADO 38º 700ml','HERRADURA REPOSADO 750ml','EL JIMADOR BLANCO 1L','EL JIMADOR AÑEJO 1L'],
+  'Aperitivos/Licores':['Aperol 700ml','aperol 1000ml','Campari 700ml','CAMPARI 750ml','RAMAZZOTTI 700ml','FERNET BRANCA 750ml','ST. GERMAIN 750ml','FRANGELICO 24º 700ml','JAGGERMEISTER 1000ml','LIMONCELLO VILLA MASSA 700ml','LICOR BOLS ELDER FLOWER 700ml','LICOR BOLS TRIPLE SEC 700ml','VERMOUTH MARTINI ROSSO 750ml','VERMOUTH CARPANO ROSSO 750ml','Carpano Bianco 950ml','Baileys 750ml','Disarono 750ml','TRAKAL 700ml','JACK APPLE 750ml','CENTENARIO OPORTO DULCE 1000ml','COGÑAC TRES PALOS 1000ml'],
+  'Cerveza':['Heineken 330ml','HEINEKEN 0 330ml','ERDINGER 0 330ml','CORONA 355ml','PERONI 330ml','KUNTSMAN GRAN TOROBAYO 480ml','Kunstmann barril 30L','Calafate barril 30L'],
+  'Espumante':['Espumante Francisco de Aguirre 750ml','BRUT VIÑAMAR 750ml','BRUT UNDURRAGA 750ml'],
+  'Gaseosas':['Coca Cola 350ml','Coca Cola Zero 350ml','Coca Cola Light 350ml','Coca Cola Zero 220ml','Sprite 350ml','Sprite Zero 350ml','Fanta 350ml'],
+  'Mixers/Jugos':['SCHWEPES TONICA 350ml','SCHWEPES TONICA ZERO 350ml','SCHWEPEES GINGER ALE 350ml','FENTIMANS GINGER BEER 200ml','FENTIMANS ROSE 200ml','JUGO NARANJA WHATTS 1500ml','JUGO PIÑA 1500ml','AGUA CON GAS 1.5L','PULPA MARACUYA 1kg','PULPA FRAMBUESA 1kg','SR JUGO LIMON (casero)'],
+  'Aguas':['Agua con gas puyehue 330ml','Agua sin gas puyehue 330ml'],
+  'Energéticas':['RED BULL TRADICIONAL 250ml','RED BULL SANDIA 250ml','RED BULL YELLOW EDITION 250ml'],
+};
+
+// ── VINOS POR CEPA ──
+const VINO_CEPAS = {
+  'Por copa':['Vino por copa In Situ Reserva Carmenere','Vino por copa In Situ Reserva Chardonnay','Vino por copa In Situ Espumante Rosé','Vino por copa Montes Limited CS/Cs','Vino por copa Floresta Chardonnay','Vino por copa Floresta Cabernet Sauvignon'],
+  'Cabernet Sauvignon':['Cabernet Sauvignon Vik A','Cabernet Sauvignon In Situ Reserva','Cabernet Sauvignon In Situ Gran Reserva','Cabernet Sauvignon Montes Alpha','Cabernet Sauvignon Floresta','Cabernet Sauvignon Casa Real Escudo de Familia','Cabernet Sauvignon Medalla Real Gran Reserva','Cabernet Sauvignon Carmen Gran Reserva','Cabernet Sauvignon Cabo de Hornos 2018'],
+  'Carmenere':['Carmenere Montes Alpha','Carmenere Vik A','Carmenere In Situ Reserva','Carmenere Floresta','Carmenere In Situ Gran Reserva','Carmenere Medalla Real Gran Reserva','Carmenere Casa Real Escudo de Familia','Carmenere Casa Real Reserva Especial','Carmenere Puente Austral Gran Reserva'],
+  'Pinot Noir':['Pinot Noir Montes Outer Limits','Pinot Noir Casa Real Escudo de Familia','Pinot Noir Medalla Real Gran Reserva','Pinot Noir Carmen Gran Reserva','Pinot Noir In Situ','Araucanía País-País Venturrelli','Araucanía Pinot Noir Venturrelli'],
+  'Merlot':['Merlot Montes Alpha','Merlot Casa Real Escudo de Familia','Merlot Medalla Real Gran Reserva','Merlot Carmen Gran Reserva','Merlot Errázuriz Estate'],
+  'Syrah':['Syrah In Situ Reserva','Syrah Montes Alpha','Syrah Casa Real Escudo de Familia','Syrah Medalla Real Gran Reserva','Syrah Carmen Gran Reserva'],
+  'Ensamblaje':['Ensamblaje Santa Rita Triple C','Ensamblaje In Situ CS/Sangiovese','Ensamblaje In Situ PV/Carmenere/CS','Ensamblaje In Situ Chardonnay/Viognier','Ensamblaje Vik Milla Cala','Ensamblaje El Principal Calicanto','Ensamblaje Von Siebenthal Parcela 7','Ensamblaje In Situ Signature Wines','Ensamblaje San Pedro Double Barrel 1865','Kaiken Ultra Ensamblaje'],
+  'Chardonnay':['Chardonnay In Situ','Chardonnay Floresta','Chardonnay Medalla Real Gran Reserva','Chardonnay Carmen Gran Reserva','Chardonnay Errázuriz Max'],
+  'Otros blancos':['Otros blancos Montes Outer Limits Alvarinho','Otros blancos Floresta Field Blend','Sauvignon Blanc Carmen','Sauvignon Blanc Errázuriz Estate','Riesling Casas del Bosque'],
+  'Rosados':['Rosados Montes Cherub','Rosados In Situ Moscatel','Moscato Viñamar','Demi Sec Amaranta'],
+  'Otros tintos':['Otros tintos Kaiken Reserva Malbec Argentina','Otros tintos Floresta Cabernet Franc','Malbec San Pedro 1865','Carignan Morandé'],
+  'Íconos':['Íconos In Situ QV1000 Ensamblaje','Íconos Casa Real Reserva Especial','Íconos Tierras Moradas Carmenere','Íconos Cabo de Hornos Cabernet Sauvignon','Íconos Kaiken Mai Malbec San Pedro','Íconos Tayú San Pedro'],
+};
+
+// ── PORCIONES DE COCINA CON GRAMAJE ──
+const PREPS = {
+  ATUN:[
+    {n:'PORCION TARTAR DE ATUN 130g',g:130,desc:'Tapa tartar atún'},
+    {n:'PORCION TAPA TARTAR ATUN 40g',g:40,desc:'Tapa'},
+    {n:'PORCION ATUN 120g',g:120,desc:'Porción atún'}
+  ],
+  PULPO:[
+    {n:'PORCION PULPO BRASEADO 250g',g:250,desc:'Principal'},
+    {n:'PORCION CARPACCIO PULPO 100g',g:100,desc:'Entrada'},
+    {n:'PORCION TAPA CARPACCIO PULPO 44g',g:44,desc:'Tapa'}
+  ],
+  'FLAT IRON':[{n:'PORCION FLAT IRON 250g',g:250,desc:'Principal'}],
+  FILETE:[{n:'PORCION FILETE 250g',g:250,desc:'Principal'}],
+  ENTRAÑA:[{n:'PORCION ENTRAÑA 150g',g:150,desc:'Principal'}],
+  MERLUZA:[{n:'PORCION MERLUZA 250g',g:250,desc:'Principal'}],
+  SALMÓN:[{n:'PORCION SALMON 250g',g:250,desc:'Principal'}],
+  OSOBUCO:[{n:'PORCION OSOBUCO 350g',g:350,desc:'Principal'}],
+  'VACUNO (GENERAL)':[
+    {n:'PORCION TARTAR DE VACUNO 130g',g:130,desc:'Entrada'},
+    {n:'PORCION TAPA TARTAR VACUNO 40g',g:40,desc:'Tapa'},
+    {n:'PORCION CARPACCIO DE VACUNO 100g',g:100,desc:'Entrada'},
+    {n:'PORCION TAPA CARPACCIO VACUNO 40g',g:40,desc:'Tapa'},
+    {n:'PORCION VITELLO TONATO 180g',g:180,desc:'Entrada'},
+    {n:'PORCION TAPA VITELLO TONATO 40g',g:40,desc:'Tapa'}
+  ],
+  PATO:[{n:'CANELÓN DE PATO (4 canelones) ~300g',g:300,desc:'1 porción = 4 canelones'}],
+  OSTIONES:[
+    {n:'OSTIONES A LA PARMESANA (6 unid.)',g:0,desc:'6 ostiones por porción',unidad:'unidad'},
+    {n:'TAPA OSTIONES (2 unid.)',g:0,desc:'2 ostiones por tapa',unidad:'unidad'}
+  ],
+  CAMARÓN:[
+    {n:'GAMBERETTI DI RICCIONE (5 unid.)',g:0,desc:'5 camarones con cabeza',unidad:'unidad'},
+    {n:'PORCION CAMARÓN SIN PIEL (6 unid.)',g:0,desc:'6 camarones sin piel',unidad:'unidad'}
+  ],
+  CENTOLLA:[{n:'PORCION RELLENO CENTOLLA 144g',g:144,desc:'Relleno para pasta'}],
+  RICOTTA:[
+    {n:'PORCION RELLENO RICOTTA SALMON 150g',g:150,desc:'Relleno salmón-ricotta'},
+    {n:'PORCION RELLENO ALCACHOFA',g:100,desc:'Relleno alcachofa'},
+    {n:'PORCION RELLENO DE REMOLACHA',g:100,desc:'Relleno betarraga'}
+  ],
+  SOBRECOSTILLA:[
+    {n:'PORCION RELLENO SOBRECOSTILLA 150g',g:150,desc:'Relleno pasta'},
+    {n:'PORCION ALBONDIGA 90g',g:90,desc:'3 albóndigas por porción'}
+  ],
+  'PIERNA CORDERO':[{n:'PORCION RELLENO CORDERO',g:120,desc:'Relleno pasta cordero'}],
+  'FRUTTI DI MARE':[
+    {n:'FRUTTI DI MARE (4 cal + 4 ost + 4 cam)',g:0,desc:'1 porción = 4 calamares + 4 ostiones + 4 camarones',unidad:'compuesto',
+     componentes:[{ins:'CALAMAR',cant:4},{ins:'OSTIONES',cant:4},{ins:'CAMARÓN',cant:4}]}
+  ],
+};
+
+const ALL_PREPS_FLAT = Object.values(PREPS).flat().map(p=>p.n);
+const ALL_BAR_FLAT = Object.values(BAR_CATS).flat();
+const ALL_WIN_FLAT = Object.values(VINO_CEPAS).flat();
+
+// ── DB LOCAL ──
+const DB={barIngresos:[],barConteo:[],vinoIngresos:[],vinoConteo:[],cocIngresos:[],cocProd:[],cocConteo:[],
+  bodega:{ATUN:{kg:92},PULPO:{kg:5},SALMÓN:{kg:15},FILETE:{kg:10},'FLAT IRON':{kg:0},MERLUZA:{kg:8}}};
+
+const VENTAS_COC=[{p:'Flat iron e pappardelle',u:111,v:1652512},{p:'Tres tapas',u:108,v:1363271},{p:'Tartar de atún',u:90,v:1005490},{p:'Agnolotti di plateada',u:115,v:1342349},{p:'Pulpo Braseado',u:16,v:270876},{p:'Ostiones parmesana',u:57,v:696873}];
+const VENTAS_BAR=[{p:'Sangría Riccione',u:106,v:559238},{p:'Aperol Spritz',u:32,v:169551},{p:'Negroni Clásico',u:26,v:174315},{p:'Sour Peruano',u:32,v:200197},{p:'Adela',u:27,v:128204},{p:'Andiamo!',u:20,v:117258}];
+const VENTAS_WIN=[{p:'CS Montes Alpha',u:24,v:538560},{p:'Copa In Situ Carmenere',u:68,v:306000},{p:'Carmenere Montes Alpha',u:18,v:403740},{p:'Chardonnay In Situ',u:14,v:272580},{p:'Pinot Noir MRR',u:11,v:299860},{p:'Copa Floresta Chardonnay',u:42,v:189000}];
+
+// ── AUTH ──
+let USER='',ROLE='',selR='';
+const MENUS={
+  cocina:[{id:'coc-ingreso',ico:'📦',lbl:'Ingreso de Insumos',s:'cocina'},{id:'coc-prod',ico:'🧑‍🍳',lbl:'Producción',s:'cocina'},{id:'coc-conteo',ico:'📋',lbl:'Conteo de Turno',s:'cocina'}],
+  barra:[{id:'bar-ingreso',ico:'📦',lbl:'Ingreso de Bebidas',s:'barra'},{id:'bar-conteo',ico:'📋',lbl:'Conteo de Turno',s:'barra'},{id:'bar-inv',ico:'🗂',lbl:'Inventario Semanal',s:'barra'}],
+  vinos:[
+    {id:'vinos_barra-ingreso',ico:'📦',lbl:'Ingreso de Vinos',s:'vinos_barra'},
+    {id:'vinos_barra-conteo',ico:'📋',lbl:'Conteo de Turno',s:'vinos_barra'},
+    {id:'vinos_barra-inv',ico:'🗂',lbl:'Inventario Semanal',s:'vinos_barra'}
+  ],
+  gerencia:[{id:'ger-dash',ico:'📊',lbl:'Dashboard',s:'gerencia'},{id:'ger-ventas',ico:'💰',lbl:'Ventas · Toteat',s:'gerencia'},{id:'ger-inv-coc',ico:'🍽',lbl:'Inv. Cocina',s:'gerencia'},{id:'ger-inv-bar',ico:'🍹',lbl:'Inv. Barra',s:'gerencia'},{id:'ger-inv-win',ico:'🍷',lbl:'Inv. Vinos',s:'gerencia'}],
+};
+
+function pickR(el){document.querySelectorAll('.rc').forEach(c=>c.classList.remove('on'));el.classList.add('on');selR=el.dataset.r;chkL();}
+function chkL(){document.getElementById('lbtn').disabled=!(document.getElementById('ln').value.trim()&&selR);}
+
+function login(){
+  USER=document.getElementById('ln').value.trim();ROLE=selR;
+  document.getElementById('login').classList.remove('active');
+  document.getElementById('app').classList.add('active');
+  document.getElementById('who').textContent=({barra:'🍹',cocina:'👨‍🍳',vinos:'🍷',gerencia:'👩‍💼'}[ROLE]||'')+' '+USER;
+  buildSB(ROLE);setToday();
+  nav(MENUS[ROLE][0].id);
+  if(ROLE==='gerencia')loadGerDash();
+  renderVentas();
+  renderCocInvSem();renderBarInvSem();renderBar2InvSem();renderWinInvSem();renderWin2InvSem();
+  filterBarProd();filterVinoProd();
+}
+function logout(){document.getElementById('app').classList.remove('active');document.getElementById('login').classList.add('active');document.querySelectorAll('.rc').forEach(c=>c.classList.remove('on'));document.getElementById('ln').value='';document.getElementById('lbtn').disabled=true;selR='';}
+
+function buildSB(s){
+  const items=MENUS[s]||[];
+  document.getElementById('sb').innerHTML='<div class="ngt">'+(s==='barra'?'🍹 Barra':s==='cocina'?'👨‍🍳 Cocina':s==='vinos'?'🍷 Vinos':'👩‍💼 Gerencia')+'</div>'+
+    items.map(m=>`<div class="nb" id="nb-${m.id}" data-s="${m.s}" onclick="nav('${m.id}')"><span class="ni">${m.ico}</span>${m.lbl}</div>`).join('');
+}
+function nav(id){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(n=>n.classList.remove('active'));
+  const ve=document.getElementById('v-'+id),nb=document.getElementById('nb-'+id);
+  if(ve)ve.classList.add('active');if(nb)nb.classList.add('active');
+}
+
+// ── UTILS ──
+function setToday(){const t=new Date().toISOString().split('T')[0];['bi-fecha','bc-fecha','vi-fecha','vc-fecha','ci-fecha','pr-f','cc-fecha'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=t;});}
+function toast(msg,type='tok'){const t=document.getElementById('toast');t.textContent=({tok:'✅',terr:'❌',tw:'⚠️'}[type]||'')+' '+msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3000);}
+function fKg(v,d=2){return(v||0).toFixed(d)}
+function fPct(v){return((v||0)*100).toFixed(1)+'%'}
+function fM(v){return'$'+(Math.round(v)||0).toLocaleString('es-CL')}
+function setAl(id,msg,cls){const el=document.getElementById(id);if(!el)return;if(!msg){el.classList.add('hidden');return;}el.className='al '+cls;el.textContent=msg;}
+
+// ── BARRA FILTROS ──
+function filterBarProd(){
+  const cat=document.getElementById('bi-cat')?.value||'';
+  const sel=document.getElementById('bi-prod');
+  if(!sel)return;
+  sel.innerHTML='<option value="">— Elegir —</option>';
+  const items=cat?BAR_CATS[cat]||[]:ALL_BAR_FLAT;
+  items.forEach(p=>{const o=document.createElement('option');o.textContent=p;sel.appendChild(o);});
+}
+function filterVinoProd(){
+  const cepa=document.getElementById('vi-cepa')?.value||'';
+  const sel=document.getElementById('vi-prod');
+  if(!sel)return;
+  sel.innerHTML='<option value="">— Elegir —</option>';
+  const items=cepa?VINO_CEPAS[cepa]||[]:ALL_WIN_FLAT;
+  items.forEach(p=>{const o=document.createElement('option');o.textContent=p;sel.appendChild(o);});
+}
+
+// ── BARRA · INGRESO ──
+function calcBar(){
+  const u=parseFloat(document.getElementById('bi-uds')?.value)||0;
+  const ml=parseFloat(document.getElementById('bi-ml')?.value)||0;
+  document.getElementById('bi-ml-total').textContent=(u*ml).toLocaleString();
+}
+function guardarBarIngreso(){
+  const f=document.getElementById('bi-fecha').value,p=document.getElementById('bi-prod').value;
+  const u=parseFloat(document.getElementById('bi-uds').value)||0,ml=parseFloat(document.getElementById('bi-ml').value)||0;
+  const cat=document.getElementById('bi-cat').value||'—';
+  if(!f||!p){toast('Completa fecha y producto','terr');return;}
+  if(u<=0){toast('Ingresa las unidades','terr');return;}
+  const rec={f,p,cat,u,ml,mlTotal:u*ml,hora:new Date().toLocaleTimeString()};
+  DB.barIngresos.push(rec);renderBarLog();
+  document.getElementById('bi-prod').value='';document.getElementById('bi-uds').value='';document.getElementById('bi-ml').value='';document.getElementById('bi-ml-total').textContent='—';
+  callScript('guardarBarIngreso',rec);toast(`${p} — ${u} uds.`,'tok');
+}
+function renderBarLog(){
+  const fecha=document.getElementById('bi-fecha').value||new Date().toISOString().split('T')[0];
+  const rows=DB.barIngresos.filter(r=>r.f===fecha);
+  const tb=document.getElementById('bi-tbody');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--txd);padding:18px">Sin ingresos hoy</td></tr>';return;}
+  tb.innerHTML=rows.map(r=>`<tr><td class="bl">${r.p}</td><td style="color:var(--txd)">${r.cat}</td><td>${r.u}</td><td>${r.ml}</td><td>${r.mlTotal.toLocaleString()} ml</td><td style="color:var(--txd)">${r.hora}</td></tr>`).join('');
+}
+
+// ── BARRA · CONTEO ──
+function loadBarConteo(){
+  const list=document.getElementById('bc-list');
+  let html='';
+  Object.entries(BAR_CATS).forEach(([cat,items])=>{
+    html+=`<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txd);padding:12px 0 6px;border-top:1px solid var(--br);margin-top:6px">${cat}</div>`;
+    items.forEach((p,i)=>{
+      const idx=ALL_BAR_FLAT.indexOf(p);
+      html+=`<div style="display:grid;grid-template-columns:1fr 90px 90px 90px 90px;gap:6px;padding:5px 0;align-items:center;">
+        <div style="font-size:12px;color:var(--txm)">${p}</div>
+        <input type="number" id="ba-${idx}" min="0" step="0.01" placeholder="0.00" style="background:var(--d3);border:1px solid rgba(90,141,217,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcBarRow(${idx})">
+        <input type="number" id="bl-${idx}" min="0" placeholder="0" style="background:var(--d3);border:1px solid rgba(90,141,217,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcBarRow(${idx})">
+        <input type="number" id="bb-${idx}" min="0" placeholder="0" style="background:var(--d3);border:1px solid rgba(90,141,217,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcBarRow(${idx})">
+        <div id="bmt-${idx}" style="background:rgba(90,141,217,.08);border:1px solid rgba(90,141,217,.25);border-radius:9px;padding:7px;text-align:center;font-size:12px;color:#5A8DD9;font-weight:600">—</div>
+      </div>`;
+    });
+  });
+  list.innerHTML=html;
+}
+function calcBarRow(i){
+  const a=parseFloat(document.getElementById('ba-'+i)?.value)||0;
+  const l=parseInt(document.getElementById('bl-'+i)?.value)||0;
+  const b=parseInt(document.getElementById('bb-'+i)?.value)||0;
+  const ml=Math.round(a*750)+(l+b)*750;
+  const el=document.getElementById('bmt-'+i);if(el)el.textContent=(ml/1000).toFixed(2)+' L';
+}
+function guardarBarConteo(){
+  const fecha=document.getElementById('bc-fecha').value;
+  if(!fecha){toast('Selecciona una fecha','terr');return;}
+  let n=0;
+  ALL_BAR_FLAT.forEach((p,i)=>{
+    const a=parseFloat(document.getElementById('ba-'+i)?.value)||0;
+    const l=parseInt(document.getElementById('bl-'+i)?.value)||0;
+    const b=parseInt(document.getElementById('bb-'+i)?.value)||0;
+    if(a||l||b){DB.barConteo.push({fecha,ingrediente:p,botAbierta:a,botLlenas:l,botBodega:b});n++;}
+  });
+  callScript('guardarBarConteo',{fecha,conteos:DB.barConteo.slice(-n)});
+  toast(`Conteo barra · ${n} productos`,'tok');
+}
+
+// ── VINOS · INGRESO ──
+function calcVino(){
+  const u=parseFloat(document.getElementById('vi-uds')?.value)||0;
+  const ml=parseFloat(document.getElementById('vi-ml')?.value)||750;
+  document.getElementById('vi-ml-total').textContent=(u*ml).toLocaleString();
+}
+function guardarVinoIngreso(){
+  const f=document.getElementById('vi-fecha').value,p=document.getElementById('vi-prod').value;
+  const u=parseFloat(document.getElementById('vi-uds').value)||0,ml=parseFloat(document.getElementById('vi-ml').value)||750;
+  const cepa=document.getElementById('vi-cepa').value||'—';
+  if(!f||!p){toast('Completa fecha y vino','terr');return;}
+  if(u<=0){toast('Ingresa las botellas','terr');return;}
+  const rec={f,p,cepa,u,ml,mlTotal:u*ml,hora:new Date().toLocaleTimeString()};
+  DB.vinoIngresos.push(rec);renderVinoLog();
+  document.getElementById('vi-prod').value='';['vi-uds','vi-ml'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('vi-ml-total').textContent='—';
+  callScript('guardarVinoIngreso',rec);toast(`${p.split(' ').slice(0,3).join(' ')} — ${u} bot.`,'tok');
+}
+function renderVinoLog(){
+  const fecha=document.getElementById('vi-fecha').value||new Date().toISOString().split('T')[0];
+  const rows=DB.vinoIngresos.filter(r=>r.f===fecha);
+  const tb=document.getElementById('vi-tbody');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--txd);padding:18px">Sin ingresos hoy</td></tr>';return;}
+  tb.innerHTML=rows.map(r=>`<tr><td style="color:#5A8DD9;font-weight:600">${r.p}</td><td style="color:var(--txd)">${r.cepa}</td><td>${r.u}</td><td>${r.mlTotal.toLocaleString()} ml</td><td style="color:var(--txd)">${r.hora}</td></tr>`).join('');
+}
+
+// ── VINOS · CONTEO ──
+function loadVinoConteo(){
+  const list=document.getElementById('vc-list');
+  let html='';
+  Object.entries(VINO_CEPAS).forEach(([cepa,items])=>{
+    html+=`<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#C06080;padding:12px 0 6px;border-top:1px solid rgba(155,58,90,.2);margin-top:6px">${cepa}</div>`;
+    items.forEach(p=>{
+      const idx=ALL_WIN_FLAT.indexOf(p);
+      html+=`<div style="display:grid;grid-template-columns:1fr 90px 90px 90px 90px;gap:6px;padding:5px 0;align-items:center;">
+        <div style="font-size:12px;color:var(--txm)">${p}</div>
+        <input type="number" id="wa-${idx}" min="0" step="0.01" placeholder="0.00" style="background:var(--d3);border:1px solid rgba(155,58,90,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcWinRow(${idx})">
+        <input type="number" id="wl-${idx}" min="0" placeholder="0" style="background:var(--d3);border:1px solid rgba(155,58,90,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcWinRow(${idx})">
+        <input type="number" id="wb-${idx}" min="0" placeholder="0" style="background:var(--d3);border:1px solid rgba(155,58,90,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcWinRow(${idx})">
+        <div id="wt-${idx}" style="background:rgba(155,58,90,.1);border:1px solid rgba(155,58,90,.3);border-radius:9px;padding:7px;text-align:center;font-size:13px;color:#C06080;font-weight:600">—</div>
+      </div>`;
+    });
+  });
+  list.innerHTML=html;
+}
+function calcWinRow(i){
+  const a=parseFloat(document.getElementById('wa-'+i)?.value)||0;
+  const l=parseInt(document.getElementById('wl-'+i)?.value)||0;
+  const b=parseInt(document.getElementById('wb-'+i)?.value)||0;
+  const el=document.getElementById('wt-'+i);if(el)el.textContent=(a+l+b).toFixed(2);
+}
+function guardarVinoConteo(){
+  const fecha=document.getElementById('vc-fecha').value;if(!fecha){toast('Selecciona una fecha','terr');return;}
+  let n=0,conteos=[];
+  ALL_WIN_FLAT.forEach((p,i)=>{
+    const a=parseFloat(document.getElementById('wa-'+i)?.value)||0;
+    const l=parseInt(document.getElementById('wl-'+i)?.value)||0;
+    const b=parseInt(document.getElementById('wb-'+i)?.value)||0;
+    if(a||l||b){conteos.push({ingrediente:p,botAbierta:a,botLlenas:l,botBodega:b});n++;}
+  });
+  DB.vinoConteo.push(...conteos.map(c=>({...c,fecha})));
+  callScript('guardarVinoConteo',{fecha,conteos});toast(`Conteo vinos · ${n} productos`,'tok');
+}
+
+// ── COCINA · INGRESO ──
+let origCoc='';
+function setOrig(o){
+  origCoc=o;
+  document.getElementById('ob-prov').classList.toggle('on',o==='prov');
+  document.getElementById('ob-bod').classList.toggle('on',o==='bod');
+  document.getElementById('blq-prov').classList.toggle('hidden',o!=='prov');
+  document.getElementById('blq-bod').classList.toggle('hidden',o!=='bod');
+  document.getElementById('blq-save').classList.remove('hidden');
+  setAl('ci-al',null);
+}
+function chkBodegaStock(){
+  const ins=document.getElementById('ci-ins').value;
+  const s=ins&&DB.bodega[ins]?DB.bodega[ins].kg:0;
+  document.getElementById('ob-bod-stock').textContent=`Stock: ${s.toFixed(1)} kg`;
+  document.getElementById('bod-kgd').textContent=s.toFixed(2);
+}
+function calcCocProv(){
+  const tot=parseFloat(document.getElementById('cp-tot').value)||0;
+  const bod=parseFloat(document.getElementById('cp-bod').value)||0;
+  const mer=parseFloat(document.getElementById('cp-mer').value)||0;
+  const prod=Math.max(0,tot-bod),limp=Math.max(0,prod-mer),pct=prod>0?mer/prod:0;
+  document.getElementById('cp-prod').textContent=fKg(prod);
+  document.getElementById('cp-limp').textContent=fKg(limp);
+  document.getElementById('cp-pct').textContent=prod>0?`Merma: ${fPct(pct)}`:'';
+  if(tot>0){
+    document.getElementById('cp-mv').classList.remove('hidden');
+    ['mv-tot','mv-bod','mv-mer','mv-limp'].forEach((id,i)=>document.getElementById(id).textContent=fKg([tot,bod,mer,limp][i]));
+  }
+  if(pct>0.35)setAl('ci-al',`⚠️ Merma alta: ${fPct(pct)}. ¿Problema con el insumo?`,'aw');
+  else if(limp>0)setAl('ci-al',`✅ ${fKg(limp)} kg listos para producción`,'aok');
+  else setAl('ci-al',null);
+}
+function calcCocBod(){
+  const ins=document.getElementById('ci-ins').value;
+  const st=ins&&DB.bodega[ins]?DB.bodega[ins].kg:0;
+  const prod=parseFloat(document.getElementById('cb-prod').value)||0;
+  const mer=parseFloat(document.getElementById('cb-mer').value)||0;
+  const limp=Math.max(0,prod-mer),rest=Math.max(0,st-prod),pct=prod>0?mer/prod:0;
+  document.getElementById('cb-limp').textContent=fKg(limp);
+  document.getElementById('cb-pct').textContent=prod>0?`Merma: ${fPct(pct)}`:'';
+  document.getElementById('cb-rest').textContent=fKg(rest);
+  if(prod>st+0.001)setAl('ci-al',`❌ Stock insuficiente. Disponible: ${fKg(st)} kg`,'ae');
+  else if(limp>0)setAl('ci-al',`✅ ${fKg(limp)} kg listos para producción`,'aok');
+}
+function guardarCocIngreso(){
+  const fecha=document.getElementById('ci-fecha').value,ins=document.getElementById('ci-ins').value;
+  if(!fecha||!ins){toast('Completa fecha e insumo','terr');return;}
+  if(!origCoc){toast('Elige el origen','terr');return;}
+  let kgProd,mer,limp;
+  if(origCoc==='prov'){
+    const tot=parseFloat(document.getElementById('cp-tot').value)||0;
+    const bod=parseFloat(document.getElementById('cp-bod').value)||0;
+    mer=parseFloat(document.getElementById('cp-mer').value)||0;
+    kgProd=Math.max(0,tot-bod);limp=Math.max(0,kgProd-mer);
+    if(!DB.bodega[ins])DB.bodega[ins]={kg:0};DB.bodega[ins].kg+=bod;
+  } else {
+    kgProd=parseFloat(document.getElementById('cb-prod').value)||0;
+    mer=parseFloat(document.getElementById('cb-mer').value)||0;
+    limp=Math.max(0,kgProd-mer);
+    if(DB.bodega[ins])DB.bodega[ins].kg=Math.max(0,DB.bodega[ins].kg-kgProd);
+  }
+  if(kgProd<=0){toast('Ingresa los KG','terr');return;}
+  const pct=kgProd>0?mer/kgProd:0;
+  DB.cocIngresos.push({fecha,ins,origen:origCoc,kgProd,mer,limp,pct});
+  renderCocLog();origCoc='';
+  ['ob-prov','ob-bod'].forEach(id=>document.getElementById(id).classList.remove('on'));
+  ['blq-prov','blq-bod','blq-save'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  ['cp-tot','cp-bod','cp-mer','cb-prod','cb-mer'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.getElementById('ci-ins').value='';setAl('ci-al',null);
+  callScript('guardarCocIngreso',{fecha,ins,kgProd,mer,limp});
+  toast(`${ins} · ${fKg(limp)} kg limpios`,'tok');
+}
+function renderCocLog(){
+  const f=document.getElementById('ci-fecha').value||new Date().toISOString().split('T')[0];
+  const rows=DB.cocIngresos.filter(r=>r.fecha===f);
+  const tb=document.getElementById('ci-log');
+  if(!rows.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--txd);padding:18px">Sin registros</td></tr>';return;}
+  tb.innerHTML=rows.map(r=>`<tr><td class="g">${r.ins}</td><td>${r.origen==='prov'?'🚚 Proveedor':'🏪 Bodega'}</td><td>${fKg(r.kgProd)}</td><td class="${r.pct>0.3?'re':'or'}">${fKg(r.mer)}</td><td class="gr">${fKg(r.limp)}</td><td class="${r.pct>0.3?'re':r.pct>0.15?'or':'gr'}">${fPct(r.pct)}</td><td><span class="badge ${r.pct>0.3?'be':'bok'}">${r.pct>0.3?'⚠️ Alta':'✔️ OK'}</span></td></tr>`).join('');
+}
+
+// ── COCINA · PRODUCCIÓN ──
+function loadProd(){
+  const ins=document.getElementById('pr-ins').value;
+  const f=document.getElementById('pr-f').value;
+  if(!ins)return;
+  const disp=DB.cocIngresos.filter(r=>r.ins===ins&&r.fecha===f).reduce((s,r)=>s+r.limp,0);
+  document.getElementById('pr-disp').textContent=fKg(disp,3);
+  document.getElementById('pr-nostock').classList.toggle('hidden',disp>0||disp===0);
+  const preps=PREPS[ins]||[];
+  if(!preps.length){document.getElementById('pr-list').innerHTML='<div style="color:var(--txd);font-size:13px;padding:10px 0">Sin porciones definidas para este insumo.</div>';return;}
+  document.getElementById('pr-list').innerHTML=preps.map((p,i)=>`
+    <div style="display:grid;grid-template-columns:1fr 100px 140px;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(201,168,76,.05);">
+      <div>
+        <div style="font-size:13px;color:var(--txm);font-weight:500">${p.n}</div>
+        <div style="font-size:11px;color:var(--txd);margin-top:2px">${p.desc}</div>
+      </div>
+      <div style="background:var(--d3);border-radius:8px;padding:5px 9px;text-align:center">
+        <div style="font-size:9px;color:var(--txd);text-transform:uppercase;letter-spacing:1px">${p.unidad==='unidad'?'UNIDAD':p.unidad==='compuesto'?'COMPUESTO':'GRAMAJE'}</div>
+        <div style="font-size:13px;font-weight:700;color:var(--gold)">${p.unidad==='unidad'?p.n.match(/\d+/)?p.n.match(/\d+/)[0]+' u':'—':p.unidad==='compuesto'?'4+4+4 u':p.g+'g'}</div>
+      </div>
+      <input type="number" id="pq-${i}" min="0" placeholder="0 porciones"
+        style="background:var(--d3);border:1.5px solid rgba(201,168,76,.13);border-radius:11px;padding:10px;font-size:18px;font-weight:700;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcProdTot(${disp})">
+    </div>`).join('');
+  calcProdTot(disp);
+}
+function calcProdTot(disp){
+  const ins=document.getElementById('pr-ins').value;
+  const preps=PREPS[ins]||[];
+  let tot=0;
+  preps.forEach((_,i)=>{
+    const qty=parseInt(document.getElementById('pq-'+i)?.value)||0;
+    if(preps[i].unidad!=='unidad'&&preps[i].unidad!=='compuesto') tot+=(qty*preps[i].g)/1000;
+  });
+  document.getElementById('pr-tot').textContent=fKg(tot,3)+' kg';
+  if(disp>0){
+    const pct=Math.min(100,(tot/disp)*100),diff=disp-tot;
+    const bar=document.getElementById('pr-prog');
+    bar.style.width=pct+'%';bar.style.background=pct>100?'var(--red)':pct>90?'var(--grn)':'var(--gold)';
+    document.getElementById('pr-pct').textContent=pct.toFixed(1)+'%';
+    document.getElementById('pr-diff').textContent=diff<-0.01?`❌ Excede por ${fKg(-diff,3)} kg`:Math.abs(diff)<0.05?'✅ Cuadra exacto':`⚠️ Quedan ${fKg(diff,3)} kg`;
+    document.getElementById('pr-diff').style.color=diff<-0.01?'var(--red)':Math.abs(diff)<0.05?'var(--grn)':'var(--org)';
+    const a=document.getElementById('pr-al');
+    if(tot>disp+0.01){a.className='al ae';a.textContent=`❌ Excedes el disponible por ${fKg(tot-disp,3)} kg`;}
+    else a.classList.add('hidden');
+  }
+}
+function guardarProd(){
+  const f=document.getElementById('pr-f').value,ins=document.getElementById('pr-ins').value;
+  if(!f||!ins){toast('Completa fecha e insumo','terr');return;}
+  const preps=PREPS[ins]||[],porciones=[];
+  preps.forEach((p,i)=>{
+    const qty=parseInt(document.getElementById('pq-'+i)?.value)||0;
+    if(qty>0){DB.cocProd.push({f,ins,porcion:p.n,g:p.g,qty,kg:(qty*p.g)/1000});porciones.push({porcion:p.n,g:p.g,qty});}
+  });
+  if(!porciones.length){toast('Ingresa al menos una porción','terr');return;}
+  // Descuento automático de componentes para Frutti di Mare
+  const descuentos=[];
+  preps.forEach((p,i)=>{
+    if(p.unidad==='compuesto'&&p.componentes){
+      const qty=parseInt(document.getElementById('pq-'+i)?.value)||0;
+      if(qty>0){
+        p.componentes.forEach(c=>{
+          const total=qty*c.cant;
+          descuentos.push({ins:c.ins,unidades:total});
+          if(!DB.bodega[c.ins])DB.bodega[c.ins]={kg:0,unidades:0};
+          DB.bodega[c.ins].unidades=(DB.bodega[c.ins].unidades||0)-total;
+        });
+      }
+    }
+  });
+  if(descuentos.length){
+    const msg=descuentos.map(d=>`${d.ins}: −${d.unidades} u.`).join(' · ');
+    toast(`Frutti di Mare guardado · ${msg}`,'tok');
+  }
+  callScript('guardarCocProd',{fecha:f,ins,porciones,descuentos});
+  document.getElementById('pr-ins').value='';document.getElementById('pr-list').innerHTML='<div style="color:var(--txd);font-size:13px;padding:10px 0">Selecciona un insumo para ver las preparaciones</div>';
+  toast(`${porciones.length} preparaciones guardadas`,'tok');
+}
+
+// ── COCINA · CONTEO ──
+function loadCocConteo(){
+  const f=document.getElementById('cc-fecha').value;if(!f){toast('Selecciona fecha','terr');return;}
+  document.getElementById('cc-list').innerHTML=ALL_PREPS_FLAT.map((p,i)=>`
+    <div style="display:grid;grid-template-columns:1fr 120px 120px 90px;gap:7px;padding:7px 0;border-bottom:1px solid rgba(201,168,76,.05);align-items:center">
+      <div style="font-size:12px;color:var(--txm)">${p}</div>
+      <input type="number" id="ccc-${i}" min="0" placeholder="0" style="background:var(--d3);border:1px solid rgba(201,168,76,.13);border-radius:10px;padding:9px;font-size:17px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcCocConteoRow(${i})">
+      <input type="number" id="ccb-${i}" min="0" placeholder="0" style="background:var(--d3);border:1px solid rgba(201,168,76,.13);border-radius:10px;padding:9px;font-size:17px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcCocConteoRow(${i})">
+      <div id="cct-${i}" style="background:rgba(201,168,76,.08);border:1px solid var(--br);border-radius:10px;padding:9px;text-align:center;font-size:17px;font-weight:700;color:var(--gold)">—</div>
+    </div>`).join('');
+}
+function calcCocConteoRow(i){const c=parseInt(document.getElementById('ccc-'+i)?.value)||0;const b=parseInt(document.getElementById('ccb-'+i)?.value)||0;const el=document.getElementById('cct-'+i);if(el)el.textContent=c+b;}
+function guardarCocConteo(){
+  const f=document.getElementById('cc-fecha').value;if(!f){toast('Selecciona fecha','terr');return;}
+  const conteos=[];
+  ALL_PREPS_FLAT.forEach((p,i)=>{
+    const c=parseInt(document.getElementById('ccc-'+i)?.value)||0;const b=parseInt(document.getElementById('ccb-'+i)?.value)||0;
+    if(c||b)conteos.push({ingrediente:p,cocina:c,bodega:b});
+  });
+  callScript('guardarCocConteo',{fecha:f,conteos});toast(`Conteo cocina · ${conteos.length} preparaciones`,'tok');
+}
+
+// ── INVENTARIO SEMANAL ──
+const DIAS=['Lun','Mar','Mié','Jue','Vie','Sáb'];
+let cocSemOff=0,barSemOff=0,barSemOff2=0,winSemOff=0,winSemOff2=0;
+
+function getLunes(d){const dd=new Date(d);const day=dd.getDay();dd.setDate(dd.getDate()-day+(day===0?-6:1));return dd;}
+function addDays(iso,n){const d=new Date(iso+'T12:00:00');d.setDate(d.getDate()+n);return d.toISOString().split('T')[0]}
+function getSemFechas(off){const l=getLunes(new Date());l.setDate(l.getDate()+off*7);return Array.from({length:6},(_,i)=>addDays(l.toISOString().split('T')[0],i));}
+function semLabel(fechas){const f0=new Date(fechas[0]+'T12:00:00'),f5=new Date(fechas[5]+'T12:00:00');return`${f0.getDate()} ${f0.toLocaleDateString('es',{month:'short'})} — ${f5.getDate()} ${f5.toLocaleDateString('es',{month:'short',year:'numeric'})}`;}
+
+function genDemoInv(items){
+  const inv={};const lunes=getLunes(new Date());
+  items.forEach(p=>{inv[p]={};let si=Math.floor(Math.random()*20)+5;
+    for(let d=0;d<6;d++){const f=addDays(lunes.toISOString().split('T')[0],d);const prod=Math.floor(Math.random()*15)+2,cons=Math.floor(Math.random()*10);const sf=si+prod-cons;inv[p][f]={si,prod,cons,sf};si=sf;}
+  });return inv;
+}
+
+let invCoc=null,invBar=null,invWin=null;
+
+function renderInvTableWithCats(theadId,tbodyId,catsObj,inv,off){
+  const fechas=getSemFechas(off);
+  document.getElementById(theadId).innerHTML=`<tr><th>PRODUCTO</th>${fechas.map((f,i)=>`<th><div>${DIAS[i]}</div><div class="dh"><span>SI</span><span>P/I</span><span>C</span></div></th>`).join('')}<th>SF HOY</th></tr>`;
+  let html='';
+  Object.entries(catsObj).forEach(([cat,items])=>{
+    html+=`<tr class="cat-header"><td colspan="${fechas.length+2}">${cat}</td></tr>`;
+    items.forEach(p=>{
+      let lastSF='—';
+      const cells=fechas.map(f=>{
+        const d=inv[p]?.[f];
+        if(!d)return`<td><div class="dc"><div class="sc si">—</div><div class="sc inp">—</div><div class="sc cons">—</div></div></td>`;
+        lastSF=d.sf;
+        return`<td><div class="dc"><div class="sc si">${d.si}</div><div class="sc inp">${d.prod||d.ing||0}</div><div class="sc cons">${d.cons}</div></div></td>`;
+      }).join('');
+      const sfC=typeof lastSF==='number'&&lastSF<3?'color:var(--red)':typeof lastSF==='number'&&lastSF<8?'color:var(--org)':'';
+      html+=`<tr><td>${p}</td>${cells}<td style="padding:10px 12px;font-size:15px;font-weight:700;${sfC}">${lastSF}</td></tr>`;
+    });
+  });
+  document.getElementById(tbodyId).innerHTML=html;
+}
+
+function renderInvTable(theadId,tbodyId,items,inv,off){
+  const fechas=getSemFechas(off);
+  document.getElementById(theadId).innerHTML=`<tr><th>PORCIÓN</th>${fechas.map((f,i)=>`<th><div>${DIAS[i]}</div><div class="dh"><span>SI</span><span>Prod</span><span>Cons</span></div></th>`).join('')}<th>SF HOY</th></tr>`;
+  document.getElementById(tbodyId).innerHTML=items.map(p=>{
+    let lastSF='—';
+    const cells=fechas.map(f=>{const d=inv[p]?.[f];if(!d)return`<td><div class="dc"><div class="sc si">—</div><div class="sc inp">—</div><div class="sc cons">—</div></div></td>`;lastSF=d.sf;return`<td><div class="dc"><div class="sc si">${d.si}</div><div class="sc inp">${d.prod||0}</div><div class="sc cons">${d.cons}</div></div></td>`;}).join('');
+    const sfC=typeof lastSF==='number'&&lastSF<5?'color:var(--red)':typeof lastSF==='number'&&lastSF<10?'color:var(--org)':'';
+    return`<tr><td>${p}</td>${cells}<td style="padding:10px 12px;font-size:15px;font-weight:700;${sfC}">${lastSF}</td></tr>`;
+  }).join('');
+}
+
+function renderCocInvSem(){document.getElementById('coc-sem-lbl').textContent=semLabel(getSemFechas(cocSemOff));if(!invCoc)invCoc=genDemoInv(ALL_PREPS_FLAT);renderInvTable('coc-inv-thead','coc-inv-tbody',ALL_PREPS_FLAT,invCoc,cocSemOff);}
+function cocSemAnt(){cocSemOff--;renderCocInvSem()}function cocSemSig(){cocSemOff++;renderCocInvSem()}
+
+function renderBarInvSem(){document.getElementById('bar-sem-lbl').textContent=semLabel(getSemFechas(barSemOff));if(!invBar)invBar=genDemoInv(ALL_BAR_FLAT);renderInvTableWithCats('bar-inv-thead','bar-inv-tbody',BAR_CATS,invBar,barSemOff);}
+function barSemAnt(){barSemOff--;renderBarInvSem()}function barSemSig(){barSemOff++;renderBarInvSem()}
+
+function renderBar2InvSem(){document.getElementById('bar2-sem-lbl').textContent=semLabel(getSemFechas(barSemOff2));if(!invBar)invBar=genDemoInv(ALL_BAR_FLAT);renderInvTableWithCats('bar2-inv-thead','bar2-inv-tbody',BAR_CATS,invBar,barSemOff2);}
+function barSemAnt2(){barSemOff2--;renderBar2InvSem()}function barSemSig2(){barSemOff2++;renderBar2InvSem()}
+
+function renderWinInvSem(){document.getElementById('win-sem-lbl').textContent=semLabel(getSemFechas(winSemOff));if(!invWin)invWin=genDemoInv(ALL_WIN_FLAT);renderInvTableWithCats('win-inv-thead','win-inv-tbody',VINO_CEPAS,invWin,winSemOff);}
+function winSemAnt(){winSemOff--;renderWinInvSem()}function winSemSig(){winSemOff++;renderWinInvSem()}
+
+function renderWin2InvSem(){document.getElementById('win2-sem-lbl').textContent=semLabel(getSemFechas(winSemOff2));if(!invWin)invWin=genDemoInv(ALL_WIN_FLAT);renderInvTableWithCats('win2-inv-thead','win2-inv-tbody',VINO_CEPAS,invWin,winSemOff2);}
+function winSemAnt2(){winSemOff2--;renderWin2InvSem()}function winSemSig2(){winSemOff2++;renderWin2InvSem()}
+
+// ── GERENCIA · DASHBOARD ──
+function loadGerDash(){
+  const mc=Math.max(...VENTAS_COC.map(v=>v.v));
+  document.getElementById('ger-chart-coc').innerHTML=VENTAS_COC.map(v=>`<div class="cb"><div class="cbv" style="color:var(--gold)">${(v.v/1e6).toFixed(1)}M</div><div class="cbf" style="height:${Math.round((v.v/mc)*120)}px;background:var(--gold)"></div><div class="cbl" title="${v.p}">${v.p.split(' ')[0]}</div></div>`).join('');
+  const mb=Math.max(...VENTAS_BAR.map(v=>v.v));
+  document.getElementById('ger-chart-bar').innerHTML=VENTAS_BAR.map(v=>`<div class="cb"><div class="cbv" style="color:#5A8DD9">${(v.v/1e6).toFixed(1)}M</div><div class="cbf" style="height:${Math.round((v.v/mb)*120)}px;background:#5A8DD9"></div><div class="cbl" title="${v.p}">${v.p.split(' ')[0]}</div></div>`).join('');
+  const mw=Math.max(...VENTAS_WIN.map(v=>v.v));
+  document.getElementById('ger-chart-win').innerHTML=VENTAS_WIN.map(v=>`<div class="cb"><div class="cbv" style="color:#C06080">${(v.v/1e6).toFixed(1)}M</div><div class="cbf" style="height:${Math.round((v.v/mw)*120)}px;background:#9B3A5A"></div><div class="cbl" title="${v.p}">${v.p.split(' ').slice(-1)[0]}</div></div>`).join('');
+  const alertas=[{s:'🍹 Barra',i:'aperol 1000ml',st:'2.1 bot',niv:'bajo'},{s:'🍹 Barra',i:'TANQUERAY 750ml',st:'0.5 bot',niv:'critico'},{s:'👨‍🍳 Cocina',i:'PORCION PULPO BRASEADO',st:'3 porc.',niv:'critico'},{s:'👨‍🍳 Cocina',i:'PORCION FLAT IRON 250g',st:'6 porc.',niv:'bajo'},{s:'🍷 Vinos',i:'CS Vik A',st:'1 bot',niv:'critico'},{s:'🍷 Vinos',i:'Íconos Cabo de Hornos',st:'2 bot',niv:'bajo'}];
+  const ac={critico:'be',bajo:'bw'},al={critico:'🔴 Crítico',bajo:'🟡 Bajo'};
+  document.getElementById('ger-alertas').innerHTML=alertas.map(a=>`<tr><td>${a.s}</td><td>${a.i}</td><td class="${a.niv==='critico'?'re':'or'}">${a.st}</td><td><span class="badge ${ac[a.niv]}">${al[a.niv]}</span></td><td style="color:var(--txd)">${a.niv==='critico'?'Reponer urgente':'Revisar hoy'}</td></tr>`).join('');
+}
+
+// ── VENTAS ──
+function renderVentas(){
+  const all=[...VENTAS_COC.map(v=>({...v,s:'👨‍🍳 Cocina'})),...VENTAS_BAR.map(v=>({...v,s:'🍹 Barra'})),...VENTAS_WIN.map(v=>({...v,s:'🍷 Vinos'}))];
+  document.getElementById('v-all-tbody').innerHTML=all.map(v=>`<tr><td>${v.s}</td><td>${v.p}</td><td class="g">${v.u}</td><td class="gr">${fM(v.v)}</td></tr>`).join('');
+  document.getElementById('v-coc-tbody').innerHTML=VENTAS_COC.map(v=>`<tr><td>${v.p}</td><td class="g">${v.u}</td><td class="gr">${fM(v.v)}</td><td style="color:var(--txm)">~65%</td></tr>`).join('');
+  document.getElementById('v-bar-tbody').innerHTML=VENTAS_BAR.map(v=>`<tr><td>${v.p}</td><td class="bl">${v.u}</td><td class="gr">${fM(v.v)}</td></tr>`).join('');
+  document.getElementById('v-win-tbody').innerHTML=VENTAS_WIN.map(v=>`<tr><td class="wi">${v.p}</td><td style="color:#C06080">${v.u}</td><td class="gr">${fM(v.v)}</td></tr>`).join('');
+}
+function switchVtab(el,id){
+  document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
+  ['vt-todos','vt-coc','vt-bar','vt-win'].forEach(v=>document.getElementById(v).classList.toggle('hidden',v!==id));
+}
+function syncVentas(ctx){
+  const res=document.getElementById('sync-res');
+  if(res){res.className='al ai';res.textContent='⏳ Conectando con Toteat…';}
+  callScript('sincronizarVentas',{ctx}).catch(()=>{});
+  setTimeout(()=>{
+    if(res){res.className='al aok';res.textContent=`✅ Sincronizado · Consumo actualizado · ${new Date().toLocaleTimeString()}`;}
+    toast('Toteat sincronizado','tok');
+  },2000);
+}
+
+// ── APPS SCRIPT ──
+async function callScript(action,data){
+  if(!SCRIPT_URL||SCRIPT_URL.includes('TU_URL')){console.log('[DEMO]',action,data);return{ok:true};}
+  try{const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,data})});return await r.json();}
+  catch(e){console.error(e);return{error:e.message};}
+}
+
+// ── INIT ──
+filterBarProd();filterVinoProd();
+const style=document.createElement('style');style.textContent='@keyframes spin{to{transform:rotate(360deg)}}';document.head.appendChild(style);
+</script>
+</body>
+</html>
