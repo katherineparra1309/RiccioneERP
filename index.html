@@ -954,10 +954,10 @@ function guardarCocIngreso(){
   const fecha=document.getElementById('ci-fecha').value,ins=document.getElementById('ci-ins').value;
   if(!fecha||!ins){toast('Completa fecha e insumo','terr');return;}
   if(!origCoc){toast('Elige el origen','terr');return;}
-  let kgProd,mer,limp;
+  let kgProd,mer,limp,bod=0;
   if(origCoc==='prov'){
     const tot=parseFloat(document.getElementById('cp-tot').value)||0;
-    const bod=parseFloat(document.getElementById('cp-bod').value)||0;
+    bod=parseFloat(document.getElementById('cp-bod').value)||0;
     mer=parseFloat(document.getElementById('cp-mer').value)||0;
     kgProd=Math.max(0,tot-bod);limp=Math.max(0,kgProd-mer);
     if(!DB.bodega[ins])DB.bodega[ins]={kg:0};DB.bodega[ins].kg+=bod;
@@ -975,7 +975,18 @@ function guardarCocIngreso(){
   ['blq-prov','blq-bod','blq-save'].forEach(id=>document.getElementById(id).classList.add('hidden'));
   ['cp-tot','cp-bod','cp-mer','cb-prod','cb-mer'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('ci-ins').value='';setAl('ci-al',null);
-  callScript('guardarCocIngreso',{fecha,ins,kgProd,mer,limp});
+  callScript('guardarCocIngreso',{
+    fecha,
+    insumo: ins,
+    origen: origCoc==='prov'?'proveedor':'bodega',
+    kgTotal: kgProd+bod,
+    kgBodega: bod,
+    kgDeBodega: origCoc==='bod'?kgProd:0,
+    merma: mer,
+    kgLimpio: limp,
+    proveedor: document.getElementById('ci-prov')?.value||'',
+    usuario: USER,
+  });
   toast(`${ins} · ${fKg(limp)} kg limpios`,'tok');
 }
 function renderCocLog(){
