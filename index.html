@@ -1071,7 +1071,16 @@ function guardarProd(){
     const msg=descuentos.map(d=>`${d.ins}: −${d.unidades} u.`).join(' · ');
     toast(`Frutti di Mare guardado · ${msg}`,'tok');
   }
-  callScript('guardarCocProd',{fecha:f,ins,porciones,descuentos});
+  callScript('guardarCocProd',{
+  fecha: f,
+  insumoBase: ins,
+  porciones: porciones.map(p=>({
+    porcion:  p.porcion,
+    gramaje:  p.g,
+    cantidad: p.qty,
+  })),
+  usuario: USER,
+});
   document.getElementById('pr-ins').value='';document.getElementById('pr-list').innerHTML='<div style="color:var(--txd);font-size:13px;padding:10px 0">Selecciona un insumo para ver las preparaciones</div>';
   toast(`${porciones.length} preparaciones guardadas`,'tok');
 }
