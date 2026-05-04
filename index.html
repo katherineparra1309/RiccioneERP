@@ -203,6 +203,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="rc" data-r="gerencia" onclick="pickR(this)"><span class="ico">👩‍💼</span><span class="lbl">Gerencia</span></div>
       </div>
     </div>
+    <div class="ib">
+      <label class="il">Clave de acceso</label>
+      <input class="bi" id="lclave" type="password" placeholder="Clave del restaurante" autocomplete="off" oninput="chkL()">
+    </div>
     <button class="cta" id="lbtn" onclick="login()" disabled>Entrar al Sistema</button>
   </div>
 </div>
@@ -542,7 +546,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="card">
           <div class="card-hd grn">🔄 Sincronización central</div>
           <div class="al ai" style="margin-bottom:14px">El Apps Script importa ventas desde Toteat, separa automáticamente productos de barra, cocina y vinos, y actualiza el campo <strong>Consumo</strong> en todos los inventarios.</div>
-          <button class="btn bgg" style="font-size:15px;padding:16px 28px" onclick="syncVentas('all')">🔄 &nbsp;Sincronizar Barra + Cocina + Vinos</button>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px">
+            <button class="btn bgg" style="font-size:15px;padding:16px 28px" onclick="syncTodo()">🔄 &nbsp;Sincronizar los 3 Inventarios</button>
+          </div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn bo" style="font-size:12px" onclick="syncSeccion('cocina')">🍽 Solo Cocina</button>
+            <button class="btn bo" style="font-size:12px" onclick="syncSeccion('barra')">🍹 Solo Barra</button>
+            <button class="btn bo" style="font-size:12px" onclick="syncSeccion('vinos')">🍷 Solo Vinos</button>
+          </div>
           <div id="sync-res" class="al hidden" style="margin-top:12px"></div>
         </div>
         <div class="card">
@@ -609,7 +620,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="toast" id="toast"></div>
 
 <script>
-const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwG9Tlnd3v0-VsCMqQ_GfxRDfwHY_X2Vef97DKewXyw_d5yTn_lrOLripHwBPU7hesj/exec';
+const SCRIPT_URL='TU_URL_APPS_SCRIPT_AQUI'; // ← reemplaza con tu URL /exec
+const CLAVE='RICCIONE2026'; // ← misma clave que en Apps Script
 
 // ── DATOS BARRA POR CATEGORÍA ──
 const BAR_CATS = {
@@ -722,9 +734,16 @@ const MENUS={
 };
 
 function pickR(el){document.querySelectorAll('.rc').forEach(c=>c.classList.remove('on'));el.classList.add('on');selR=el.dataset.r;chkL();}
-function chkL(){document.getElementById('lbtn').disabled=!(document.getElementById('ln').value.trim()&&selR);}
+function chkL(){const n=document.getElementById('ln').value.trim();const c=document.getElementById('lclave').value.trim();document.getElementById('lbtn').disabled=!(n&&selR&&c);}
 
 function login(){
+  const claveIngresada=document.getElementById('lclave').value.trim();
+  if(claveIngresada!==CLAVE){
+    document.getElementById('lclave').style.borderColor='var(--red)';
+    toast('Clave incorrecta','terr');
+    return;
+  }
+  document.getElementById('lclave').style.borderColor='';
   USER=document.getElementById('ln').value.trim();ROLE=selR;
   document.getElementById('login').classList.remove('active');
   document.getElementById('app').classList.add('active');
@@ -736,7 +755,7 @@ function login(){
   renderCocInvSem();renderBarInvSem();renderBar2InvSem();renderWinInvSem();renderWin2InvSem();
   filterBarProd();filterVinoProd();
 }
-function logout(){document.getElementById('app').classList.remove('active');document.getElementById('login').classList.add('active');document.querySelectorAll('.rc').forEach(c=>c.classList.remove('on'));document.getElementById('ln').value='';document.getElementById('lbtn').disabled=true;selR='';}
+function logout(){document.getElementById('app').classList.remove('active');document.getElementById('login').classList.add('active');document.getElementById('lclave').value='';document.querySelectorAll('.rc').forEach(c=>c.classList.remove('on'));document.getElementById('ln').value='';document.getElementById('lbtn').disabled=true;selR='';}
 
 function buildSB(s){
   const items=MENUS[s]||[];
@@ -951,63 +970,31 @@ function calcCocBod(){
   else if(limp>0)setAl('ci-al',`✅ ${fKg(limp)} kg listos para producción`,'aok');
 }
 function guardarCocIngreso(){
-  const fecha=document.getElementById('ci-fecha').value;
-  const ins=document.getElementById('ci-ins').value;
+  const fecha=document.getElementById('ci-fecha').value,ins=document.getElementById('ci-ins').value;
   if(!fecha||!ins){toast('Completa fecha e insumo','terr');return;}
   if(!origCoc){toast('Elige el origen','terr');return;}
-
-  // ── Guardar origCoc ANTES de resetear ──
-  const origenActual = origCoc;
-
-  let kgProd, mer, limp, bod=0, kgDeBodega=0;
-  if(origenActual==='prov'){
+  let kgProd,mer,limp;
+  if(origCoc==='prov'){
     const tot=parseFloat(document.getElementById('cp-tot').value)||0;
-    bod=parseFloat(document.getElementById('cp-bod').value)||0;
+    const bod=parseFloat(document.getElementById('cp-bod').value)||0;
     mer=parseFloat(document.getElementById('cp-mer').value)||0;
-    kgProd=Math.max(0,tot-bod);
-    limp=Math.max(0,kgProd-mer);
-    if(!DB.bodega[ins])DB.bodega[ins]={kg:0};
-    DB.bodega[ins].kg+=bod;
+    kgProd=Math.max(0,tot-bod);limp=Math.max(0,kgProd-mer);
+    if(!DB.bodega[ins])DB.bodega[ins]={kg:0};DB.bodega[ins].kg+=bod;
   } else {
-    kgDeBodega=parseFloat(document.getElementById('cb-prod').value)||0;
+    kgProd=parseFloat(document.getElementById('cb-prod').value)||0;
     mer=parseFloat(document.getElementById('cb-mer').value)||0;
-    kgProd=kgDeBodega;
     limp=Math.max(0,kgProd-mer);
     if(DB.bodega[ins])DB.bodega[ins].kg=Math.max(0,DB.bodega[ins].kg-kgProd);
   }
-
   if(kgProd<=0){toast('Ingresa los KG','terr');return;}
   const pct=kgProd>0?mer/kgProd:0;
-
-  DB.cocIngresos.push({fecha,ins,origen:origenActual,kgProd,mer,limp,pct});
-  renderCocLog();
-
-  // ── Resetear DESPUÉS de guardar los datos ──
-  origCoc='';
+  DB.cocIngresos.push({fecha,ins,origen:origCoc,kgProd,mer,limp,pct});
+  renderCocLog();origCoc='';
   ['ob-prov','ob-bod'].forEach(id=>document.getElementById(id).classList.remove('on'));
   ['blq-prov','blq-bod','blq-save'].forEach(id=>document.getElementById(id).classList.add('hidden'));
   ['cp-tot','cp-bod','cp-mer','cb-prod','cb-mer'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('ci-ins').value='';
-  setAl('ci-al',null);
-
-  // ── Enviar al backend con todos los campos correctos ──
-  const tot = origenActual==='prov'
-    ? (parseFloat(document.getElementById('cp-tot')?.value)||kgProd+bod)
-    : kgDeBodega;
-
-  callScript('guardarCocIngreso',{
-    fecha,
-    insumo:     ins,
-    origen:     origenActual==='prov' ? 'proveedor' : 'bodega',
-    kgTotal:    origenActual==='prov' ? kgProd+bod  : kgDeBodega,
-    kgBodega:   origenActual==='prov' ? bod         : 0,
-    kgDeBodega: origenActual==='bod'  ? kgDeBodega  : 0,
-    merma:      mer,
-    kgLimpio:   limp,
-    proveedor:  document.getElementById('ci-prov')?.value || '',
-    usuario:    USER,
-  });
-
+  document.getElementById('ci-ins').value='';setAl('ci-al',null);
+  callScript('guardarCocIngreso',{fecha,ins,kgProd,mer,limp});
   toast(`${ins} · ${fKg(limp)} kg limpios`,'tok');
 }
 function renderCocLog(){
@@ -1092,16 +1079,7 @@ function guardarProd(){
     const msg=descuentos.map(d=>`${d.ins}: −${d.unidades} u.`).join(' · ');
     toast(`Frutti di Mare guardado · ${msg}`,'tok');
   }
-  callScript('guardarCocProd',{
-  fecha: f,
-  insumoBase: ins,
-  porciones: porciones.map(p=>({
-    porcion:  p.porcion,
-    gramaje:  p.g,
-    cantidad: p.qty,
-  })),
-  usuario: USER,
-});
+  callScript('guardarCocProd',{fecha:f,ins,porciones,descuentos});
   document.getElementById('pr-ins').value='';document.getElementById('pr-list').innerHTML='<div style="color:var(--txd);font-size:13px;padding:10px 0">Selecciona un insumo para ver las preparaciones</div>';
   toast(`${porciones.length} preparaciones guardadas`,'tok');
 }
@@ -1218,33 +1196,60 @@ function switchVtab(el,id){
   document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
   ['vt-todos','vt-coc','vt-bar','vt-win'].forEach(v=>document.getElementById(v).classList.toggle('hidden',v!==id));
 }
-function syncVentas(ctx){
+function syncVentas(ctx){syncTodo();}
+
+async function syncTodo(){
   const res=document.getElementById('sync-res');
-  if(res){res.className='al ai';res.textContent='⏳ Conectando con Toteat…';}
-  callScript('sincronizarVentas',{ctx}).catch(()=>{});
-  setTimeout(()=>{
-    if(res){res.className='al aok';res.textContent=`✅ Sincronizado · Consumo actualizado · ${new Date().toLocaleTimeString()}`;}
-    toast('Toteat sincronizado','tok');
-  },2000);
+  const fecha=new Date().toISOString().split('T')[0];
+  if(res){res.className='al ai';res.textContent='⏳ Sincronizando los 3 inventarios para '+fecha+'…';}
+  toast('Sincronizando...','tw');
+  try{
+    const r=await callScript('sincronizarVentas',{fecha});
+    if(r&&r.ok){
+      const msg='✅ '+fecha+' · Cocina: +'+(r.cocina?.cierres?.agregados||0)+' · Barra: +'+(r.barra?.cierres?.agregados||0)+' · Vinos: +'+(r.vinos?.cierres?.agregados||0);
+      if(res){res.className='al aok';res.textContent=msg;}
+      toast('3 inventarios sincronizados','tok');
+    } else {
+      if(res){res.className='al ae';res.textContent='❌ '+(r?.error||'Error desconocido');}
+      toast('Error al sincronizar','terr');
+    }
+  }catch(e){
+    if(res){res.className='al ae';res.textContent='❌ '+e.message;}
+    toast('Error de conexión','terr');
+  }
+}
+
+async function syncSeccion(sec){
+  const res=document.getElementById('sync-res');
+  const fecha=new Date().toISOString().split('T')[0];
+  const nom={cocina:'🍽 Cocina',barra:'🍹 Barra',vinos:'🍷 Vinos'}[sec]||sec;
+  if(res){res.className='al ai';res.textContent='⏳ Sincronizando '+nom+'…';}
+  try{
+    const r=await callScript('sincronizarCocina'===sec?'sincronizarCocina':sec==='barra'?'sincronizarBarra':'sincronizarVinos',{fecha,seccion:sec});
+    if(r&&r.ok){
+      if(res){res.className='al aok';res.textContent='✅ '+nom+' sincronizado · '+fecha;}
+      toast(nom+' OK','tok');
+    } else {
+      if(res){res.className='al ae';res.textContent='❌ '+(r?.error||'Error');}
+      toast('Error','terr');
+    }
+  }catch(e){
+    if(res){res.className='al ae';res.textContent='❌ '+e.message;}
+    toast('Error','terr');
+  }
 }
 
 // ── APPS SCRIPT ──
-async function callScript(action, data) {
-  if (!SCRIPT_URL || SCRIPT_URL.includes('TU_URL')) {
-    console.log('[DEMO]', action, data);
-    return { ok: true };
+async function callScript(action,data){
+  if(!SCRIPT_URL||SCRIPT_URL.includes('TU_URL')){console.log('[DEMO]',action,data);return{ok:true};}
+  try{
+    const url=SCRIPT_URL+'?action='+encodeURIComponent(action)+'&clave='+encodeURIComponent(CLAVE)+'&data='+encodeURIComponent(JSON.stringify(data||{}));
+    const r=await fetch(url);
+    return await r.json();
   }
-  try {
-    const payload = encodeURIComponent(JSON.stringify(data || {}));
-    const url = `${SCRIPT_URL}?action=${action}&data=${payload}`;
-    const r = await fetch(url);
-    const text = await r.text();
-    return JSON.parse(text);
-  } catch(e) {
-    console.error('callScript error:', e);
-    return { error: e.message };
-  }
+  catch(e){console.error(e);return{error:e.message};}
 }
+
 // ── INIT ──
 filterBarProd();filterVinoProd();
 const style=document.createElement('style');style.textContent='@keyframes spin{to{transform:rotate(360deg)}}';document.head.appendChild(style);
