@@ -951,41 +951,63 @@ function calcCocBod(){
   else if(limp>0)setAl('ci-al',`✅ ${fKg(limp)} kg listos para producción`,'aok');
 }
 function guardarCocIngreso(){
-  const fecha=document.getElementById('ci-fecha').value,ins=document.getElementById('ci-ins').value;
+  const fecha=document.getElementById('ci-fecha').value;
+  const ins=document.getElementById('ci-ins').value;
   if(!fecha||!ins){toast('Completa fecha e insumo','terr');return;}
   if(!origCoc){toast('Elige el origen','terr');return;}
-  let kgProd,mer,limp;
-  if(origCoc==='prov'){
+
+  // ── Guardar origCoc ANTES de resetear ──
+  const origenActual = origCoc;
+
+  let kgProd, mer, limp, bod=0, kgDeBodega=0;
+  if(origenActual==='prov'){
     const tot=parseFloat(document.getElementById('cp-tot').value)||0;
-    const bod=parseFloat(document.getElementById('cp-bod').value)||0;
+    bod=parseFloat(document.getElementById('cp-bod').value)||0;
     mer=parseFloat(document.getElementById('cp-mer').value)||0;
-    kgProd=Math.max(0,tot-bod);limp=Math.max(0,kgProd-mer);
-    if(!DB.bodega[ins])DB.bodega[ins]={kg:0};DB.bodega[ins].kg+=bod;
+    kgProd=Math.max(0,tot-bod);
+    limp=Math.max(0,kgProd-mer);
+    if(!DB.bodega[ins])DB.bodega[ins]={kg:0};
+    DB.bodega[ins].kg+=bod;
   } else {
-    kgProd=parseFloat(document.getElementById('cb-prod').value)||0;
+    kgDeBodega=parseFloat(document.getElementById('cb-prod').value)||0;
     mer=parseFloat(document.getElementById('cb-mer').value)||0;
+    kgProd=kgDeBodega;
     limp=Math.max(0,kgProd-mer);
     if(DB.bodega[ins])DB.bodega[ins].kg=Math.max(0,DB.bodega[ins].kg-kgProd);
   }
+
   if(kgProd<=0){toast('Ingresa los KG','terr');return;}
   const pct=kgProd>0?mer/kgProd:0;
-  DB.cocIngresos.push({fecha,ins,origen:origCoc,kgProd,mer,limp,pct});
-  renderCocLog();origCoc='';
+
+  DB.cocIngresos.push({fecha,ins,origen:origenActual,kgProd,mer,limp,pct});
+  renderCocLog();
+
+  // ── Resetear DESPUÉS de guardar los datos ──
+  origCoc='';
   ['ob-prov','ob-bod'].forEach(id=>document.getElementById(id).classList.remove('on'));
   ['blq-prov','blq-bod','blq-save'].forEach(id=>document.getElementById(id).classList.add('hidden'));
   ['cp-tot','cp-bod','cp-mer','cb-prod','cb-mer'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('ci-ins').value='';setAl('ci-al',null);
+  document.getElementById('ci-ins').value='';
+  setAl('ci-al',null);
+
+  // ── Enviar al backend con todos los campos correctos ──
+  const tot = origenActual==='prov'
+    ? (parseFloat(document.getElementById('cp-tot')?.value)||kgProd+bod)
+    : kgDeBodega;
+
   callScript('guardarCocIngreso',{
     fecha,
-    insumo: ins,
-    origen: origCoc==='prov'?'proveedor':'bodega',
-    kgTotal: origCoc==='prov'?(parseFloat(document.getElementById('cp-tot').value)||0):0,
-    kgBodega: origCoc==='prov'?(parseFloat(document.getElementById('cp-bod').value)||0):0,
-    kgDeBodega: origCoc==='bod'?(parseFloat(document.getElementById('cb-prod').value)||0):0,
-    merma: mer,
-    kgLimpio: limp,
-    proveedor: document.getElementById('ci-prov').value||''
+    insumo:     ins,
+    origen:     origenActual==='prov' ? 'proveedor' : 'bodega',
+    kgTotal:    origenActual==='prov' ? kgProd+bod  : kgDeBodega,
+    kgBodega:   origenActual==='prov' ? bod         : 0,
+    kgDeBodega: origenActual==='bod'  ? kgDeBodega  : 0,
+    merma:      mer,
+    kgLimpio:   limp,
+    proveedor:  document.getElementById('ci-prov')?.value || '',
+    usuario:    USER,
   });
+
   toast(`${ins} · ${fKg(limp)} kg limpios`,'tok');
 }
 function renderCocLog(){
@@ -1070,7 +1092,16 @@ function guardarProd(){
     const msg=descuentos.map(d=>`${d.ins}: −${d.unidades} u.`).join(' · ');
     toast(`Frutti di Mare guardado · ${msg}`,'tok');
   }
-  callScript('guardarCocProd',{fecha:f,ins,porciones,descuentos});
+  callScript('guardarCocProd',{
+  fecha: f,
+  insumoBase: ins,
+  porciones: porciones.map(p=>({
+    porcion:  p.porcion,
+    gramaje:  p.g,
+    cantidad: p.qty,
+  })),
+  usuario: USER,
+});
   document.getElementById('pr-ins').value='';document.getElementById('pr-list').innerHTML='<div style="color:var(--txd);font-size:13px;padding:10px 0">Selecciona un insumo para ver las preparaciones</div>';
   toast(`${porciones.length} preparaciones guardadas`,'tok');
 }
@@ -1198,15 +1229,26 @@ function syncVentas(ctx){
 }
 
 // ── APPS SCRIPT ──
-async function callScript(action,data){
-  if(!SCRIPT_URL||SCRIPT_URL.includes('TU_URL')){console.log('[DEMO]',action,data);return{ok:true};}
-  try{const r=await fetch(SCRIPT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action,data})});return await r.json();}
-  catch(e){console.error(e);return{error:e.message};}
+async function callScript(action, data) {
+  if (!SCRIPT_URL || SCRIPT_URL.includes('TU_URL')) {
+    console.log('[DEMO]', action, data);
+    return { ok: true };
+  }
+  try {
+    const payload = encodeURIComponent(JSON.stringify(data || {}));
+    const url = `${SCRIPT_URL}?action=${action}&data=${payload}`;
+    const r = await fetch(url);
+    const text = await r.text();
+    return JSON.parse(text);
+  } catch(e) {
+    console.error('callScript error:', e);
+    return { error: e.message };
+  }
 }
-
 // ── INIT ──
 filterBarProd();filterVinoProd();
 const style=document.createElement('style');style.textContent='@keyframes spin{to{transform:rotate(360deg)}}';document.head.appendChild(style);
 </script>
 </body>
 </html>
+
