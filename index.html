@@ -995,18 +995,16 @@ function guardarCocIngreso(){
     ? (parseFloat(document.getElementById('cp-tot')?.value)||kgProd+bod)
     : kgDeBodega;
 
-  callScript('guardarCocIngreso',{
-    fecha,
-    insumo:     ins,
-    origen:     origenActual==='prov' ? 'proveedor' : 'bodega',
-    kgTotal:    origenActual==='prov' ? kgProd+bod  : kgDeBodega,
-    kgBodega:   origenActual==='prov' ? bod         : 0,
-    kgDeBodega: origenActual==='bod'  ? kgDeBodega  : 0,
-    merma:      mer,
-    kgLimpio:   limp,
-    proveedor:  document.getElementById('ci-prov')?.value || '',
-    usuario:    USER,
-  });
+callScript('guardarCocIngreso',{
+  fecha, insumo:ins,
+  origen: origenActual==='prov'?'proveedor':'bodega',
+  kgTotal: origenActual==='prov'?kgProd+bod:kgDeBodega,
+  kgBodega: origenActual==='prov'?bod:0,
+  kgDeBodega: origenActual==='bod'?kgDeBodega:0,
+  merma:mer, kgLimpio:limp,
+  proveedor:document.getElementById('ci-prov')?.value||'',
+  usuario:USER
+});
 
   toast(`${ins} · ${fKg(limp)} kg limpios`,'tok');
 }
