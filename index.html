@@ -408,13 +408,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
         <div class="card">
           <div class="card-hd blu">🍶 Stock por producto</div>
-          <div style="display:grid;grid-template-columns:1fr 90px 90px 90px 90px;gap:8px;padding-bottom:10px;border-bottom:1px solid var(--br);margin-bottom:4px">
-            <div style="font-size:9px;letter-spacing:2px;color:var(--txd)">PRODUCTO</div>
-            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">BOT. ABIERTA</div>
-            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">BOT. LLENAS</div>
-            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">BODEGA</div>
-            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">TOTAL (ml)</div>
-          </div>
+<div style="display:grid;grid-template-columns:1fr 90px 90px 90px 90px 90px;gap:8px;padding-bottom:10px;border-bottom:1px solid var(--br);margin-bottom:4px">
+    <div style="font-size:9px;letter-spacing:2px;color:var(--txd)">PRODUCTO</div>
+    <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">ABIERTA 1</div>
+    <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">ABIERTA 2</div>
+    <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">BOT. LLENAS</div>
+    <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">BODEGA</div>
+    <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">TOTAL (ml)</div>
+</div>
+          
           <div id="bc-list"></div>
           <div class="btn-row" style="margin-top:18px"><button class="btn bb bxl" onclick="guardarBarConteo()">💾 &nbsp;Guardar Conteo Barra</button></div>
         </div>
@@ -809,22 +811,24 @@ function loadBarConteo(){
     html+=`<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txd);padding:12px 0 6px;border-top:1px solid var(--br);margin-top:6px">${cat}</div>`;
     items.forEach((p,i)=>{
       const idx=ALL_BAR_FLAT.indexOf(p);
-      html+=`<div style="display:grid;grid-template-columns:1fr 90px 90px 90px 90px;gap:6px;padding:5px 0;align-items:center;">
-        <div style="font-size:12px;color:var(--txm)">${p}</div>
-        <input type="number" id="ba-${idx}" min="0" step="0.01" placeholder="0.00" style="background:var(--d3);border:1px solid rgba(90,141,217,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcBarRow(${idx})">
-        <input type="number" id="bl-${idx}" min="0" placeholder="0" style="background:var(--d3);border:1px solid rgba(90,141,217,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcBarRow(${idx})">
-        <input type="number" id="bb-${idx}" min="0" placeholder="0" style="background:var(--d3);border:1px solid rgba(90,141,217,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcBarRow(${idx})">
-        <div id="bmt-${idx}" style="background:rgba(90,141,217,.08);border:1px solid rgba(90,141,217,.25);border-radius:9px;padding:7px;text-align:center;font-size:12px;color:#5A8DD9;font-weight:600">—</div>
-      </div>`;
+    html+=`<div style="display:grid;grid-template-columns:1fr 90px 90px 90px 90px 90px;gap:6px;padding:5px 0;align-items:center;">
+  <div style="font-size:12px;color:var(--txm)">${p}</div>
+  <input type="number" id="ba1-${idx}" min="0" step="0.01" placeholder="0.00" style="background:var(--d3);border:1px solid rgba(90,141,217,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcBarRow(${idx})">
+  <input type="number" id="ba2-${idx}" min="0" step="0.01" placeholder="0.00" style="background:var(--d3);border:1px solid rgba(90,141,217,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcBarRow(${idx})">
+  <input type="number" id="bl-${idx}" min="0" placeholder="0" style="background:var(--d3);border:1px solid rgba(90,141,217,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcBarRow(${idx})">
+  <input type="number" id="bb-${idx}" min="0" placeholder="0" style="background:var(--d3);border:1px solid rgba(90,141,217,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcBarRow(${idx})">
+  <div id="bmt-${idx}" style="background:rgba(90,141,217,.08);border:1px solid rgba(90,141,217,.25);border-radius:9px;padding:7px;text-align:center;font-size:12px;color:#5A8DD9;font-weight:600">—</div>
+</div>`;
     });
   });
   list.innerHTML=html;
 }
 function calcBarRow(i){
-  const a=parseFloat(document.getElementById('ba-'+i)?.value)||0;
+  const a1=parseFloat(document.getElementById('ba1-'+i)?.value)||0;
+  const a2=parseFloat(document.getElementById('ba2-'+i)?.value)||0;
   const l=parseInt(document.getElementById('bl-'+i)?.value)||0;
   const b=parseInt(document.getElementById('bb-'+i)?.value)||0;
-  const ml=Math.round(a*750)+(l+b)*750;
+  const ml=Math.round((a1+a2)*750)+(l+b)*750;
   const el=document.getElementById('bmt-'+i);if(el)el.textContent=(ml/1000).toFixed(2)+' L';
 }
 function guardarBarConteo(){
@@ -832,7 +836,7 @@ function guardarBarConteo(){
   if(!fecha){toast('Selecciona una fecha','terr');return;}
   let n=0;
   ALL_BAR_FLAT.forEach((p,i)=>{
-    const a=parseFloat(document.getElementById('ba-'+i)?.value)||0;
+   const a=(parseFloat(document.getElementById('ba1-'+i)?.value)||0)+(parseFloat(document.getElementById('ba2-'+i)?.value)||0);
     const l=parseInt(document.getElementById('bl-'+i)?.value)||0;
     const b=parseInt(document.getElementById('bb-'+i)?.value)||0;
     if(a||l||b){DB.barConteo.push({fecha,ingrediente:p,botAbierta:a,botLlenas:l,botBodega:b});n++;}
