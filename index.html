@@ -227,21 +227,21 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <div class="fg c3">
             <div class="f"><label>Fecha</label><input type="date" id="ci-fecha"></div>
             <div class="f"><label>Insumo</label>
-              <select id="ci-ins" onchange="chkBodegaStock()">
-                <option value="">— Elegir —</option>
-                <optgroup label="Proteínas Mar">
-                  <option>ATUN</option><option>PULPO</option><option>SALMÓN</option>
-                  <option>MERLUZA</option><option>OSTIONES</option><option>CAMARÓN</option>
-                  <option>CENTOLLA</option><option>LANGOSTINO</option><option>CALAMAR</option>
-                </optgroup>
-                <optgroup label="Carnes">
-                  <option>FILETE</option><option>FLAT IRON</option><option>ENTRAÑA</option>
-                  <option>VACUNO (GENERAL)</option><option>SOBRECOSTILLA</option>
-                  <option>OSOBUCO</option><option>PATO</option><option>POLLO</option>
-                  <option>PIERNA CORDERO</option>
-                </optgroup>
-
-              </select>
+             <select id="ci-ins" onchange="chkBodegaStock()">
+  <option value="">— Elegir —</option>
+  <optgroup label="Proteínas Mar">
+    <option>ATUN</option><option>PULPO</option><option>SALMON</option>
+    <option>MERLUZA</option><option>OSTIONES</option><option>CAMARON</option>
+    <option>CENTOLLA</option><option>LANGOSTINO</option><option>CALAMAR</option>
+  </optgroup>
+  <optgroup label="Carnes">
+    <option>FILETE</option><option>FLAT IRON</option><option>ENTRAÑA</option>
+    <option>VACUNO (GENERAL)</option><option>SOBRECOSTILLA</option>
+    <option>OSOBUCO</option><option>PATO</option><option>POLLO</option>
+    <option>TERNERA</option><option>PIERNA CORDERO</option>
+  </optgroup>
+</select>
+              
             </div>
             <div class="f"><label>Proveedor</label><input type="text" id="ci-prov" placeholder="Ej: La Flor" style="font-size:15px;text-align:left;padding:13px 15px"></div>
           </div>
@@ -306,15 +306,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
           <div class="fg c3">
             <div class="f"><label>Fecha</label><input type="date" id="pr-f"></div>
             <div class="f"><label>Insumo base</label>
-              <select id="pr-ins" onchange="loadProd()">
-                <option value="">— Elegir —</option>
-                <option>ATUN</option><option>PULPO</option><option>FLAT IRON</option>
-                <option>FILETE</option><option>MERLUZA</option><option>SALMÓN</option>
-                <option>VACUNO (GENERAL)</option><option>PATO</option><option>OSTIONES</option>
-                <option>CAMARÓN</option>                <option>CENTOLLA</option><option>CALAMAR</option>
-                <option>FRUTTI DI MARE</option>
-                <option>SOBRECOSTILLA</option><option>PIERNA CORDERO</option>
-              </select>
+             <select id="pr-ins" onchange="loadProd()">
+  <option value="">— Elegir —</option>
+  <optgroup label="Proteínas Mar">
+    <option>ATUN</option><option>PULPO</option><option>SALMON</option>
+    <option>MERLUZA</option><option>OSTIONES</option><option>CAMARON</option>
+    <option>CENTOLLA</option><option>CALAMAR</option>
+  </optgroup>
+  <optgroup label="Carnes">
+    <option>FILETE</option><option>FLAT IRON</option><option>ENTRAÑA</option>
+    <option>VACUNO (GENERAL)</option><option>SOBRECOSTILLA</option>
+    <option>OSOBUCO</option><option>PATO</option><option>POLLO</option>
+    <option>TERNERA</option><option>PIERNA CORDERO</option>
+  </optgroup>
+</select>
             </div>
             <div class="f"><label>KG Limpio disponible</label><div class="rb"><span class="rl2">Calculado</span><span class="rv" id="pr-disp">—</span><span class="ru">kg</span></div></div>
           </div>
@@ -649,8 +654,8 @@ const VINO_CEPAS = {
 // ── PORCIONES DE COCINA CON GRAMAJE ──
 const PREPS = {
   ATUN:[
-    {n:'PORCION TARTAR DE ATUN 130g',g:130,desc:'Tapa tartar atún'},
-    {n:'PORCION TAPA TARTAR ATUN 40g',g:40,desc:'Tapa'},
+    {n:'PORCION TARTAR DE ATUN 130g',g:130,desc:'Tartar de atún'},
+    {n:'PORCION TAPA TARTAR ATUN 40g',g:40,desc:'Tapa tartar atún'},
     {n:'PORCION ATUN 120g',g:120,desc:'Porción atún'}
   ],
   PULPO:[
@@ -658,44 +663,59 @@ const PREPS = {
     {n:'PORCION CARPACCIO PULPO 100g',g:100,desc:'Entrada'},
     {n:'PORCION TAPA CARPACCIO PULPO 44g',g:44,desc:'Tapa'}
   ],
-  'FLAT IRON':[{n:'PORCION FLAT IRON 250g',g:250,desc:'Principal'}],
-  FILETE:[{n:'PORCION FILETE 250g',g:250,desc:'Principal'}],
-  ENTRAÑA:[{n:'PORCION ENTRAÑA 150g',g:150,desc:'Principal'}],
-  MERLUZA:[{n:'PORCION MERLUZA 250g',g:250,desc:'Principal'}],
-  SALMÓN:[{n:'PORCION SALMON 250g',g:250,desc:'Principal'}],
-  OSOBUCO:[{n:'PORCION OSOBUCO 350g',g:350,desc:'Principal'}],
+  'FLAT IRON':[
+    {n:'PORCION FLAT IRON 250g',g:250,desc:'Principal'}
+  ],
+  FILETE:[
+    {n:'PORCION FILETE 250g',g:250,desc:'Principal'}
+  ],
+  ENTRAÑA:[
+    {n:'PORCION ENTRAÑA 150g',g:150,desc:'Principal'}
+  ],
+  MERLUZA:[
+    {n:'PORCION MERLUZA 250g',g:250,desc:'Principal'}
+  ],
+  SALMON:[
+    {n:'PORCION SALMON 250g',g:250,desc:'Principal'}
+  ],
+  OSOBUCO:[
+    {n:'PORCION OSOBUCO 350g',g:350,desc:'Principal'}
+  ],
+  POLLO:[
+    {n:'PORCION POLLO CESAR 200g',g:200,desc:'César / Pollo a la plancha'}
+  ],
+  TERNERA:[
+    {n:'PORCION ESCALOPA 1 PORCION = 170 g',g:170,desc:'Cotolette milanesa / pizza / 4 quesos / prosciutto'}
+  ],
   'VACUNO (GENERAL)':[
     {n:'PORCION TARTAR DE VACUNO 130g',g:130,desc:'Entrada'},
-    {n:'PORCION TAPA TARTAR VACUNO 40g',g:40,desc:'Tapa'},
+    {n:'PORCION TAPA TARTAR DE VACUNO 40g',g:40,desc:'Tapa'},
     {n:'PORCION CARPACCIO DE VACUNO 100g',g:100,desc:'Entrada'},
-    {n:'PORCION TAPA CARPACCIO VACUNO 40g',g:40,desc:'Tapa'},
+    {n:'PORCION TAPA CARPACCIO DE VACUNO 40g',g:40,desc:'Tapa'},
     {n:'PORCION VITELLO TONATO 180g',g:180,desc:'Entrada'},
     {n:'PORCION TAPA VITELLO TONATO 40g',g:40,desc:'Tapa'}
   ],
-  PATO:[{n:'CANELÓN DE PATO (4 canelones) ~300g',g:300,desc:'1 porción = 4 canelones'}],
-  OSTIONES:[
-    {n:'OSTIONES A LA PARMESANA (6 unid.)',g:0,desc:'6 ostiones por porción',unidad:'unidad'},
-    {n:'TAPA OSTIONES (2 unid.)',g:0,desc:'2 ostiones por tapa',unidad:'unidad'}
+  PATO:[
+    {n:'CANELON DE PATO 1 PORCION = 4 CANELONES',g:300,desc:'1 porción = 4 canelones'}
   ],
-CAMARÓN:[
-  {n:'GAMBERETTI 1 PORCION = 5 GAMBERETTI',g:0,desc:'Gamberetti Di Riccione - 5 camarones con cabeza',unidad:'unidad'},
-  {n:'CAMARON CON CABEZA 1 PORCION = 2 UNID',g:0,desc:'Gamberetti rose / Pesto e Gamberetti',unidad:'unidad'},
-  {n:'CAMARON SIN CABEZA 1 PORCION = 6 UNIDADES',g:0,desc:'Gamberetti rose / Pesto e Gamberetti / Risotti di Mare',unidad:'unidad'}
-],
-  CENTOLLA:[{n:'PORCION RELLENO CENTOLLA 144g',g:144,desc:'Relleno para pasta'}],
-  RICOTTA:[
-    {n:'PORCION RELLENO RICOTTA SALMON 150g',g:150,desc:'Relleno salmón-ricotta'},
-    {n:'PORCION RELLENO ALCACHOFA',g:100,desc:'Relleno alcachofa'},
-    {n:'PORCION RELLENO DE REMOLACHA',g:100,desc:'Relleno betarraga'}
+  OSTIONES:[
+    {n:'OSTIONES 1 PORCION = 6 OSTIONES',g:0,desc:'6 ostiones por porción',unidad:'unidad'},
+    {n:'DI MARE 1 PORCION = 4CAM + 4CAL+4OSTI',g:0,desc:'4 camarones + 4 calamares + 4 ostiones',unidad:'unidad'}
+  ],
+  CAMARON:[
+    {n:'GAMBERETTI 1 PORCION = 5 GAMBERETTI',g:0,desc:'Gamberetti Di Riccione - 5 con cabeza',unidad:'unidad'},
+    {n:'CAMARON CON CABEZA 1 PORCION = 2 UNID',g:0,desc:'Gamberetti rose / Pesto e Gamberetti',unidad:'unidad'},
+    {n:'CAMARON SIN CABEZA 1 PORCION = 6 UNIDADES',g:0,desc:'Gamberetti rose / Pesto / Risotti di Mare',unidad:'unidad'}
+  ],
+  CENTOLLA:[
+    {n:'PORCION RELLENO CENTOLLA 144g',g:144,desc:'Relleno para pasta'}
   ],
   SOBRECOSTILLA:[
     {n:'PORCION RELLENO SOBRECOSTILLA 150g',g:150,desc:'Relleno pasta'},
     {n:'PORCION ALBONDIGA 90g',g:90,desc:'3 albóndigas por porción'}
   ],
-  'PIERNA CORDERO':[{n:'PORCION RELLENO CORDERO',g:120,desc:'Relleno pasta cordero'}],
-  'FRUTTI DI MARE':[
-    {n:'FRUTTI DI MARE (4 cal + 4 ost + 4 cam)',g:0,desc:'1 porción = 4 calamares + 4 ostiones + 4 camarones',unidad:'compuesto',
-     componentes:[{ins:'CALAMAR',cant:4},{ins:'OSTIONES',cant:4},{ins:'CAMARÓN',cant:4}]}
+  'PIERNA CORDERO':[
+    {n:'PORCION RELLENO CORDERO 1 UNIDAD',g:120,desc:'Relleno pasta cordero / Sorrentino di Agnello'}
   ],
 };
 
