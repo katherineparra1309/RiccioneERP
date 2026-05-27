@@ -184,79 +184,104 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   .fg.c3,.fg.c4{grid-template-columns:1fr 1fr}
   .kpi-grid{grid-template-columns:1fr 1fr}
 }
-
 /* ── MOBILE ── */
 @media(max-width:768px){
-  /* Sidebar → bottom nav fija */
+  #app{flex-direction:column!important}
+  .layout{flex-direction:column!important;flex:1;min-height:0}
   .sidebar{
     display:flex!important;
-    position:fixed;
-    bottom:0;left:0;right:0;
-    width:100%!important;
-    height:auto;
-    flex-direction:row;
-    background:var(--d2);
-    border-right:none;
-    border-top:1px solid var(--br);
-    padding:6px 4px env(safe-area-inset-bottom,6px);
-    overflow-x:auto;
-    overflow-y:hidden;
-    z-index:200;
-    gap:2px;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;
+    visibility:visible!important;
+    opacity:1!important;
+    position:fixed!important;
+    bottom:0!important;
+    top:auto!important;
+    left:0!important;
+    right:0!important;
+    width:100vw!important;
+    height:64px!important;
+    max-height:64px!important;
+    min-height:64px!important;
+    flex-direction:row!important;
+    flex-wrap:nowrap!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    background:var(--d2)!important;
+    border-right:none!important;
+    border-top:2px solid var(--br)!important;
+    padding:4px 6px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    z-index:9999!important;
+    gap:2px!important;
+    -webkit-overflow-scrolling:touch!important;
+    scrollbar-width:none!important;
+    box-sizing:border-box!important;
   }
-  .sidebar::-webkit-scrollbar{display:none}
-  .ngt{display:none}
+  .sidebar::-webkit-scrollbar{display:none!important}
+  .ngt{display:none!important}
   .nb{
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    padding:5px 8px;
-    border-radius:10px;
-    min-width:60px;
-    flex-shrink:0;
-    gap:2px;
-    font-size:9px;
-    white-space:nowrap;
-    border:1px solid transparent;
-    text-align:center;
-    line-height:1.2;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-width:60px!important;
+    max-width:82px!important;
+    height:56px!important;
+    flex-shrink:0!important;
+    padding:4px 7px!important;
+    border-radius:10px!important;
+    border:1px solid transparent!important;
+    font-size:9px!important;
+    color:var(--txm)!important;
+    text-align:center!important;
+    line-height:1.2!important;
+    gap:2px!important;
+    cursor:pointer!important;
+    white-space:nowrap!important;
+    background:transparent!important;
   }
-  .nb .ni{font-size:20px;width:auto;display:block}
-  /* Contenido con espacio para bottom nav */
-  .content{padding:14px 12px 82px}
-  /* Topbar */
-  .topbar{height:50px;padding:0 14px;gap:8px}
-  .tlogo{font-size:17px;letter-spacing:2px}
-  .who{font-size:10px;padding:3px 8px}
-  .btn-exit{padding:5px 9px;font-size:11px}
-  /* Grillas */
-  .fg.c2,.fg.c3,.fg.c4{grid-template-columns:1fr}
-  .kpi-grid{grid-template-columns:1fr 1fr}
-  .orig-grid{grid-template-columns:1fr 1fr}
-  /* Cards */
-  .card{padding:15px 13px}
-  .ph-title{font-size:20px}
-  /* Tablas con scroll horizontal */
-  .iw{overflow-x:auto;-webkit-overflow-scrolling:touch}
-  /* Producción: grid de porciones adaptado */
-  #pr-list > div{grid-template-columns:1fr 80px!important;gap:8px!important}
-  #pr-list > div > div:nth-child(2){display:none}
-  /* Conteo cocina */
+  .nb .ni{
+    font-size:20px!important;
+    width:auto!important;
+    display:block!important;
+  }
+  .nb-lbl{
+    display:block!important;
+    font-size:8.5px!important;
+    max-width:76px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+  .nb.active{background:rgba(201,168,76,.15)!important;border-color:var(--br)!important;color:var(--gold)!important;font-weight:600!important}
+  .nb[data-s="barra"].active,.nb[data-s="vinos_barra"].active{background:rgba(90,141,217,.15)!important;border-color:rgba(90,141,217,.3)!important;color:#5A8DD9!important}
+  .nb[data-s="gerencia"].active{background:rgba(80,168,112,.15)!important;border-color:rgba(80,168,112,.3)!important;color:var(--grn)!important}
+  .content{
+    flex:1!important;
+    padding:14px 12px 76px!important;
+    overflow-y:auto!important;
+    width:100%!important;
+  }
+  .topbar{height:50px!important;padding:0 12px!important;gap:8px!important}
+  .tlogo{font-size:17px!important;letter-spacing:2px!important}
+  .who{font-size:10px!important;padding:3px 8px!important}
+  .btn-exit{padding:5px 9px!important;font-size:11px!important}
+  .fg.c2,.fg.c3,.fg.c4{grid-template-columns:1fr!important}
+  .kpi-grid{grid-template-columns:1fr 1fr!important}
+  .orig-grid{grid-template-columns:1fr 1fr!important}
+  .card{padding:15px 13px!important}
+  .ph-title{font-size:20px!important}
+  .iw{overflow-x:auto!important;-webkit-overflow-scrolling:touch!important}
+  .dt{display:block!important;overflow-x:auto!important}
+  #pr-list > div{grid-template-columns:1fr 120px!important;gap:8px!important}
+  #pr-list > div > div:nth-child(2){display:none!important}
   #cc-list > div{grid-template-columns:1fr 80px 80px 70px!important;gap:4px!important}
-  /* Conteo barra */
-  #bc-list > div{grid-template-columns:1fr 65px 65px 65px 65px 65px!important;gap:3px!important}
-  /* Conteo vinos */
-  #vc-list > div{grid-template-columns:1fr 70px 70px 70px 70px!important;gap:3px!important}
-  /* Dashboard charts: 1 columna */
+  #bc-list > div{min-width:500px!important}
+  #vc-list > div{min-width:420px!important}
   #v-ger-dash > div:nth-child(3){grid-template-columns:1fr!important}
-  /* Toast sobre bottom nav */
-  .toast{bottom:75px;left:10px;right:10px;max-width:none}
-  /* Botón guardar */
-  .bxl{width:100%;justify-content:center}
-  .btn-row{flex-direction:column}
-  .nb-lbl{display:block;max-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px}
+  .toast{bottom:72px!important;left:10px!important;right:10px!important;max-width:none!important}
+  .bxl{width:100%!important;justify-content:center!important}
+  .btn-row{flex-direction:column!important}
 }
 </style>
 </head>
@@ -506,7 +531,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">BODEGA</div>
     <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">TOTAL (ml)</div>
 </div>
-          
           <div id="bc-list"></div>
           <div class="btn-row" style="margin-top:18px"><button class="btn bb bxl" onclick="guardarBarConteo()">💾 &nbsp;Guardar Conteo Barra</button></div>
         </div>
@@ -703,7 +727,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script>
 const SCRIPT_URL='https://script.google.com/macros/s/AKfycbwG9Tlnd3v0-VsCMqQ_GfxRDfwHY_X2Vef97DKewXyw_d5yTn_lrOLripHwBPU7hesj/exec';
 
-// ── DATOS BARRA POR CATEGORÍA ──
 const BAR_CATS = {
   'Gin':['GIN GORDON´S 750ml','TANQUERAY 43,1º 750ml','HENDRICK 41º 700ml','GIN BEEFEATER PINK 37,5º 750ml','GIN BEEFEATER LONDO DRY 750ml','MALFI ROSA 750ml','BOMBAY SAPPHIRE 750ml','Bulldog 750ml','Monkey 47 700ml'],
   'Pisco':['ALTO DEL CARMEN 35º 750ml','ALTO DEL CARMEN RESERVADO 750ml','ALTO DEL CARMEN TRANSPARENTE 750ml','MISTRAL NOBEL 40º 750ml','Mistral 35° 750ml','HORCON QUEMADO 40º 750ml','Espíritu de los Andes 750ml','PISCO PERUANO GRAN PEREZ CRUZ 2000ml'],
@@ -720,7 +743,6 @@ const BAR_CATS = {
   'Energéticas':['RED BULL TRADICIONAL 250ml','RED BULL SANDIA 250ml','RED BULL YELLOW EDITION 250ml'],
 };
 
-// ── VINOS POR CEPA ──
 const VINO_CEPAS = {
   'Por copa':['Vino por copa In Situ Reserva Carmenere','Vino por copa In Situ Reserva Chardonnay','Vino por copa In Situ Espumante Rosé','Vino por copa Montes Limited CS/Cs','Vino por copa Floresta Chardonnay','Vino por copa Floresta Cabernet Sauvignon'],
   'Cabernet Sauvignon':['Cabernet Sauvignon Vik A','Cabernet Sauvignon In Situ Reserva','Cabernet Sauvignon In Situ Gran Reserva','Cabernet Sauvignon Montes Alpha','Cabernet Sauvignon Floresta','Cabernet Sauvignon Casa Real Escudo de Familia','Cabernet Sauvignon Medalla Real Gran Reserva','Cabernet Sauvignon Carmen Gran Reserva','Cabernet Sauvignon Cabo de Hornos 2018'],
@@ -736,85 +758,31 @@ const VINO_CEPAS = {
   'Íconos':['Íconos In Situ QV1000 Ensamblaje','Íconos Casa Real Reserva Especial','Íconos Tierras Moradas Carmenere','Íconos Cabo de Hornos Cabernet Sauvignon','Íconos Kaiken Mai Malbec San Pedro','Íconos Tayú San Pedro'],
 };
 
-// ── PORCIONES DE COCINA CON GRAMAJE ──
 const PREPS = {
-  ATUN:[
-    {n:'PORCION TARTAR DE ATUN 130G',g:130,desc:'Tartar de atún'},
-    {n:'PORCION TAPA TARTAR ATUN 40G',g:40,desc:'Tapa tartar atún'},
-    {n:'PORCION ATUN 120G',g:120,desc:'Il Tonno / Insalata Riccione'}
-  ],
-  PULPO:[
-    {n:'PORCION PULPO BRASEADO 250G',g:250,desc:'Principal'},
-    {n:'PORCION CARPACCIO PULPO 100G',g:100,desc:'Entrada'},
-    {n:'PORCION TAPA CARPACCIO PULPO 44G',g:44,desc:'Tapa'}
-  ],
-  SALMON:[
-    {n:'PORCION SALMON 250G',g:250,desc:'Salmone agrumato / Risotti di Salmone'},
-    {n:'PORCION RELLENO SALMON 1 PORCION = 150G',g:150,desc:'Tortellini di Salmone'}
-  ],
-  MERLUZA:[
-    {n:'PORCION MERLUZA 250G',g:250,desc:'Principal'}
-  ],
-  OSTIONES:[
-    {n:'OSTIONES 1 PORCION = 6 OSTIONES',g:0,desc:'Ostiones a la parmesana (plato)',unidad:'unidad'},
-    {n:'OSTIONES 1 PORCION = 2 OSTIONES',g:0,desc:'Tapa ostiones parmesana',unidad:'unidad'},
-    {n:'DI MARE 1 PORCION = 4CAM + 4CAL+4OSTI',g:0,desc:'Frutti di Mare / Risotti di Mare',unidad:'unidad'}
-  ],
-  CAMARON:[
-    {n:'GAMBERETTI 1 PORCION = 5 GAMBERETTI',g:0,desc:'Gamberetti Di Riccione - 5 con cabeza',unidad:'unidad'},
-    {n:'CAMARON CON CABEZA 1 PORCION = 2 UNID',g:0,desc:'Gamberetti rose / Pesto e Gamberetti / Frutti di Mare',unidad:'unidad'},
-    {n:'CAMARON SIN CABEZA 1 PORCION = 6 UNIDADES',g:0,desc:'Gamberetti rose / Pesto e Gamberetti / La Gamberetti',unidad:'unidad'}
-  ],
-  CENTOLLA:[
-    {n:'PORCION RELLENO DE CENTOLLA 1 UNIDAD = 144G',g:144,desc:'Agnolotti di Granchio'}
-  ],
-  'FLAT IRON':[
-    {n:'PORCION FLAT IRON 250G',g:250,desc:'Flat Iron e Pappardelle'}
-  ],
-  FILETE:[
-    {n:'PORCION FILETE 250G',g:250,desc:'Filetto / Risotti Oporto'}
-  ],
-  ENTRAÑA:[
-    {n:'PORCION ENTRAÑA 150G',g:150,desc:'Risotti di Manzo'}
-  ],
-  'VACUNO (GENERAL)':[
-    {n:'PORCION TARTAR DE VACUNO 130G',g:130,desc:'Tartar de vacuno'},
-    {n:'PORCION TAPA TARTAR DE VACUNO 40G',g:40,desc:'Tapa tartar de vacuno'},
-    {n:'PORCION CARPACCIO DE VACUNO 100G',g:100,desc:'Carpaccio de vacuno'},
-    {n:'PORCION TAPA CARPACCIO DE VACUNO 40G',g:40,desc:'Tapa carpaccio de vacuno'},
-    {n:'PORCION VITELLO TONATO 180G',g:180,desc:'Vitello Tonnato / Insalatta Riccione'},
-    {n:'PORCION TAPA VITELLO TONATO 40G',g:40,desc:'Tapa Vitello Tonnato'},
-    {n:'PORCION BRUSCHETA ROAST BEEF',g:50,desc:'Bruscheta roast beef'},
-    {n:'PORCION GIRANDOLA 1 UNIDAD',g:100,desc:'Girandola'}
-  ],
-  SOBRECOSTILLA:[
-    {n:'PORCION RELLENO SOBRECOSTILLA Y CEBOLLA 1 UNIDAD = 150G',g:150,desc:'Agnolotti di Plateada'}
-  ],
-  OSOBUCO:[
-    {n:'PORCION OSOBUCO 350G',g:350,desc:'Il Lombardo'}
-  ],
-  PATO:[
-    {n:'CANELON DE PATO 1 PORCION = 4 CANELONES',g:300,desc:'1 porción = 4 canelones'}
-  ],
-  POLLO:[
-    {n:'PORCION POLLO CESAR 200G',g:200,desc:'César / Pollo a la plancha'}
-  ],
-  ESCALOPA:[
-    {n:'PORCION ESCALOPA 1 PORCION = 170 g',g:170,desc:'Cotolette milanesa / pizza / 4 quesos / prosciutto / Milanesa con pure'}
-  ],
-  'PIERNA CORDERO':[
-    {n:'PORCION RELLENO CORDERO 1 UNIDAD',g:120,desc:'Sorrentino di Agnello'}
-  ],
-  ALCACHOFA:[
-    {n:'PORCION RELLENO ALCACHOFA 1 UNIDAD',g:1,desc:'Tortellini di carciofi'}
-  ],
+  ATUN:[{n:'PORCION TARTAR DE ATUN 130G',g:130,desc:'Tartar de atún'},{n:'PORCION TAPA TARTAR ATUN 40G',g:40,desc:'Tapa tartar atún'},{n:'PORCION ATUN 120G',g:120,desc:'Il Tonno / Insalata Riccione'}],
+  PULPO:[{n:'PORCION PULPO BRASEADO 250G',g:250,desc:'Principal'},{n:'PORCION CARPACCIO PULPO 100G',g:100,desc:'Entrada'},{n:'PORCION TAPA CARPACCIO PULPO 44G',g:44,desc:'Tapa'}],
+  SALMON:[{n:'PORCION SALMON 250G',g:250,desc:'Salmone agrumato / Risotti di Salmone'},{n:'PORCION RELLENO SALMON 1 PORCION = 150G',g:150,desc:'Tortellini di Salmone'}],
+  MERLUZA:[{n:'PORCION MERLUZA 250G',g:250,desc:'Principal'}],
+  OSTIONES:[{n:'OSTIONES 1 PORCION = 6 OSTIONES',g:0,desc:'Ostiones a la parmesana (plato)',unidad:'unidad'},{n:'OSTIONES 1 PORCION = 2 OSTIONES',g:0,desc:'Tapa ostiones parmesana',unidad:'unidad'},{n:'DI MARE 1 PORCION = 4CAM + 4CAL+4OSTI',g:0,desc:'Frutti di Mare / Risotti di Mare',unidad:'unidad'}],
+  CAMARON:[{n:'GAMBERETTI 1 PORCION = 5 GAMBERETTI',g:0,desc:'Gamberetti Di Riccione - 5 con cabeza',unidad:'unidad'},{n:'CAMARON CON CABEZA 1 PORCION = 2 UNID',g:0,desc:'Gamberetti rose / Pesto e Gamberetti / Frutti di Mare',unidad:'unidad'},{n:'CAMARON SIN CABEZA 1 PORCION = 6 UNIDADES',g:0,desc:'Gamberetti rose / Pesto e Gamberetti / La Gamberetti',unidad:'unidad'}],
+  CENTOLLA:[{n:'PORCION RELLENO DE CENTOLLA 1 UNIDAD = 144G',g:144,desc:'Agnolotti di Granchio'}],
+  'FLAT IRON':[{n:'PORCION FLAT IRON 250G',g:250,desc:'Flat Iron e Pappardelle'}],
+  FILETE:[{n:'PORCION FILETE 250G',g:250,desc:'Filetto / Risotti Oporto'}],
+  ENTRAÑA:[{n:'PORCION ENTRAÑA 150G',g:150,desc:'Risotti di Manzo'}],
+  'VACUNO (GENERAL)':[{n:'PORCION TARTAR DE VACUNO 130G',g:130,desc:'Tartar de vacuno'},{n:'PORCION TAPA TARTAR DE VACUNO 40G',g:40,desc:'Tapa tartar de vacuno'},{n:'PORCION CARPACCIO DE VACUNO 100G',g:100,desc:'Carpaccio de vacuno'},{n:'PORCION TAPA CARPACCIO DE VACUNO 40G',g:40,desc:'Tapa carpaccio de vacuno'},{n:'PORCION VITELLO TONATO 180G',g:180,desc:'Vitello Tonnato / Insalatta Riccione'},{n:'PORCION TAPA VITELLO TONATO 40G',g:40,desc:'Tapa Vitello Tonnato'},{n:'PORCION BRUSCHETA ROAST BEEF',g:50,desc:'Bruscheta roast beef'},{n:'PORCION GIRANDOLA 1 UNIDAD',g:100,desc:'Girandola'}],
+  SOBRECOSTILLA:[{n:'PORCION RELLENO SOBRECOSTILLA Y CEBOLLA 1 UNIDAD = 150G',g:150,desc:'Agnolotti di Plateada'}],
+  OSOBUCO:[{n:'PORCION OSOBUCO 350G',g:350,desc:'Il Lombardo'}],
+  PATO:[{n:'CANELON DE PATO 1 PORCION = 4 CANELONES',g:300,desc:'1 porción = 4 canelones'}],
+  POLLO:[{n:'PORCION POLLO CESAR 200G',g:200,desc:'César / Pollo a la plancha'}],
+  ESCALOPA:[{n:'PORCION ESCALOPA 1 PORCION = 170 g',g:170,desc:'Cotolette milanesa / pizza / 4 quesos / prosciutto / Milanesa con pure'}],
+  'PIERNA CORDERO':[{n:'PORCION RELLENO CORDERO 1 UNIDAD',g:120,desc:'Sorrentino di Agnello'}],
+  ALCACHOFA:[{n:'PORCION RELLENO ALCACHOFA 1 UNIDAD',g:1,desc:'Tortellini di carciofi'}],
 };
 
 const ALL_PREPS_FLAT = Object.values(PREPS).flat().map(p=>p.n);
 const ALL_BAR_FLAT = Object.values(BAR_CATS).flat();
 const ALL_WIN_FLAT = Object.values(VINO_CEPAS).flat();
 
-// ── DB LOCAL ──
 const DB={barIngresos:[],barConteo:[],vinoIngresos:[],vinoConteo:[],cocIngresos:[],cocProd:[],cocConteo:[],
   bodega:{ATUN:{kg:92},PULPO:{kg:5},SALMÓN:{kg:15},FILETE:{kg:10},'FLAT IRON':{kg:0},MERLUZA:{kg:8}}};
 
@@ -822,17 +790,12 @@ const VENTAS_COC=[{p:'Flat iron e pappardelle',u:111,v:1652512},{p:'Tres tapas',
 const VENTAS_BAR=[{p:'Sangría Riccione',u:106,v:559238},{p:'Aperol Spritz',u:32,v:169551},{p:'Negroni Clásico',u:26,v:174315},{p:'Sour Peruano',u:32,v:200197},{p:'Adela',u:27,v:128204},{p:'Andiamo!',u:20,v:117258}];
 const VENTAS_WIN=[{p:'CS Montes Alpha',u:24,v:538560},{p:'Copa In Situ Carmenere',u:68,v:306000},{p:'Carmenere Montes Alpha',u:18,v:403740},{p:'Chardonnay In Situ',u:14,v:272580},{p:'Pinot Noir MRR',u:11,v:299860},{p:'Copa Floresta Chardonnay',u:42,v:189000}];
 
-// ── AUTH ──
 let USER='',ROLE='',selR='';
 const MENUS={
-  cocina:[{id:'coc-ingreso',ico:'📦',lbl:'Ingreso de Insumos',s:'cocina'},{id:'coc-prod',ico:'🧑‍🍳',lbl:'Producción',s:'cocina'},{id:'coc-conteo',ico:'📋',lbl:'Conteo de Turno',s:'cocina'}],
-  barra:[{id:'bar-ingreso',ico:'📦',lbl:'Ingreso de Bebidas',s:'barra'},{id:'bar-conteo',ico:'📋',lbl:'Conteo de Turno',s:'barra'},{id:'bar-inv',ico:'🗂',lbl:'Inventario Semanal',s:'barra'}],
-  vinos:[
-    {id:'vinos_barra-ingreso',ico:'📦',lbl:'Ingreso de Vinos',s:'vinos_barra'},
-    {id:'vinos_barra-conteo',ico:'📋',lbl:'Conteo de Turno',s:'vinos_barra'},
-    {id:'vinos_barra-inv',ico:'🗂',lbl:'Inventario Semanal',s:'vinos_barra'}
-  ],
-  gerencia:[{id:'ger-dash',ico:'📊',lbl:'Dashboard',s:'gerencia'},{id:'ger-ventas',ico:'💰',lbl:'Ventas · Toteat',s:'gerencia'},{id:'ger-inv-coc',ico:'🍽',lbl:'Inv. Cocina',s:'gerencia'},{id:'ger-inv-bar',ico:'🍹',lbl:'Inv. Barra',s:'gerencia'},{id:'ger-inv-win',ico:'🍷',lbl:'Inv. Vinos',s:'gerencia'}],
+  cocina:[{id:'coc-ingreso',ico:'📦',lbl:'Ingreso',s:'cocina'},{id:'coc-prod',ico:'🧑‍🍳',lbl:'Producción',s:'cocina'},{id:'coc-conteo',ico:'📋',lbl:'Conteo',s:'cocina'}],
+  barra:[{id:'bar-ingreso',ico:'📦',lbl:'Ingreso',s:'barra'},{id:'bar-conteo',ico:'📋',lbl:'Conteo',s:'barra'},{id:'bar-inv',ico:'🗂',lbl:'Inventario',s:'barra'}],
+  vinos:[{id:'vinos_barra-ingreso',ico:'📦',lbl:'Ingreso',s:'vinos_barra'},{id:'vinos_barra-conteo',ico:'📋',lbl:'Conteo',s:'vinos_barra'},{id:'vinos_barra-inv',ico:'🗂',lbl:'Inventario',s:'vinos_barra'}],
+  gerencia:[{id:'ger-dash',ico:'📊',lbl:'Dashboard',s:'gerencia'},{id:'ger-ventas',ico:'💰',lbl:'Ventas',s:'gerencia'},{id:'ger-inv-coc',ico:'🍽',lbl:'Inv.Cocina',s:'gerencia'},{id:'ger-inv-bar',ico:'🍹',lbl:'Inv.Barra',s:'gerencia'},{id:'ger-inv-win',ico:'🍷',lbl:'Inv.Vinos',s:'gerencia'}],
 };
 
 function pickR(el){document.querySelectorAll('.rc').forEach(c=>c.classList.remove('on'));el.classList.add('on');selR=el.dataset.r;chkL();}
@@ -855,17 +818,17 @@ function logout(){document.getElementById('app').classList.remove('active');docu
 function buildSB(s){
   const items=MENUS[s]||[];
   document.getElementById('sb').innerHTML='<div class="ngt">'+(s==='barra'?'🍹 Barra':s==='cocina'?'👨‍🍳 Cocina':s==='vinos'?'🍷 Vinos':'👩‍💼 Gerencia')+'</div>'+
-   items.map(m=>`<div class="nb" id="nb-${m.id}" data-s="${m.s}" onclick="nav('${m.id}')"><span class="ni">${m.ico}</span><span class="nb-lbl">${m.lbl}</span></div>`).join('');
+    items.map(m=>`<div class="nb" id="nb-${m.id}" data-s="${m.s}" onclick="nav('${m.id}')"><span class="ni">${m.ico}</span><span class="nb-lbl">${m.lbl}</span></div>`).join('');
 }
+
 function nav(id){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(n=>n.classList.remove('active'));
   const ve=document.getElementById('v-'+id),nb=document.getElementById('nb-'+id);
   if(ve)ve.classList.add('active');if(nb)nb.classList.add('active');
-  if(window.innerWidth<=768){document.querySelector('.content').scrollTop=0;}
+  try{if(window.innerWidth<=900){const c=document.querySelector('.content');if(c)c.scrollTop=0;}}catch(e){}
 }
 
-// ── UTILS ──
 function setToday(){const t=new Date().toISOString().split('T')[0];['bi-fecha','bc-fecha','vi-fecha','vc-fecha','ci-fecha','pr-f','cc-fecha'].forEach(id=>{const el=document.getElementById(id);if(el)el.value=t;});}
 function toast(msg,type='tok'){const t=document.getElementById('toast');t.textContent=({tok:'✅',terr:'❌',tw:'⚠️'}[type]||'')+' '+msg;t.className='toast show '+type;setTimeout(()=>t.classList.remove('show'),3000);}
 function fKg(v,d=2){return(v||0).toFixed(d)}
@@ -873,30 +836,22 @@ function fPct(v){return((v||0)*100).toFixed(1)+'%'}
 function fM(v){return'$'+(Math.round(v)||0).toLocaleString('es-CL')}
 function setAl(id,msg,cls){const el=document.getElementById(id);if(!el)return;if(!msg){el.classList.add('hidden');return;}el.className='al '+cls;el.textContent=msg;}
 
-// ── BARRA FILTROS ──
 function filterBarProd(){
   const cat=document.getElementById('bi-cat')?.value||'';
-  const sel=document.getElementById('bi-prod');
-  if(!sel)return;
+  const sel=document.getElementById('bi-prod');if(!sel)return;
   sel.innerHTML='<option value="">— Elegir —</option>';
   const items=cat?BAR_CATS[cat]||[]:ALL_BAR_FLAT;
   items.forEach(p=>{const o=document.createElement('option');o.textContent=p;sel.appendChild(o);});
 }
 function filterVinoProd(){
   const cepa=document.getElementById('vi-cepa')?.value||'';
-  const sel=document.getElementById('vi-prod');
-  if(!sel)return;
+  const sel=document.getElementById('vi-prod');if(!sel)return;
   sel.innerHTML='<option value="">— Elegir —</option>';
   const items=cepa?VINO_CEPAS[cepa]||[]:ALL_WIN_FLAT;
   items.forEach(p=>{const o=document.createElement('option');o.textContent=p;sel.appendChild(o);});
 }
 
-// ── BARRA · INGRESO ──
-function calcBar(){
-  const u=parseFloat(document.getElementById('bi-uds')?.value)||0;
-  const ml=parseFloat(document.getElementById('bi-ml')?.value)||0;
-  document.getElementById('bi-ml-total').textContent=(u*ml).toLocaleString();
-}
+function calcBar(){const u=parseFloat(document.getElementById('bi-uds')?.value)||0;const ml=parseFloat(document.getElementById('bi-ml')?.value)||0;document.getElementById('bi-ml-total').textContent=(u*ml).toLocaleString();}
 function guardarBarIngreso(){
   const f=document.getElementById('bi-fecha').value,p=document.getElementById('bi-prod').value;
   const u=parseFloat(document.getElementById('bi-uds').value)||0,ml=parseFloat(document.getElementById('bi-ml').value)||0;
@@ -916,15 +871,13 @@ function renderBarLog(){
   tb.innerHTML=rows.map(r=>`<tr><td class="bl">${r.p}</td><td style="color:var(--txd)">${r.cat}</td><td>${r.u}</td><td>${r.ml}</td><td>${r.mlTotal.toLocaleString()} ml</td><td style="color:var(--txd)">${r.hora}</td></tr>`).join('');
 }
 
-// ── BARRA · CONTEO ──
 function loadBarConteo(){
-  const list=document.getElementById('bc-list');
-  let html='';
+  const list=document.getElementById('bc-list');let html='';
   Object.entries(BAR_CATS).forEach(([cat,items])=>{
     html+=`<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--txd);padding:12px 0 6px;border-top:1px solid var(--br);margin-top:6px">${cat}</div>`;
     items.forEach((p,i)=>{
       const idx=ALL_BAR_FLAT.indexOf(p);
-    html+=`<div style="display:grid;grid-template-columns:1fr 90px 90px 90px 90px 90px;gap:6px;padding:5px 0;align-items:center;">
+      html+=`<div style="display:grid;grid-template-columns:1fr 90px 90px 90px 90px 90px;gap:6px;padding:5px 0;align-items:center;">
   <div style="font-size:12px;color:var(--txm)">${p}</div>
   <input type="number" id="ba1-${idx}" min="0" step="0.01" placeholder="0.00" style="background:var(--d3);border:1px solid rgba(90,141,217,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcBarRow(${idx})">
   <input type="number" id="ba2-${idx}" min="0" step="0.01" placeholder="0.00" style="background:var(--d3);border:1px solid rgba(90,141,217,.2);border-radius:9px;padding:7px;font-size:13px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcBarRow(${idx})">
@@ -936,34 +889,15 @@ function loadBarConteo(){
   });
   list.innerHTML=html;
 }
-function calcBarRow(i){
-  const a1=parseFloat(document.getElementById('ba1-'+i)?.value)||0;
-  const a2=parseFloat(document.getElementById('ba2-'+i)?.value)||0;
-  const l=parseInt(document.getElementById('bl-'+i)?.value)||0;
-  const b=parseInt(document.getElementById('bb-'+i)?.value)||0;
-  const ml=Math.round((a1+a2)*750)+(l+b)*750;
-  const el=document.getElementById('bmt-'+i);if(el)el.textContent=(ml/1000).toFixed(2)+' L';
-}
+function calcBarRow(i){const a1=parseFloat(document.getElementById('ba1-'+i)?.value)||0;const a2=parseFloat(document.getElementById('ba2-'+i)?.value)||0;const l=parseInt(document.getElementById('bl-'+i)?.value)||0;const b=parseInt(document.getElementById('bb-'+i)?.value)||0;const ml=Math.round((a1+a2)*750)+(l+b)*750;const el=document.getElementById('bmt-'+i);if(el)el.textContent=(ml/1000).toFixed(2)+' L';}
 function guardarBarConteo(){
-  const fecha=document.getElementById('bc-fecha').value;
-  if(!fecha){toast('Selecciona una fecha','terr');return;}
+  const fecha=document.getElementById('bc-fecha').value;if(!fecha){toast('Selecciona una fecha','terr');return;}
   let n=0;
-  ALL_BAR_FLAT.forEach((p,i)=>{
-   const a=(parseFloat(document.getElementById('ba1-'+i)?.value)||0)+(parseFloat(document.getElementById('ba2-'+i)?.value)||0);
-    const l=parseInt(document.getElementById('bl-'+i)?.value)||0;
-    const b=parseInt(document.getElementById('bb-'+i)?.value)||0;
-    if(a||l||b){DB.barConteo.push({fecha,ingrediente:p,botAbierta:a,botLlenas:l,botBodega:b});n++;}
-  });
-  callScript('guardarBarConteo',{fecha,conteos:DB.barConteo.slice(-n)});
-  toast(`Conteo barra · ${n} productos`,'tok');
+  ALL_BAR_FLAT.forEach((p,i)=>{const a=(parseFloat(document.getElementById('ba1-'+i)?.value)||0)+(parseFloat(document.getElementById('ba2-'+i)?.value)||0);const l=parseInt(document.getElementById('bl-'+i)?.value)||0;const b=parseInt(document.getElementById('bb-'+i)?.value)||0;if(a||l||b){DB.barConteo.push({fecha,ingrediente:p,botAbierta:a,botLlenas:l,botBodega:b});n++;}});
+  callScript('guardarBarConteo',{fecha,conteos:DB.barConteo.slice(-n)});toast(`Conteo barra · ${n} productos`,'tok');
 }
 
-// ── VINOS · INGRESO ──
-function calcVino(){
-  const u=parseFloat(document.getElementById('vi-uds')?.value)||0;
-  const ml=parseFloat(document.getElementById('vi-ml')?.value)||750;
-  document.getElementById('vi-ml-total').textContent=(u*ml).toLocaleString();
-}
+function calcVino(){const u=parseFloat(document.getElementById('vi-uds')?.value)||0;const ml=parseFloat(document.getElementById('vi-ml')?.value)||750;document.getElementById('vi-ml-total').textContent=(u*ml).toLocaleString();}
 function guardarVinoIngreso(){
   const f=document.getElementById('vi-fecha').value,p=document.getElementById('vi-prod').value;
   const u=parseFloat(document.getElementById('vi-uds').value)||0,ml=parseFloat(document.getElementById('vi-ml').value)||750;
@@ -984,10 +918,8 @@ function renderVinoLog(){
   tb.innerHTML=rows.map(r=>`<tr><td style="color:#5A8DD9;font-weight:600">${r.p}</td><td style="color:var(--txd)">${r.cepa}</td><td>${r.u}</td><td>${r.mlTotal.toLocaleString()} ml</td><td style="color:var(--txd)">${r.hora}</td></tr>`).join('');
 }
 
-// ── VINOS · CONTEO ──
 function loadVinoConteo(){
-  const list=document.getElementById('vc-list');
-  let html='';
+  const list=document.getElementById('vc-list');let html='';
   Object.entries(VINO_CEPAS).forEach(([cepa,items])=>{
     html+=`<div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#C06080;padding:12px 0 6px;border-top:1px solid rgba(155,58,90,.2);margin-top:6px">${cepa}</div>`;
     items.forEach(p=>{
@@ -1003,225 +935,87 @@ function loadVinoConteo(){
   });
   list.innerHTML=html;
 }
-function calcWinRow(i){
-  const a=parseFloat(document.getElementById('wa-'+i)?.value)||0;
-  const l=parseInt(document.getElementById('wl-'+i)?.value)||0;
-  const b=parseInt(document.getElementById('wb-'+i)?.value)||0;
-  const el=document.getElementById('wt-'+i);if(el)el.textContent=(a+l+b).toFixed(2);
-}
+function calcWinRow(i){const a=parseFloat(document.getElementById('wa-'+i)?.value)||0;const l=parseInt(document.getElementById('wl-'+i)?.value)||0;const b=parseInt(document.getElementById('wb-'+i)?.value)||0;const el=document.getElementById('wt-'+i);if(el)el.textContent=(a+l+b).toFixed(2);}
 function guardarVinoConteo(){
   const fecha=document.getElementById('vc-fecha').value;if(!fecha){toast('Selecciona una fecha','terr');return;}
   let n=0,conteos=[];
-  ALL_WIN_FLAT.forEach((p,i)=>{
-    const a=parseFloat(document.getElementById('wa-'+i)?.value)||0;
-    const l=parseInt(document.getElementById('wl-'+i)?.value)||0;
-    const b=parseInt(document.getElementById('wb-'+i)?.value)||0;
-    if(a||l||b){conteos.push({ingrediente:p,botAbierta:a,botLlenas:l,botBodega:b});n++;}
-  });
+  ALL_WIN_FLAT.forEach((p,i)=>{const a=parseFloat(document.getElementById('wa-'+i)?.value)||0;const l=parseInt(document.getElementById('wl-'+i)?.value)||0;const b=parseInt(document.getElementById('wb-'+i)?.value)||0;if(a||l||b){conteos.push({ingrediente:p,botAbierta:a,botLlenas:l,botBodega:b});n++;}});
   DB.vinoConteo.push(...conteos.map(c=>({...c,fecha})));
   callScript('guardarVinoConteo',{fecha,conteos});toast(`Conteo vinos · ${n} productos`,'tok');
 }
 
-// ── COCINA · INGRESO ──
 let origCoc='';
-function setOrig(o){
-  origCoc=o;
-  document.getElementById('ob-prov').classList.toggle('on',o==='prov');
-  document.getElementById('ob-bod').classList.toggle('on',o==='bod');
-  document.getElementById('blq-prov').classList.toggle('hidden',o!=='prov');
-  document.getElementById('blq-bod').classList.toggle('hidden',o!=='bod');
-  document.getElementById('blq-save').classList.remove('hidden');
-  setAl('ci-al',null);
-}
-function chkBodegaStock(){
-  const ins=document.getElementById('ci-ins').value;
-  const s=ins&&DB.bodega[ins]?DB.bodega[ins].kg:0;
-  document.getElementById('ob-bod-stock').textContent=`Stock: ${s.toFixed(1)} kg`;
-  document.getElementById('bod-kgd').textContent=s.toFixed(2);
-}
+function setOrig(o){origCoc=o;document.getElementById('ob-prov').classList.toggle('on',o==='prov');document.getElementById('ob-bod').classList.toggle('on',o==='bod');document.getElementById('blq-prov').classList.toggle('hidden',o!=='prov');document.getElementById('blq-bod').classList.toggle('hidden',o!=='bod');document.getElementById('blq-save').classList.remove('hidden');setAl('ci-al',null);}
+function chkBodegaStock(){const ins=document.getElementById('ci-ins').value;const s=ins&&DB.bodega[ins]?DB.bodega[ins].kg:0;document.getElementById('ob-bod-stock').textContent=`Stock: ${s.toFixed(1)} kg`;document.getElementById('bod-kgd').textContent=s.toFixed(2);}
 function calcCocProv(){
-  const tot=parseFloat(document.getElementById('cp-tot').value)||0;
-  const bod=parseFloat(document.getElementById('cp-bod').value)||0;
-  const mer=parseFloat(document.getElementById('cp-mer').value)||0;
+  const tot=parseFloat(document.getElementById('cp-tot').value)||0;const bod=parseFloat(document.getElementById('cp-bod').value)||0;const mer=parseFloat(document.getElementById('cp-mer').value)||0;
   const prod=Math.max(0,tot-bod),limp=Math.max(0,prod-mer),pct=prod>0?mer/prod:0;
-  document.getElementById('cp-prod').textContent=fKg(prod);
-  document.getElementById('cp-limp').textContent=fKg(limp);
-  document.getElementById('cp-pct').textContent=prod>0?`Merma: ${fPct(pct)}`:'';
-  if(tot>0){
-    document.getElementById('cp-mv').classList.remove('hidden');
-    ['mv-tot','mv-bod','mv-mer','mv-limp'].forEach((id,i)=>document.getElementById(id).textContent=fKg([tot,bod,mer,limp][i]));
-  }
-  if(pct>0.35)setAl('ci-al',`⚠️ Merma alta: ${fPct(pct)}. ¿Problema con el insumo?`,'aw');
-  else if(limp>0)setAl('ci-al',`✅ ${fKg(limp)} kg listos para producción`,'aok');
-  else setAl('ci-al',null);
+  document.getElementById('cp-prod').textContent=fKg(prod);document.getElementById('cp-limp').textContent=fKg(limp);document.getElementById('cp-pct').textContent=prod>0?`Merma: ${fPct(pct)}`:'';
+  if(tot>0){document.getElementById('cp-mv').classList.remove('hidden');['mv-tot','mv-bod','mv-mer','mv-limp'].forEach((id,i)=>document.getElementById(id).textContent=fKg([tot,bod,mer,limp][i]));}
+  if(pct>0.35)setAl('ci-al',`⚠️ Merma alta: ${fPct(pct)}. ¿Problema con el insumo?`,'aw');else if(limp>0)setAl('ci-al',`✅ ${fKg(limp)} kg listos para producción`,'aok');else setAl('ci-al',null);
 }
 function calcCocBod(){
-  const ins=document.getElementById('ci-ins').value;
-  const st=ins&&DB.bodega[ins]?DB.bodega[ins].kg:0;
-  const prod=parseFloat(document.getElementById('cb-prod').value)||0;
-  const mer=parseFloat(document.getElementById('cb-mer').value)||0;
+  const ins=document.getElementById('ci-ins').value;const st=ins&&DB.bodega[ins]?DB.bodega[ins].kg:0;
+  const prod=parseFloat(document.getElementById('cb-prod').value)||0;const mer=parseFloat(document.getElementById('cb-mer').value)||0;
   const limp=Math.max(0,prod-mer),rest=Math.max(0,st-prod),pct=prod>0?mer/prod:0;
-  document.getElementById('cb-limp').textContent=fKg(limp);
-  document.getElementById('cb-pct').textContent=prod>0?`Merma: ${fPct(pct)}`:'';
-  document.getElementById('cb-rest').textContent=fKg(rest);
-  if(prod>st+0.001)setAl('ci-al',`❌ Stock insuficiente. Disponible: ${fKg(st)} kg`,'ae');
-  else if(limp>0)setAl('ci-al',`✅ ${fKg(limp)} kg listos para producción`,'aok');
+  document.getElementById('cb-limp').textContent=fKg(limp);document.getElementById('cb-pct').textContent=prod>0?`Merma: ${fPct(pct)}`:'';document.getElementById('cb-rest').textContent=fKg(rest);
+  if(prod>st+0.001)setAl('ci-al',`❌ Stock insuficiente. Disponible: ${fKg(st)} kg`,'ae');else if(limp>0)setAl('ci-al',`✅ ${fKg(limp)} kg listos para producción`,'aok');
 }
 function guardarCocIngreso(){
-  const fecha=document.getElementById('ci-fecha').value;
-  const ins=document.getElementById('ci-ins').value;
-  if(!fecha||!ins){toast('Completa fecha e insumo','terr');return;}
-  if(!origCoc){toast('Elige el origen','terr');return;}
-
-  // ── Guardar origCoc ANTES de resetear ──
-  const origenActual = origCoc;
-
-  let kgProd, mer, limp, bod=0, kgDeBodega=0;
-  if(origenActual==='prov'){
-    const tot=parseFloat(document.getElementById('cp-tot').value)||0;
-    bod=parseFloat(document.getElementById('cp-bod').value)||0;
-    mer=parseFloat(document.getElementById('cp-mer').value)||0;
-    kgProd=Math.max(0,tot-bod);
-    limp=Math.max(0,kgProd-mer);
-    if(!DB.bodega[ins])DB.bodega[ins]={kg:0};
-    DB.bodega[ins].kg+=bod;
-  } else {
-    kgDeBodega=parseFloat(document.getElementById('cb-prod').value)||0;
-    mer=parseFloat(document.getElementById('cb-mer').value)||0;
-    kgProd=kgDeBodega;
-    limp=Math.max(0,kgProd-mer);
-    if(DB.bodega[ins])DB.bodega[ins].kg=Math.max(0,DB.bodega[ins].kg-kgProd);
-  }
-
+  const fecha=document.getElementById('ci-fecha').value;const ins=document.getElementById('ci-ins').value;
+  if(!fecha||!ins){toast('Completa fecha e insumo','terr');return;}if(!origCoc){toast('Elige el origen','terr');return;}
+  const origenActual=origCoc;
+  let kgProd,mer,limp,bod=0,kgDeBodega=0;
+  if(origenActual==='prov'){const tot=parseFloat(document.getElementById('cp-tot').value)||0;bod=parseFloat(document.getElementById('cp-bod').value)||0;mer=parseFloat(document.getElementById('cp-mer').value)||0;kgProd=Math.max(0,tot-bod);limp=Math.max(0,kgProd-mer);if(!DB.bodega[ins])DB.bodega[ins]={kg:0};DB.bodega[ins].kg+=bod;}
+  else{kgDeBodega=parseFloat(document.getElementById('cb-prod').value)||0;mer=parseFloat(document.getElementById('cb-mer').value)||0;kgProd=kgDeBodega;limp=Math.max(0,kgProd-mer);if(DB.bodega[ins])DB.bodega[ins].kg=Math.max(0,DB.bodega[ins].kg-kgProd);}
   if(kgProd<=0){toast('Ingresa los KG','terr');return;}
   const pct=kgProd>0?mer/kgProd:0;
-
-  DB.cocIngresos.push({fecha,ins,origen:origenActual,kgProd,mer,limp,pct});
-  renderCocLog();
-
-  // ── Resetear DESPUÉS de guardar los datos ──
-  origCoc='';
-  ['ob-prov','ob-bod'].forEach(id=>document.getElementById(id).classList.remove('on'));
-  ['blq-prov','blq-bod','blq-save'].forEach(id=>document.getElementById(id).classList.add('hidden'));
-  ['cp-tot','cp-bod','cp-mer','cb-prod','cb-mer'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
-  document.getElementById('ci-ins').value='';
-  setAl('ci-al',null);
-
-  // ── Enviar al backend con todos los campos correctos ──
-  const tot = origenActual==='prov'
-    ? (parseFloat(document.getElementById('cp-tot')?.value)||kgProd+bod)
-    : kgDeBodega;
-
-callScript('guardarCocIngreso',{
-  fecha, insumo:ins,
-  origen: origenActual==='prov'?'proveedor':'bodega',
-  kgTotal: origenActual==='prov'?kgProd+bod:kgDeBodega,
-  kgBodega: origenActual==='prov'?bod:0,
-  kgDeBodega: origenActual==='bod'?kgDeBodega:0,
-  merma:mer, kgLimpio:limp,
-  proveedor:document.getElementById('ci-prov')?.value||'',
-  usuario:USER
-});
-
+  DB.cocIngresos.push({fecha,ins,origen:origenActual,kgProd,mer,limp,pct});renderCocLog();
+  origCoc='';['ob-prov','ob-bod'].forEach(id=>document.getElementById(id).classList.remove('on'));['blq-prov','blq-bod','blq-save'].forEach(id=>document.getElementById(id).classList.add('hidden'));['cp-tot','cp-bod','cp-mer','cb-prod','cb-mer'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('ci-ins').value='';setAl('ci-al',null);
+  callScript('guardarCocIngreso',{fecha,insumo:ins,origen:origenActual==='prov'?'proveedor':'bodega',kgTotal:origenActual==='prov'?kgProd+bod:kgDeBodega,kgBodega:origenActual==='prov'?bod:0,kgDeBodega:origenActual==='bod'?kgDeBodega:0,merma:mer,kgLimpio:limp,proveedor:document.getElementById('ci-prov')?.value||'',usuario:USER});
   toast(`${ins} · ${fKg(limp)} kg limpios`,'tok');
 }
 function renderCocLog(){
   const f=document.getElementById('ci-fecha').value||new Date().toISOString().split('T')[0];
-  const rows=DB.cocIngresos.filter(r=>r.fecha===f);
-  const tb=document.getElementById('ci-log');
+  const rows=DB.cocIngresos.filter(r=>r.fecha===f);const tb=document.getElementById('ci-log');
   if(!rows.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--txd);padding:18px">Sin registros</td></tr>';return;}
   tb.innerHTML=rows.map(r=>`<tr><td class="g">${r.ins}</td><td>${r.origen==='prov'?'🚚 Proveedor':'🏪 Bodega'}</td><td>${fKg(r.kgProd)}</td><td class="${r.pct>0.3?'re':'or'}">${fKg(r.mer)}</td><td class="gr">${fKg(r.limp)}</td><td class="${r.pct>0.3?'re':r.pct>0.15?'or':'gr'}">${fPct(r.pct)}</td><td><span class="badge ${r.pct>0.3?'be':'bok'}">${r.pct>0.3?'⚠️ Alta':'✔️ OK'}</span></td></tr>`).join('');
 }
 
-// ── COCINA · PRODUCCIÓN ──
 function loadProd(){
-  const ins=document.getElementById('pr-ins').value;
-  const f=document.getElementById('pr-f').value;
-  if(!ins)return;
+  const ins=document.getElementById('pr-ins').value;const f=document.getElementById('pr-f').value;if(!ins)return;
   const disp=DB.cocIngresos.filter(r=>r.ins===ins&&r.fecha===f).reduce((s,r)=>s+r.limp,0);
-  document.getElementById('pr-disp').textContent=fKg(disp,3);
-  document.getElementById('pr-nostock').classList.toggle('hidden',disp>0||disp===0);
+  document.getElementById('pr-disp').textContent=fKg(disp,3);document.getElementById('pr-nostock').classList.toggle('hidden',disp>0||disp===0);
   const preps=PREPS[ins]||[];
   if(!preps.length){document.getElementById('pr-list').innerHTML='<div style="color:var(--txd);font-size:13px;padding:10px 0">Sin porciones definidas para este insumo.</div>';return;}
   document.getElementById('pr-list').innerHTML=preps.map((p,i)=>`
     <div style="display:grid;grid-template-columns:1fr 100px 140px;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(201,168,76,.05);">
-      <div>
-        <div style="font-size:13px;color:var(--txm);font-weight:500">${p.n}</div>
-        <div style="font-size:11px;color:var(--txd);margin-top:2px">${p.desc}</div>
-      </div>
+      <div><div style="font-size:13px;color:var(--txm);font-weight:500">${p.n}</div><div style="font-size:11px;color:var(--txd);margin-top:2px">${p.desc}</div></div>
       <div style="background:var(--d3);border-radius:8px;padding:5px 9px;text-align:center">
         <div style="font-size:9px;color:var(--txd);text-transform:uppercase;letter-spacing:1px">${p.unidad==='unidad'?'UNIDAD':p.unidad==='compuesto'?'COMPUESTO':'GRAMAJE'}</div>
         <div style="font-size:13px;font-weight:700;color:var(--gold)">${p.unidad==='unidad'?p.n.match(/\d+/)?p.n.match(/\d+/)[0]+' u':'—':p.unidad==='compuesto'?'4+4+4 u':p.g+'g'}</div>
       </div>
-      <input type="number" id="pq-${i}" min="0" placeholder="0 porciones"
-        style="background:var(--d3);border:1.5px solid rgba(201,168,76,.13);border-radius:11px;padding:10px;font-size:18px;font-weight:700;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcProdTot(${disp})">
+      <input type="number" id="pq-${i}" min="0" placeholder="0 porciones" style="background:var(--d3);border:1.5px solid rgba(201,168,76,.13);border-radius:11px;padding:10px;font-size:18px;font-weight:700;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcProdTot(${disp})">
     </div>`).join('');
   calcProdTot(disp);
 }
 function calcProdTot(disp){
-  const ins=document.getElementById('pr-ins').value;
-  const preps=PREPS[ins]||[];
-  let tot=0;
-  preps.forEach((_,i)=>{
-    const qty=parseInt(document.getElementById('pq-'+i)?.value)||0;
-    if(preps[i].unidad!=='unidad'&&preps[i].unidad!=='compuesto') tot+=(qty*preps[i].g)/1000;
-  });
+  const ins=document.getElementById('pr-ins').value;const preps=PREPS[ins]||[];let tot=0;
+  preps.forEach((_,i)=>{const qty=parseInt(document.getElementById('pq-'+i)?.value)||0;if(preps[i].unidad!=='unidad'&&preps[i].unidad!=='compuesto')tot+=(qty*preps[i].g)/1000;});
   document.getElementById('pr-tot').textContent=fKg(tot,3)+' kg';
-  if(disp>0){
-    const pct=Math.min(100,(tot/disp)*100),diff=disp-tot;
-    const bar=document.getElementById('pr-prog');
-    bar.style.width=pct+'%';bar.style.background=pct>100?'var(--red)':pct>90?'var(--grn)':'var(--gold)';
-    document.getElementById('pr-pct').textContent=pct.toFixed(1)+'%';
-    document.getElementById('pr-diff').textContent=diff<-0.01?`❌ Excede por ${fKg(-diff,3)} kg`:Math.abs(diff)<0.05?'✅ Cuadra exacto':`⚠️ Quedan ${fKg(diff,3)} kg`;
-    document.getElementById('pr-diff').style.color=diff<-0.01?'var(--red)':Math.abs(diff)<0.05?'var(--grn)':'var(--org)';
-    const a=document.getElementById('pr-al');
-    if(tot>disp+0.01){a.className='al ae';a.textContent=`❌ Excedes el disponible por ${fKg(tot-disp,3)} kg`;}
-    else a.classList.add('hidden');
-  }
+  if(disp>0){const pct=Math.min(100,(tot/disp)*100),diff=disp-tot;const bar=document.getElementById('pr-prog');bar.style.width=pct+'%';bar.style.background=pct>100?'var(--red)':pct>90?'var(--grn)':'var(--gold)';document.getElementById('pr-pct').textContent=pct.toFixed(1)+'%';document.getElementById('pr-diff').textContent=diff<-0.01?`❌ Excede por ${fKg(-diff,3)} kg`:Math.abs(diff)<0.05?'✅ Cuadra exacto':`⚠️ Quedan ${fKg(diff,3)} kg`;document.getElementById('pr-diff').style.color=diff<-0.01?'var(--red)':Math.abs(diff)<0.05?'var(--grn)':'var(--org)';const a=document.getElementById('pr-al');if(tot>disp+0.01){a.className='al ae';a.textContent=`❌ Excedes el disponible por ${fKg(tot-disp,3)} kg`;}else a.classList.add('hidden');}
 }
 function guardarProd(){
   const f=document.getElementById('pr-f').value,ins=document.getElementById('pr-ins').value;
   if(!f||!ins){toast('Completa fecha e insumo','terr');return;}
   const preps=PREPS[ins]||[],porciones=[];
-  preps.forEach((p,i)=>{
-    const qty=parseInt(document.getElementById('pq-'+i)?.value)||0;
-    if(qty>0){DB.cocProd.push({f,ins,porcion:p.n,g:p.g,qty,kg:(qty*p.g)/1000});porciones.push({porcion:p.n,g:p.g,qty});}
-  });
+  preps.forEach((p,i)=>{const qty=parseInt(document.getElementById('pq-'+i)?.value)||0;if(qty>0){DB.cocProd.push({f,ins,porcion:p.n,g:p.g,qty,kg:(qty*p.g)/1000});porciones.push({porcion:p.n,g:p.g,qty});}});
   if(!porciones.length){toast('Ingresa al menos una porción','terr');return;}
-  // Descuento automático de componentes para Frutti di Mare
-  const descuentos=[];
-  preps.forEach((p,i)=>{
-    if(p.unidad==='compuesto'&&p.componentes){
-      const qty=parseInt(document.getElementById('pq-'+i)?.value)||0;
-      if(qty>0){
-        p.componentes.forEach(c=>{
-          const total=qty*c.cant;
-          descuentos.push({ins:c.ins,unidades:total});
-          if(!DB.bodega[c.ins])DB.bodega[c.ins]={kg:0,unidades:0};
-          DB.bodega[c.ins].unidades=(DB.bodega[c.ins].unidades||0)-total;
-        });
-      }
-    }
-  });
-  if(descuentos.length){
-    const msg=descuentos.map(d=>`${d.ins}: −${d.unidades} u.`).join(' · ');
-    toast(`Frutti di Mare guardado · ${msg}`,'tok');
-  }
-  callScript('guardarCocProd',{
-  fecha: f,
-  insumoBase: ins,
-  porciones: porciones.map(p=>({
-    porcion:  p.porcion,
-    gramaje:  p.g,
-    cantidad: p.qty,
-  })),
-  usuario: USER,
-});
+  callScript('guardarCocProd',{fecha:f,insumoBase:ins,porciones:porciones.map(p=>({porcion:p.porcion,gramaje:p.g,cantidad:p.qty})),usuario:USER});
   document.getElementById('pr-ins').value='';document.getElementById('pr-list').innerHTML='<div style="color:var(--txd);font-size:13px;padding:10px 0">Selecciona un insumo para ver las preparaciones</div>';
   toast(`${porciones.length} preparaciones guardadas`,'tok');
 }
 
-// ── COCINA · CONTEO ──
 function loadCocConteo(){
   const f=document.getElementById('cc-fecha').value;if(!f){toast('Selecciona fecha','terr');return;}
   document.getElementById('cc-list').innerHTML=ALL_PREPS_FLAT.map((p,i)=>`
@@ -1235,93 +1029,49 @@ function loadCocConteo(){
 function calcCocConteoRow(i){const c=parseInt(document.getElementById('ccc-'+i)?.value)||0;const b=parseInt(document.getElementById('ccb-'+i)?.value)||0;const el=document.getElementById('cct-'+i);if(el)el.textContent=c+b;}
 function guardarCocConteo(){
   const f=document.getElementById('cc-fecha').value;if(!f){toast('Selecciona fecha','terr');return;}
-  const conteos=[];
-  ALL_PREPS_FLAT.forEach((p,i)=>{
-    const c=parseInt(document.getElementById('ccc-'+i)?.value)||0;const b=parseInt(document.getElementById('ccb-'+i)?.value)||0;
-    if(c||b)conteos.push({ingrediente:p,cocina:c,bodega:b});
-  });
+  const conteos=[];ALL_PREPS_FLAT.forEach((p,i)=>{const c=parseInt(document.getElementById('ccc-'+i)?.value)||0;const b=parseInt(document.getElementById('ccb-'+i)?.value)||0;if(c||b)conteos.push({ingrediente:p,cocina:c,bodega:b});});
   callScript('guardarCocConteo',{fecha:f,conteos});toast(`Conteo cocina · ${conteos.length} preparaciones`,'tok');
 }
 
-// ── INVENTARIO SEMANAL ──
 const DIAS=['Lun','Mar','Mié','Jue','Vie','Sáb'];
 let cocSemOff=0,barSemOff=0,barSemOff2=0,winSemOff=0,winSemOff2=0;
-
 function getLunes(d){const dd=new Date(d);const day=dd.getDay();dd.setDate(dd.getDate()-day+(day===0?-6:1));return dd;}
 function addDays(iso,n){const d=new Date(iso+'T12:00:00');d.setDate(d.getDate()+n);return d.toISOString().split('T')[0]}
 function getSemFechas(off){const l=getLunes(new Date());l.setDate(l.getDate()+off*7);return Array.from({length:6},(_,i)=>addDays(l.toISOString().split('T')[0],i));}
 function semLabel(fechas){const f0=new Date(fechas[0]+'T12:00:00'),f5=new Date(fechas[5]+'T12:00:00');return`${f0.getDate()} ${f0.toLocaleDateString('es',{month:'short'})} — ${f5.getDate()} ${f5.toLocaleDateString('es',{month:'short',year:'numeric'})}`;}
-
-function genDemoInv(items){
-  const inv={};const lunes=getLunes(new Date());
-  items.forEach(p=>{inv[p]={};let si=Math.floor(Math.random()*20)+5;
-    for(let d=0;d<6;d++){const f=addDays(lunes.toISOString().split('T')[0],d);const prod=Math.floor(Math.random()*15)+2,cons=Math.floor(Math.random()*10);const sf=si+prod-cons;inv[p][f]={si,prod,cons,sf};si=sf;}
-  });return inv;
-}
-
+function genDemoInv(items){const inv={};const lunes=getLunes(new Date());items.forEach(p=>{inv[p]={};let si=Math.floor(Math.random()*20)+5;for(let d=0;d<6;d++){const f=addDays(lunes.toISOString().split('T')[0],d);const prod=Math.floor(Math.random()*15)+2,cons=Math.floor(Math.random()*10);const sf=si+prod-cons;inv[p][f]={si,prod,cons,sf};si=sf;}});return inv;}
 let invCoc=null,invBar=null,invWin=null;
-
 function renderInvTableWithCats(theadId,tbodyId,catsObj,inv,off){
   const fechas=getSemFechas(off);
   document.getElementById(theadId).innerHTML=`<tr><th>PRODUCTO</th>${fechas.map((f,i)=>`<th><div>${DIAS[i]}</div><div class="dh"><span>SI</span><span>P/I</span><span>C</span></div></th>`).join('')}<th>SF HOY</th></tr>`;
-  let html='';
-  Object.entries(catsObj).forEach(([cat,items])=>{
-    html+=`<tr class="cat-header"><td colspan="${fechas.length+2}">${cat}</td></tr>`;
-    items.forEach(p=>{
-      let lastSF='—';
-      const cells=fechas.map(f=>{
-        const d=inv[p]?.[f];
-        if(!d)return`<td><div class="dc"><div class="sc si">—</div><div class="sc inp">—</div><div class="sc cons">—</div></div></td>`;
-        lastSF=d.sf;
-        return`<td><div class="dc"><div class="sc si">${d.si}</div><div class="sc inp">${d.prod||d.ing||0}</div><div class="sc cons">${d.cons}</div></div></td>`;
-      }).join('');
-      const sfC=typeof lastSF==='number'&&lastSF<3?'color:var(--red)':typeof lastSF==='number'&&lastSF<8?'color:var(--org)':'';
-      html+=`<tr><td>${p}</td>${cells}<td style="padding:10px 12px;font-size:15px;font-weight:700;${sfC}">${lastSF}</td></tr>`;
-    });
-  });
+  let html='';Object.entries(catsObj).forEach(([cat,items])=>{html+=`<tr class="cat-header"><td colspan="${fechas.length+2}">${cat}</td></tr>`;items.forEach(p=>{let lastSF='—';const cells=fechas.map(f=>{const d=inv[p]?.[f];if(!d)return`<td><div class="dc"><div class="sc si">—</div><div class="sc inp">—</div><div class="sc cons">—</div></div></td>`;lastSF=d.sf;return`<td><div class="dc"><div class="sc si">${d.si}</div><div class="sc inp">${d.prod||d.ing||0}</div><div class="sc cons">${d.cons}</div></div></td>`;}).join('');const sfC=typeof lastSF==='number'&&lastSF<3?'color:var(--red)':typeof lastSF==='number'&&lastSF<8?'color:var(--org)':'';html+=`<tr><td>${p}</td>${cells}<td style="padding:10px 12px;font-size:15px;font-weight:700;${sfC}">${lastSF}</td></tr>`;});});
   document.getElementById(tbodyId).innerHTML=html;
 }
-
 function renderInvTable(theadId,tbodyId,items,inv,off){
   const fechas=getSemFechas(off);
   document.getElementById(theadId).innerHTML=`<tr><th>PORCIÓN</th>${fechas.map((f,i)=>`<th><div>${DIAS[i]}</div><div class="dh"><span>SI</span><span>Prod</span><span>Cons</span></div></th>`).join('')}<th>SF HOY</th></tr>`;
-  document.getElementById(tbodyId).innerHTML=items.map(p=>{
-    let lastSF='—';
-    const cells=fechas.map(f=>{const d=inv[p]?.[f];if(!d)return`<td><div class="dc"><div class="sc si">—</div><div class="sc inp">—</div><div class="sc cons">—</div></div></td>`;lastSF=d.sf;return`<td><div class="dc"><div class="sc si">${d.si}</div><div class="sc inp">${d.prod||0}</div><div class="sc cons">${d.cons}</div></div></td>`;}).join('');
-    const sfC=typeof lastSF==='number'&&lastSF<5?'color:var(--red)':typeof lastSF==='number'&&lastSF<10?'color:var(--org)':'';
-    return`<tr><td>${p}</td>${cells}<td style="padding:10px 12px;font-size:15px;font-weight:700;${sfC}">${lastSF}</td></tr>`;
-  }).join('');
+  document.getElementById(tbodyId).innerHTML=items.map(p=>{let lastSF='—';const cells=fechas.map(f=>{const d=inv[p]?.[f];if(!d)return`<td><div class="dc"><div class="sc si">—</div><div class="sc inp">—</div><div class="sc cons">—</div></div></td>`;lastSF=d.sf;return`<td><div class="dc"><div class="sc si">${d.si}</div><div class="sc inp">${d.prod||0}</div><div class="sc cons">${d.cons}</div></div></td>`;}).join('');const sfC=typeof lastSF==='number'&&lastSF<5?'color:var(--red)':typeof lastSF==='number'&&lastSF<10?'color:var(--org)':'';return`<tr><td>${p}</td>${cells}<td style="padding:10px 12px;font-size:15px;font-weight:700;${sfC}">${lastSF}</td></tr>`;}).join('');
 }
-
 function renderCocInvSem(){document.getElementById('coc-sem-lbl').textContent=semLabel(getSemFechas(cocSemOff));if(!invCoc)invCoc=genDemoInv(ALL_PREPS_FLAT);renderInvTable('coc-inv-thead','coc-inv-tbody',ALL_PREPS_FLAT,invCoc,cocSemOff);}
 function cocSemAnt(){cocSemOff--;renderCocInvSem()}function cocSemSig(){cocSemOff++;renderCocInvSem()}
-
 function renderBarInvSem(){document.getElementById('bar-sem-lbl').textContent=semLabel(getSemFechas(barSemOff));if(!invBar)invBar=genDemoInv(ALL_BAR_FLAT);renderInvTableWithCats('bar-inv-thead','bar-inv-tbody',BAR_CATS,invBar,barSemOff);}
 function barSemAnt(){barSemOff--;renderBarInvSem()}function barSemSig(){barSemOff++;renderBarInvSem()}
-
 function renderBar2InvSem(){document.getElementById('bar2-sem-lbl').textContent=semLabel(getSemFechas(barSemOff2));if(!invBar)invBar=genDemoInv(ALL_BAR_FLAT);renderInvTableWithCats('bar2-inv-thead','bar2-inv-tbody',BAR_CATS,invBar,barSemOff2);}
 function barSemAnt2(){barSemOff2--;renderBar2InvSem()}function barSemSig2(){barSemOff2++;renderBar2InvSem()}
-
 function renderWinInvSem(){document.getElementById('win-sem-lbl').textContent=semLabel(getSemFechas(winSemOff));if(!invWin)invWin=genDemoInv(ALL_WIN_FLAT);renderInvTableWithCats('win-inv-thead','win-inv-tbody',VINO_CEPAS,invWin,winSemOff);}
 function winSemAnt(){winSemOff--;renderWinInvSem()}function winSemSig(){winSemOff++;renderWinInvSem()}
-
 function renderWin2InvSem(){document.getElementById('win2-sem-lbl').textContent=semLabel(getSemFechas(winSemOff2));if(!invWin)invWin=genDemoInv(ALL_WIN_FLAT);renderInvTableWithCats('win2-inv-thead','win2-inv-tbody',VINO_CEPAS,invWin,winSemOff2);}
 function winSemAnt2(){winSemOff2--;renderWin2InvSem()}function winSemSig2(){winSemOff2++;renderWin2InvSem()}
 
-// ── GERENCIA · DASHBOARD ──
 function loadGerDash(){
-  const mc=Math.max(...VENTAS_COC.map(v=>v.v));
-  document.getElementById('ger-chart-coc').innerHTML=VENTAS_COC.map(v=>`<div class="cb"><div class="cbv" style="color:var(--gold)">${(v.v/1e6).toFixed(1)}M</div><div class="cbf" style="height:${Math.round((v.v/mc)*120)}px;background:var(--gold)"></div><div class="cbl" title="${v.p}">${v.p.split(' ')[0]}</div></div>`).join('');
-  const mb=Math.max(...VENTAS_BAR.map(v=>v.v));
-  document.getElementById('ger-chart-bar').innerHTML=VENTAS_BAR.map(v=>`<div class="cb"><div class="cbv" style="color:#5A8DD9">${(v.v/1e6).toFixed(1)}M</div><div class="cbf" style="height:${Math.round((v.v/mb)*120)}px;background:#5A8DD9"></div><div class="cbl" title="${v.p}">${v.p.split(' ')[0]}</div></div>`).join('');
-  const mw=Math.max(...VENTAS_WIN.map(v=>v.v));
-  document.getElementById('ger-chart-win').innerHTML=VENTAS_WIN.map(v=>`<div class="cb"><div class="cbv" style="color:#C06080">${(v.v/1e6).toFixed(1)}M</div><div class="cbf" style="height:${Math.round((v.v/mw)*120)}px;background:#9B3A5A"></div><div class="cbl" title="${v.p}">${v.p.split(' ').slice(-1)[0]}</div></div>`).join('');
+  const mc=Math.max(...VENTAS_COC.map(v=>v.v));document.getElementById('ger-chart-coc').innerHTML=VENTAS_COC.map(v=>`<div class="cb"><div class="cbv" style="color:var(--gold)">${(v.v/1e6).toFixed(1)}M</div><div class="cbf" style="height:${Math.round((v.v/mc)*120)}px;background:var(--gold)"></div><div class="cbl" title="${v.p}">${v.p.split(' ')[0]}</div></div>`).join('');
+  const mb=Math.max(...VENTAS_BAR.map(v=>v.v));document.getElementById('ger-chart-bar').innerHTML=VENTAS_BAR.map(v=>`<div class="cb"><div class="cbv" style="color:#5A8DD9">${(v.v/1e6).toFixed(1)}M</div><div class="cbf" style="height:${Math.round((v.v/mb)*120)}px;background:#5A8DD9"></div><div class="cbl" title="${v.p}">${v.p.split(' ')[0]}</div></div>`).join('');
+  const mw=Math.max(...VENTAS_WIN.map(v=>v.v));document.getElementById('ger-chart-win').innerHTML=VENTAS_WIN.map(v=>`<div class="cb"><div class="cbv" style="color:#C06080">${(v.v/1e6).toFixed(1)}M</div><div class="cbf" style="height:${Math.round((v.v/mw)*120)}px;background:#9B3A5A"></div><div class="cbl" title="${v.p}">${v.p.split(' ').slice(-1)[0]}</div></div>`).join('');
   const alertas=[{s:'🍹 Barra',i:'aperol 1000ml',st:'2.1 bot',niv:'bajo'},{s:'🍹 Barra',i:'TANQUERAY 750ml',st:'0.5 bot',niv:'critico'},{s:'👨‍🍳 Cocina',i:'PORCION PULPO BRASEADO',st:'3 porc.',niv:'critico'},{s:'👨‍🍳 Cocina',i:'PORCION FLAT IRON 250g',st:'6 porc.',niv:'bajo'},{s:'🍷 Vinos',i:'CS Vik A',st:'1 bot',niv:'critico'},{s:'🍷 Vinos',i:'Íconos Cabo de Hornos',st:'2 bot',niv:'bajo'}];
   const ac={critico:'be',bajo:'bw'},al={critico:'🔴 Crítico',bajo:'🟡 Bajo'};
   document.getElementById('ger-alertas').innerHTML=alertas.map(a=>`<tr><td>${a.s}</td><td>${a.i}</td><td class="${a.niv==='critico'?'re':'or'}">${a.st}</td><td><span class="badge ${ac[a.niv]}">${al[a.niv]}</span></td><td style="color:var(--txd)">${a.niv==='critico'?'Reponer urgente':'Revisar hoy'}</td></tr>`).join('');
 }
 
-// ── VENTAS ──
 function renderVentas(){
   const all=[...VENTAS_COC.map(v=>({...v,s:'👨‍🍳 Cocina'})),...VENTAS_BAR.map(v=>({...v,s:'🍹 Barra'})),...VENTAS_WIN.map(v=>({...v,s:'🍷 Vinos'}))];
   document.getElementById('v-all-tbody').innerHTML=all.map(v=>`<tr><td>${v.s}</td><td>${v.p}</td><td class="g">${v.u}</td><td class="gr">${fM(v.v)}</td></tr>`).join('');
@@ -1329,34 +1079,20 @@ function renderVentas(){
   document.getElementById('v-bar-tbody').innerHTML=VENTAS_BAR.map(v=>`<tr><td>${v.p}</td><td class="bl">${v.u}</td><td class="gr">${fM(v.v)}</td></tr>`).join('');
   document.getElementById('v-win-tbody').innerHTML=VENTAS_WIN.map(v=>`<tr><td class="wi">${v.p}</td><td style="color:#C06080">${v.u}</td><td class="gr">${fM(v.v)}</td></tr>`).join('');
 }
-function switchVtab(el,id){
-  document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');
-  ['vt-todos','vt-coc','vt-bar','vt-win'].forEach(v=>document.getElementById(v).classList.toggle('hidden',v!==id));
-}
+function switchVtab(el,id){document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');['vt-todos','vt-coc','vt-bar','vt-win'].forEach(v=>document.getElementById(v).classList.toggle('hidden',v!==id));}
 function syncVentas(ctx){
-  const res=document.getElementById('sync-res');
-  if(res){res.className='al ai';res.textContent='⏳ Conectando con Toteat…';}
+  const res=document.getElementById('sync-res');if(res){res.className='al ai';res.textContent='⏳ Conectando con Toteat…';}
   callScript('sincronizarVentas',{ctx}).catch(()=>{});
-  setTimeout(()=>{
-    if(res){res.className='al aok';res.textContent=`✅ Sincronizado · Consumo actualizado · ${new Date().toLocaleTimeString()}`;}
-    toast('Toteat sincronizado','tok');
-  },2000);
+  setTimeout(()=>{if(res){res.className='al aok';res.textContent=`✅ Sincronizado · Consumo actualizado · ${new Date().toLocaleTimeString()}`;}toast('Toteat sincronizado','tok');},2000);
 }
 
-// ── APPS SCRIPT ──
 async function callScript(action,data){
   if(!SCRIPT_URL||SCRIPT_URL.includes('TU_URL')){console.log('[DEMO]',action,data);return{ok:true};}
-  try{
-    const url=SCRIPT_URL+'?action='+encodeURIComponent(action)+'&data='+encodeURIComponent(JSON.stringify(data||{}));
-    const r=await fetch(url);
-    return await r.json();
-  }
+  try{const url=SCRIPT_URL+'?action='+encodeURIComponent(action)+'&data='+encodeURIComponent(JSON.stringify(data||{}));const r=await fetch(url);return await r.json();}
   catch(e){console.error(e);return{error:e.message};}
 }
-// ── INIT ──
 filterBarProd();filterVinoProd();
 const style=document.createElement('style');style.textContent='@keyframes spin{to{transform:rotate(360deg)}}';document.head.appendChild(style);
 </script>
 </body>
 </html>
-
