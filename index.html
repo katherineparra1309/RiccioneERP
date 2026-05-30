@@ -303,9 +303,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <label class="il">Sección</label>
       <div class="role-grid">
         <div class="rc" data-r="barra" onclick="pickR(this)"><span class="ico">🍹</span><span class="lbl">Barra</span></div>
-        <div class="rc" data-r="cocina" onclick="pickR(this)"><span class="ico">👨‍🍳</span><span class="lbl">Cocina</span></div>
         <div class="rc" data-r="vinos" onclick="pickR(this)" style="border-color:rgba(155,58,90,.35)"><span class="ico">🍷</span><span class="lbl" style="color:#C06080">Vinos</span></div>
-        <div class="rc" data-r="gerencia" onclick="pickR(this)"><span class="ico">👩‍💼</span><span class="lbl">Gerencia</span></div>
+        <div class="rc" data-r="cocina" onclick="pickR(this)" style="grid-column:1/-1"><span class="ico">👨‍🍳</span><span class="lbl">Cocina</span></div>
       </div>
     </div>
     <button class="cta" id="lbtn" onclick="login()" disabled>Entrar al Sistema</button>
@@ -629,96 +628,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
       </div>
 
-      <!-- GERENCIA · DASHBOARD -->
-      <div class="view" id="v-ger-dash">
-        <div class="section-bar sb-gerencia"></div>
-        <div class="ph"><div class="ph-title">Dashboard</div><div class="ph-sub">Resumen ejecutivo · Barra + Cocina + Vinos</div></div>
-        <div class="kpi-grid">
-          <div class="kpi"><div class="kl">Porciones Cocina</div><div class="kv">247</div><div class="ks">stock activo</div></div>
-          <div class="kpi"><div class="kl">Stock Barra (bot.)</div><div class="kv blu">94</div><div class="ks">botellas disponibles</div></div>
-          <div class="kpi"><div class="kl">Stock Vinos (bot.)</div><div class="kv win">68</div><div class="ks">botellas disponibles</div></div>
-          <div class="kpi"><div class="kl">Ventas Semana</div><div class="kv grn">$14.2M</div><div class="ks">barra + cocina + vinos</div></div>
-        </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px">
-          <div class="card"><div class="card-hd grn">📊 Top cocina</div><div class="chart" id="ger-chart-coc"></div></div>
-          <div class="card"><div class="card-hd blu">📊 Top barra</div><div class="chart" id="ger-chart-bar"></div></div>
-          <div class="card"><div class="card-hd win">📊 Top vinos</div><div class="chart" id="ger-chart-win"></div></div>
-        </div>
-        <div class="card">
-          <div class="card-hd">⚠️ Alertas de stock</div>
-          <table class="dt"><thead><tr><th>Sección</th><th>Ítem</th><th>Stock</th><th>Nivel</th><th>Acción</th></tr></thead>
-          <tbody id="ger-alertas"></tbody></table>
-        </div>
-      </div>
-
-      <!-- GERENCIA · VENTAS -->
-      <div class="view" id="v-ger-ventas">
-        <div class="section-bar sb-gerencia"></div>
-        <div class="ph"><div class="ph-title">Ventas · Toteat</div><div class="ph-sub">Centralizado: Barra + Cocina + Vinos</div></div>
-        <div class="card">
-          <div class="card-hd grn">🔄 Sincronización central</div>
-          <div class="al ai" style="margin-bottom:14px">El Apps Script importa ventas desde Toteat, separa automáticamente productos de barra, cocina y vinos, y actualiza el campo <strong>Consumo</strong> en todos los inventarios.</div>
-          <button class="btn bgg" style="font-size:15px;padding:16px 28px" onclick="syncVentas('all')">🔄 &nbsp;Sincronizar Barra + Cocina + Vinos</button>
-          <div id="sync-res" class="al hidden" style="margin-top:12px"></div>
-        </div>
-        <div class="card">
-          <div class="card-hd">📊 Ventas por sección</div>
-          <div class="tabs">
-            <div class="tab active" onclick="switchVtab(this,'vt-todos')">Todos</div>
-            <div class="tab" onclick="switchVtab(this,'vt-coc')">Cocina</div>
-            <div class="tab" onclick="switchVtab(this,'vt-bar')">Barra</div>
-            <div class="tab" onclick="switchVtab(this,'vt-win')">Vinos</div>
-          </div>
-          <div id="vt-todos"><table class="dt"><thead><tr><th>Sección</th><th>Producto</th><th>Uds.</th><th>Venta Total</th></tr></thead><tbody id="v-all-tbody"></tbody></table></div>
-          <div id="vt-coc" class="hidden"><table class="dt"><thead><tr><th>Producto</th><th>Uds.</th><th>Venta Total</th><th>Margen</th></tr></thead><tbody id="v-coc-tbody"></tbody></table></div>
-          <div id="vt-bar" class="hidden"><table class="dt"><thead><tr><th>Producto</th><th>Uds.</th><th>Venta Total</th></tr></thead><tbody id="v-bar-tbody"></tbody></table></div>
-          <div id="vt-win" class="hidden"><table class="dt"><thead><tr><th>Vino</th><th>Copas/Botellas</th><th>Venta Total</th></tr></thead><tbody id="v-win-tbody"></tbody></table></div>
-        </div>
-      </div>
-
-      <!-- GERENCIA · INV COCINA -->
-      <div class="view" id="v-ger-inv-coc">
-        <div class="section-bar sb-gerencia"></div>
-        <div class="ph"><div class="ph-title">Inventario Cocina</div><div class="ph-sub">Porciones · SI / Producción / Consumo / SF</div></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
-          <div style="display:flex;align-items:center;gap:8px">
-            <button class="btn bo" style="padding:7px 12px" onclick="cocSemAnt()">◀</button>
-            <span id="coc-sem-lbl" style="font-size:13px;color:var(--txm);min-width:160px;text-align:center"></span>
-            <button class="btn bo" style="padding:7px 12px" onclick="cocSemSig()">▶</button>
-          </div>
-          <button class="btn bo" style="font-size:12px" onclick="syncVentas('coc')">🔄 Sincronizar Toteat</button>
-        </div>
-        <div class="card" style="padding:16px"><div class="iw"><table class="it"><thead id="coc-inv-thead"></thead><tbody id="coc-inv-tbody"></tbody></table></div></div>
-      </div>
-
-      <!-- GERENCIA · INV BARRA -->
-      <div class="view" id="v-ger-inv-bar">
-        <div class="section-bar sb-gerencia"></div>
-        <div class="ph"><div class="ph-title">Inventario Barra</div><div class="ph-sub">Botellas · SI / Ingresos / Consumo / SF</div></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
-          <div style="display:flex;align-items:center;gap:8px">
-            <button class="btn bo" style="padding:7px 12px" onclick="barSemAnt2()">◀</button>
-            <span id="bar2-sem-lbl" style="font-size:13px;color:var(--txm);min-width:160px;text-align:center"></span>
-            <button class="btn bo" style="padding:7px 12px" onclick="barSemSig2()">▶</button>
-          </div>
-        </div>
-        <div class="card" style="padding:16px"><div class="iw"><table class="it"><thead id="bar2-inv-thead"></thead><tbody id="bar2-inv-tbody"></tbody></table></div></div>
-      </div>
-
-      <!-- GERENCIA · INV VINOS -->
-      <div class="view" id="v-ger-inv-win">
-        <div class="section-bar sb-gerencia"></div>
-        <div class="ph"><div class="ph-title">Inventario Vinos</div><div class="ph-sub">Por cepa · SI / Ingresos / Consumo / SF</div></div>
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:16px">
-          <div style="display:flex;align-items:center;gap:8px">
-            <button class="btn bo" style="padding:7px 12px" onclick="winSemAnt2()">◀</button>
-            <span id="win2-sem-lbl" style="font-size:13px;color:var(--txm);min-width:160px;text-align:center"></span>
-            <button class="btn bo" style="padding:7px 12px" onclick="winSemSig2()">▶</button>
-          </div>
-        </div>
-        <div class="card" style="padding:16px"><div class="iw"><table class="it"><thead id="win2-inv-thead"></thead><tbody id="win2-inv-tbody"></tbody></table></div></div>
-      </div>
-
     </main>
   </div>
 </div>
@@ -795,7 +704,6 @@ const MENUS={
   cocina:[{id:'coc-ingreso',ico:'📦',lbl:'Ingreso',s:'cocina'},{id:'coc-prod',ico:'🧑‍🍳',lbl:'Producción',s:'cocina'},{id:'coc-conteo',ico:'📋',lbl:'Conteo',s:'cocina'}],
   barra:[{id:'bar-ingreso',ico:'📦',lbl:'Ingreso',s:'barra'},{id:'bar-conteo',ico:'📋',lbl:'Conteo',s:'barra'},{id:'bar-inv',ico:'🗂',lbl:'Inventario',s:'barra'}],
   vinos:[{id:'vinos_barra-ingreso',ico:'📦',lbl:'Ingreso',s:'vinos_barra'},{id:'vinos_barra-conteo',ico:'📋',lbl:'Conteo',s:'vinos_barra'},{id:'vinos_barra-inv',ico:'🗂',lbl:'Inventario',s:'vinos_barra'}],
-  gerencia:[{id:'ger-dash',ico:'📊',lbl:'Dashboard',s:'gerencia'},{id:'ger-ventas',ico:'💰',lbl:'Ventas',s:'gerencia'},{id:'ger-inv-coc',ico:'🍽',lbl:'Inv.Cocina',s:'gerencia'},{id:'ger-inv-bar',ico:'🍹',lbl:'Inv.Barra',s:'gerencia'},{id:'ger-inv-win',ico:'🍷',lbl:'Inv.Vinos',s:'gerencia'}],
 };
 
 function pickR(el){document.querySelectorAll('.rc').forEach(c=>c.classList.remove('on'));el.classList.add('on');selR=el.dataset.r;chkL();}
@@ -805,19 +713,17 @@ function login(){
   USER=document.getElementById('ln').value.trim();ROLE=selR;
   document.getElementById('login').classList.remove('active');
   document.getElementById('app').classList.add('active');
-  document.getElementById('who').textContent=({barra:'🍹',cocina:'👨‍🍳',vinos:'🍷',gerencia:'👩‍💼'}[ROLE]||'')+' '+USER;
+  document.getElementById('who').textContent=({barra:'🍹',cocina:'👨‍🍳',vinos:'🍷'}[ROLE]||'')+' '+USER;
   buildSB(ROLE);setToday();
   nav(MENUS[ROLE][0].id);
-  if(ROLE==='gerencia')loadGerDash();
-  renderVentas();
-  renderCocInvSem();renderBarInvSem();renderBar2InvSem();renderWinInvSem();renderWin2InvSem();
   filterBarProd();filterVinoProd();
+  renderBarInvSem();renderWinInvSem();
 }
 function logout(){document.getElementById('app').classList.remove('active');document.getElementById('login').classList.add('active');document.querySelectorAll('.rc').forEach(c=>c.classList.remove('on'));document.getElementById('ln').value='';document.getElementById('lbtn').disabled=true;selR='';}
 
 function buildSB(s){
   const items=MENUS[s]||[];
-  document.getElementById('sb').innerHTML='<div class="ngt">'+(s==='barra'?'🍹 Barra':s==='cocina'?'👨‍🍳 Cocina':s==='vinos'?'🍷 Vinos':'👩‍💼 Gerencia')+'</div>'+
+  document.getElementById('sb').innerHTML='<div class="ngt">'+(s==='barra'?'🍹 Barra':s==='cocina'?'👨‍🍳 Cocina':'🍷 Vinos')+'</div>'+
     items.map(m=>`<div class="nb" id="nb-${m.id}" data-s="${m.s}" onclick="nav('${m.id}')"><span class="ni">${m.ico}</span><span class="nb-lbl">${m.lbl}</span></div>`).join('');
 }
 
@@ -1034,56 +940,27 @@ function guardarCocConteo(){
 }
 
 const DIAS=['Lun','Mar','Mié','Jue','Vie','Sáb'];
-let cocSemOff=0,barSemOff=0,barSemOff2=0,winSemOff=0,winSemOff2=0;
+let barSemOff=0,winSemOff=0;
 function getLunes(d){const dd=new Date(d);const day=dd.getDay();dd.setDate(dd.getDate()-day+(day===0?-6:1));return dd;}
 function addDays(iso,n){const d=new Date(iso+'T12:00:00');d.setDate(d.getDate()+n);return d.toISOString().split('T')[0]}
 function getSemFechas(off){const l=getLunes(new Date());l.setDate(l.getDate()+off*7);return Array.from({length:6},(_,i)=>addDays(l.toISOString().split('T')[0],i));}
 function semLabel(fechas){const f0=new Date(fechas[0]+'T12:00:00'),f5=new Date(fechas[5]+'T12:00:00');return`${f0.getDate()} ${f0.toLocaleDateString('es',{month:'short'})} — ${f5.getDate()} ${f5.toLocaleDateString('es',{month:'short',year:'numeric'})}`;}
 function genDemoInv(items){const inv={};const lunes=getLunes(new Date());items.forEach(p=>{inv[p]={};let si=Math.floor(Math.random()*20)+5;for(let d=0;d<6;d++){const f=addDays(lunes.toISOString().split('T')[0],d);const prod=Math.floor(Math.random()*15)+2,cons=Math.floor(Math.random()*10);const sf=si+prod-cons;inv[p][f]={si,prod,cons,sf};si=sf;}});return inv;}
-let invCoc=null,invBar=null,invWin=null;
+let invBar=null,invWin=null;
 function renderInvTableWithCats(theadId,tbodyId,catsObj,inv,off){
   const fechas=getSemFechas(off);
   document.getElementById(theadId).innerHTML=`<tr><th>PRODUCTO</th>${fechas.map((f,i)=>`<th><div>${DIAS[i]}</div><div class="dh"><span>SI</span><span>P/I</span><span>C</span></div></th>`).join('')}<th>SF HOY</th></tr>`;
   let html='';Object.entries(catsObj).forEach(([cat,items])=>{html+=`<tr class="cat-header"><td colspan="${fechas.length+2}">${cat}</td></tr>`;items.forEach(p=>{let lastSF='—';const cells=fechas.map(f=>{const d=inv[p]?.[f];if(!d)return`<td><div class="dc"><div class="sc si">—</div><div class="sc inp">—</div><div class="sc cons">—</div></div></td>`;lastSF=d.sf;return`<td><div class="dc"><div class="sc si">${d.si}</div><div class="sc inp">${d.prod||d.ing||0}</div><div class="sc cons">${d.cons}</div></div></td>`;}).join('');const sfC=typeof lastSF==='number'&&lastSF<3?'color:var(--red)':typeof lastSF==='number'&&lastSF<8?'color:var(--org)':'';html+=`<tr><td>${p}</td>${cells}<td style="padding:10px 12px;font-size:15px;font-weight:700;${sfC}">${lastSF}</td></tr>`;});});
   document.getElementById(tbodyId).innerHTML=html;
 }
-function renderInvTable(theadId,tbodyId,items,inv,off){
-  const fechas=getSemFechas(off);
-  document.getElementById(theadId).innerHTML=`<tr><th>PORCIÓN</th>${fechas.map((f,i)=>`<th><div>${DIAS[i]}</div><div class="dh"><span>SI</span><span>Prod</span><span>Cons</span></div></th>`).join('')}<th>SF HOY</th></tr>`;
-  document.getElementById(tbodyId).innerHTML=items.map(p=>{let lastSF='—';const cells=fechas.map(f=>{const d=inv[p]?.[f];if(!d)return`<td><div class="dc"><div class="sc si">—</div><div class="sc inp">—</div><div class="sc cons">—</div></div></td>`;lastSF=d.sf;return`<td><div class="dc"><div class="sc si">${d.si}</div><div class="sc inp">${d.prod||0}</div><div class="sc cons">${d.cons}</div></div></td>`;}).join('');const sfC=typeof lastSF==='number'&&lastSF<5?'color:var(--red)':typeof lastSF==='number'&&lastSF<10?'color:var(--org)':'';return`<tr><td>${p}</td>${cells}<td style="padding:10px 12px;font-size:15px;font-weight:700;${sfC}">${lastSF}</td></tr>`;}).join('');
-}
-function renderCocInvSem(){document.getElementById('coc-sem-lbl').textContent=semLabel(getSemFechas(cocSemOff));if(!invCoc)invCoc=genDemoInv(ALL_PREPS_FLAT);renderInvTable('coc-inv-thead','coc-inv-tbody',ALL_PREPS_FLAT,invCoc,cocSemOff);}
-function cocSemAnt(){cocSemOff--;renderCocInvSem()}function cocSemSig(){cocSemOff++;renderCocInvSem()}
 function renderBarInvSem(){document.getElementById('bar-sem-lbl').textContent=semLabel(getSemFechas(barSemOff));if(!invBar)invBar=genDemoInv(ALL_BAR_FLAT);renderInvTableWithCats('bar-inv-thead','bar-inv-tbody',BAR_CATS,invBar,barSemOff);}
 function barSemAnt(){barSemOff--;renderBarInvSem()}function barSemSig(){barSemOff++;renderBarInvSem()}
-function renderBar2InvSem(){document.getElementById('bar2-sem-lbl').textContent=semLabel(getSemFechas(barSemOff2));if(!invBar)invBar=genDemoInv(ALL_BAR_FLAT);renderInvTableWithCats('bar2-inv-thead','bar2-inv-tbody',BAR_CATS,invBar,barSemOff2);}
-function barSemAnt2(){barSemOff2--;renderBar2InvSem()}function barSemSig2(){barSemOff2++;renderBar2InvSem()}
 function renderWinInvSem(){document.getElementById('win-sem-lbl').textContent=semLabel(getSemFechas(winSemOff));if(!invWin)invWin=genDemoInv(ALL_WIN_FLAT);renderInvTableWithCats('win-inv-thead','win-inv-tbody',VINO_CEPAS,invWin,winSemOff);}
 function winSemAnt(){winSemOff--;renderWinInvSem()}function winSemSig(){winSemOff++;renderWinInvSem()}
-function renderWin2InvSem(){document.getElementById('win2-sem-lbl').textContent=semLabel(getSemFechas(winSemOff2));if(!invWin)invWin=genDemoInv(ALL_WIN_FLAT);renderInvTableWithCats('win2-inv-thead','win2-inv-tbody',VINO_CEPAS,invWin,winSemOff2);}
-function winSemAnt2(){winSemOff2--;renderWin2InvSem()}function winSemSig2(){winSemOff2++;renderWin2InvSem()}
 
-function loadGerDash(){
-  const mc=Math.max(...VENTAS_COC.map(v=>v.v));document.getElementById('ger-chart-coc').innerHTML=VENTAS_COC.map(v=>`<div class="cb"><div class="cbv" style="color:var(--gold)">${(v.v/1e6).toFixed(1)}M</div><div class="cbf" style="height:${Math.round((v.v/mc)*120)}px;background:var(--gold)"></div><div class="cbl" title="${v.p}">${v.p.split(' ')[0]}</div></div>`).join('');
-  const mb=Math.max(...VENTAS_BAR.map(v=>v.v));document.getElementById('ger-chart-bar').innerHTML=VENTAS_BAR.map(v=>`<div class="cb"><div class="cbv" style="color:#5A8DD9">${(v.v/1e6).toFixed(1)}M</div><div class="cbf" style="height:${Math.round((v.v/mb)*120)}px;background:#5A8DD9"></div><div class="cbl" title="${v.p}">${v.p.split(' ')[0]}</div></div>`).join('');
-  const mw=Math.max(...VENTAS_WIN.map(v=>v.v));document.getElementById('ger-chart-win').innerHTML=VENTAS_WIN.map(v=>`<div class="cb"><div class="cbv" style="color:#C06080">${(v.v/1e6).toFixed(1)}M</div><div class="cbf" style="height:${Math.round((v.v/mw)*120)}px;background:#9B3A5A"></div><div class="cbl" title="${v.p}">${v.p.split(' ').slice(-1)[0]}</div></div>`).join('');
-  const alertas=[{s:'🍹 Barra',i:'aperol 1000ml',st:'2.1 bot',niv:'bajo'},{s:'🍹 Barra',i:'TANQUERAY 750ml',st:'0.5 bot',niv:'critico'},{s:'👨‍🍳 Cocina',i:'PORCION PULPO BRASEADO',st:'3 porc.',niv:'critico'},{s:'👨‍🍳 Cocina',i:'PORCION FLAT IRON 250g',st:'6 porc.',niv:'bajo'},{s:'🍷 Vinos',i:'CS Vik A',st:'1 bot',niv:'critico'},{s:'🍷 Vinos',i:'Íconos Cabo de Hornos',st:'2 bot',niv:'bajo'}];
-  const ac={critico:'be',bajo:'bw'},al={critico:'🔴 Crítico',bajo:'🟡 Bajo'};
-  document.getElementById('ger-alertas').innerHTML=alertas.map(a=>`<tr><td>${a.s}</td><td>${a.i}</td><td class="${a.niv==='critico'?'re':'or'}">${a.st}</td><td><span class="badge ${ac[a.niv]}">${al[a.niv]}</span></td><td style="color:var(--txd)">${a.niv==='critico'?'Reponer urgente':'Revisar hoy'}</td></tr>`).join('');
-}
-
-function renderVentas(){
-  const all=[...VENTAS_COC.map(v=>({...v,s:'👨‍🍳 Cocina'})),...VENTAS_BAR.map(v=>({...v,s:'🍹 Barra'})),...VENTAS_WIN.map(v=>({...v,s:'🍷 Vinos'}))];
-  document.getElementById('v-all-tbody').innerHTML=all.map(v=>`<tr><td>${v.s}</td><td>${v.p}</td><td class="g">${v.u}</td><td class="gr">${fM(v.v)}</td></tr>`).join('');
-  document.getElementById('v-coc-tbody').innerHTML=VENTAS_COC.map(v=>`<tr><td>${v.p}</td><td class="g">${v.u}</td><td class="gr">${fM(v.v)}</td><td style="color:var(--txm)">~65%</td></tr>`).join('');
-  document.getElementById('v-bar-tbody').innerHTML=VENTAS_BAR.map(v=>`<tr><td>${v.p}</td><td class="bl">${v.u}</td><td class="gr">${fM(v.v)}</td></tr>`).join('');
-  document.getElementById('v-win-tbody').innerHTML=VENTAS_WIN.map(v=>`<tr><td class="wi">${v.p}</td><td style="color:#C06080">${v.u}</td><td class="gr">${fM(v.v)}</td></tr>`).join('');
-}
-function switchVtab(el,id){document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');['vt-todos','vt-coc','vt-bar','vt-win'].forEach(v=>document.getElementById(v).classList.toggle('hidden',v!==id));}
 function syncVentas(ctx){
-  const res=document.getElementById('sync-res');if(res){res.className='al ai';res.textContent='⏳ Conectando con Toteat…';}
   callScript('sincronizarVentas',{ctx}).catch(()=>{});
-  setTimeout(()=>{if(res){res.className='al aok';res.textContent=`✅ Sincronizado · Consumo actualizado · ${new Date().toLocaleTimeString()}`;}toast('Toteat sincronizado','tok');},2000);
+  setTimeout(()=>{toast('Toteat sincronizado','tok');},2000);
 }
 
 async function callScript(action,data){
