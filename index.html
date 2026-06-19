@@ -275,7 +275,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   .dt{display:block!important;overflow-x:auto!important}
   #pr-list > div{grid-template-columns:1fr 120px!important;gap:8px!important}
   #pr-list > div > div:nth-child(2){display:none!important}
-  #cc-list > div{grid-template-columns:1fr 80px 80px 70px!important;gap:4px!important}
+  #cc-list > div{grid-template-columns:1fr 90px 70px!important;gap:6px!important}
   #bc-list > div{min-width:500px!important}
   #vc-list > div{min-width:420px!important}
   #v-ger-dash > div:nth-child(3){grid-template-columns:1fr!important}
@@ -452,26 +452,36 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
       </div>
 
-      <!-- COCINA · CONTEO -->
+      <!-- COCINA · CONTEO (con separación Cocina/Bodega desde dispositivos distintos) -->
       <div class="view" id="v-coc-conteo">
         <div class="section-bar sb-cocina"></div>
         <div class="ph"><div class="ph-title">Conteo Final · Cocina</div><div class="ph-sub">Stock real al cierre de turno</div></div>
-        <div class="card">
+
+        <!-- Selector de ubicación: dónde vas a contar hoy -->
+        <div class="card" id="cc-ubic-card">
+          <div class="card-hd">📍 ¿Dónde vas a contar hoy?</div>
+          <div class="orig-grid">
+            <div class="ob" id="cc-ob-cocina" onclick="setUbicConteo('cocina')"><span class="oi">👨‍🍳</span><span class="ol">Cocina</span><span class="os">Stock en cocina</span></div>
+            <div class="ob" id="cc-ob-bodega" onclick="setUbicConteo('bodega')"><span class="oi">🏪</span><span class="ol">Bodega</span><span class="os">Stock en bodega</span></div>
+          </div>
+        </div>
+
+        <div class="card hidden" id="cc-fecha-card">
           <div class="fg c2">
             <div class="f"><label>Fecha</label><input type="date" id="cc-fecha"></div>
             <div style="display:flex;align-items:flex-end"><button class="btn bg" style="width:100%" onclick="loadCocConteo()">Cargar preparaciones →</button></div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-hd">🗂 Stock por preparación</div>
-          <div style="display:grid;grid-template-columns:1fr 120px 120px 90px;gap:8px;padding-bottom:9px;border-bottom:1px solid var(--br);margin-bottom:4px">
+        <div class="card hidden" id="cc-tabla-card">
+          <div class="card-hd" id="cc-tabla-hd">🗂 Stock por preparación</div>
+          <div id="cc-grid-header" style="display:grid;grid-template-columns:1fr 120px 90px;gap:8px;padding-bottom:9px;border-bottom:1px solid var(--br);margin-bottom:4px">
             <div style="font-size:9px;letter-spacing:2px;color:var(--txd)">PREPARACIÓN</div>
-            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">COCINA</div>
-            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">BODEGA</div>
-            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">TOTAL</div>
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center" id="cc-col-label">CANTIDAD</div>
+            <div style="font-size:9px;letter-spacing:2px;color:var(--txd);text-align:center">ESTADO</div>
           </div>
           <div id="cc-list"></div>
-          <div class="btn-row" style="margin-top:18px"><button class="btn bg bxl" onclick="guardarCocConteo()">💾 &nbsp;Guardar Conteo</button></div>
+          <div class="btn-row" style="margin-top:18px"><button class="btn bg bxl" onclick="guardarCocConteoParcial()">💾 &nbsp;Guardar mi parte del Conteo</button></div>
+          <div id="cc-al" class="al hidden" style="margin-top:12px"></div>
         </div>
       </div>
 
@@ -922,21 +932,46 @@ function guardarProd(){
   toast(`${porciones.length} preparaciones guardadas`,'tok');
 }
 
+// ── COCINA · CONTEO (separado por ubicación, dispositivos distintos) ────────
+let ubicConteo = ''; // 'cocina' | 'bodega' — elegido al entrar a la pantalla
+
+function setUbicConteo(u){
+  ubicConteo = u;
+  document.getElementById('cc-ob-cocina').classList.toggle('on', u==='cocina');
+  document.getElementById('cc-ob-bodega').classList.toggle('on', u==='bodega');
+  document.getElementById('cc-fecha-card').classList.remove('hidden');
+  document.getElementById('cc-tabla-card').classList.add('hidden');
+  document.getElementById('cc-col-label').textContent = u==='cocina' ? 'COCINA' : 'BODEGA';
+  document.getElementById('cc-tabla-hd').textContent = u==='cocina'
+    ? '🗂 Stock por preparación · Contando en COCINA'
+    : '🗂 Stock por preparación · Contando en BODEGA';
+  setAl('cc-al', null);
+}
+
 function loadCocConteo(){
+  if(!ubicConteo){toast('Elige primero dónde vas a contar','terr');return;}
   const f=document.getElementById('cc-fecha').value;if(!f){toast('Selecciona fecha','terr');return;}
   document.getElementById('cc-list').innerHTML=ALL_PREPS_FLAT.map((p,i)=>`
-    <div style="display:grid;grid-template-columns:1fr 120px 120px 90px;gap:7px;padding:7px 0;border-bottom:1px solid rgba(201,168,76,.05);align-items:center">
+    <div style="display:grid;grid-template-columns:1fr 120px 90px;gap:7px;padding:7px 0;border-bottom:1px solid rgba(201,168,76,.05);align-items:center">
       <div style="font-size:12px;color:var(--txm)">${p}</div>
-      <input type="number" id="ccc-${i}" min="0" placeholder="0" style="background:var(--d3);border:1px solid rgba(201,168,76,.13);border-radius:10px;padding:9px;font-size:17px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcCocConteoRow(${i})">
-      <input type="number" id="ccb-${i}" min="0" placeholder="0" style="background:var(--d3);border:1px solid rgba(201,168,76,.13);border-radius:10px;padding:9px;font-size:17px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%" oninput="calcCocConteoRow(${i})">
-      <div id="cct-${i}" style="background:rgba(201,168,76,.08);border:1px solid var(--br);border-radius:10px;padding:9px;text-align:center;font-size:17px;font-weight:700;color:var(--gold)">—</div>
+      <input type="number" id="ccu-${i}" min="0" placeholder="0" style="background:var(--d3);border:1px solid rgba(201,168,76,.13);border-radius:10px;padding:9px;font-size:17px;font-weight:600;color:var(--tx);text-align:center;outline:none;width:100%">
+      <div style="font-size:10px;color:var(--txd);text-align:center">pendiente</div>
     </div>`).join('');
+  document.getElementById('cc-tabla-card').classList.remove('hidden');
 }
-function calcCocConteoRow(i){const c=parseInt(document.getElementById('ccc-'+i)?.value)||0;const b=parseInt(document.getElementById('ccb-'+i)?.value)||0;const el=document.getElementById('cct-'+i);if(el)el.textContent=c+b;}
-function guardarCocConteo(){
+
+function guardarCocConteoParcial(){
+  if(!ubicConteo){toast('Elige primero dónde vas a contar','terr');return;}
   const f=document.getElementById('cc-fecha').value;if(!f){toast('Selecciona fecha','terr');return;}
-  const conteos=[];ALL_PREPS_FLAT.forEach((p,i)=>{const c=parseInt(document.getElementById('ccc-'+i)?.value)||0;const b=parseInt(document.getElementById('ccb-'+i)?.value)||0;if(c||b)conteos.push({ingrediente:p,cocina:c,bodega:b});});
-  callScript('guardarCocConteo',{fecha:f,conteos});toast(`Conteo cocina · ${conteos.length} preparaciones`,'tok');
+  const conteos=[];
+  ALL_PREPS_FLAT.forEach((p,i)=>{
+    const c=parseInt(document.getElementById('ccu-'+i)?.value)||0;
+    if(c>0)conteos.push({ingrediente:p,cantidad:c});
+  });
+  if(!conteos.length){toast('Ingresa al menos una cantidad','terr');return;}
+  callScript('guardarConteoParcial',{fecha:f, ubicacion:ubicConteo, conteos, usuario:USER});
+  setAl('cc-al',`✅ Tu parte (${ubicConteo === 'cocina' ? 'Cocina' : 'Bodega'}) fue enviada · ${conteos.length} preparaciones. El sistema combinará esto con la otra ubicación automáticamente.`,'aok');
+  toast(`Conteo ${ubicConteo} enviado · ${conteos.length} preparaciones`,'tok');
 }
 
 const DIAS=['Lun','Mar','Mié','Jue','Vie','Sáb'];
