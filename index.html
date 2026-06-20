@@ -884,12 +884,17 @@ function guardarCocIngreso(){
   let kgProd,mer,limp,bod=0,kgDeBodega=0;
   if(origenActual==='prov'){const tot=parseFloat(document.getElementById('cp-tot').value)||0;bod=parseFloat(document.getElementById('cp-bod').value)||0;mer=parseFloat(document.getElementById('cp-mer').value)||0;kgProd=Math.max(0,tot-bod);limp=Math.max(0,kgProd-mer);if(!DB.bodega[ins])DB.bodega[ins]={kg:0};DB.bodega[ins].kg+=bod;}
   else{kgDeBodega=parseFloat(document.getElementById('cb-prod').value)||0;mer=parseFloat(document.getElementById('cb-mer').value)||0;kgProd=kgDeBodega;limp=Math.max(0,kgProd-mer);if(DB.bodega[ins])DB.bodega[ins].kg=Math.max(0,DB.bodega[ins].kg-kgProd);}
-  if(kgProd<=0){toast('Ingresa los KG','terr');return;}
+  if(origenActual==='prov'){
+    const totChk=parseFloat(document.getElementById('cp-tot').value)||0;
+    if(totChk<=0){toast('Ingresa los KG totales recibidos','terr');return;}
+  } else {
+    if(kgProd<=0){toast('Ingresa los KG desde bodega','terr');return;}
+  }
   const pct=kgProd>0?mer/kgProd:0;
   DB.cocIngresos.push({fecha,ins,origen:origenActual,kgProd,mer,limp,pct});renderCocLog();
   origCoc='';['ob-prov','ob-bod'].forEach(id=>document.getElementById(id).classList.remove('on'));['blq-prov','blq-bod','blq-save'].forEach(id=>document.getElementById(id).classList.add('hidden'));['cp-tot','cp-bod','cp-mer','cb-prod','cb-mer'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('ci-ins').value='';setAl('ci-al',null);
   callScript('guardarCocIngreso',{fecha,insumo:ins,origen:origenActual==='prov'?'proveedor':'bodega',kgTotal:origenActual==='prov'?kgProd+bod:kgDeBodega,kgBodega:origenActual==='prov'?bod:0,kgDeBodega:origenActual==='bod'?kgDeBodega:0,merma:mer,kgLimpio:limp,proveedor:document.getElementById('ci-prov')?.value||'',usuario:USER});
-  toast(`${ins} · ${fKg(limp)} kg limpios`,'tok');
+  toast(kgProd>0?`${ins} · ${fKg(limp)} kg limpios`:`${ins} · ${fKg(bod||kgDeBodega)} kg enviados a bodega`,'tok');
 }
 function renderCocLog(){
   const f=document.getElementById('ci-fecha').value||new Date().toISOString().split('T')[0];
