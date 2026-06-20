@@ -357,30 +357,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
             <div class="ob" id="ob-bod" onclick="setOrig('bod')"><span class="oi">🏪</span><span class="ol">Desde Bodega</span><span class="os" id="ob-bod-stock">Ver stock →</span></div>
           </div>
           <div id="blq-prov" class="hidden">
-            <div class="card-hd" style="margin-top:4px">③ Cantidades</div>
-            <div class="fg c3">
-              <div class="f"><label>KG Ingresados</label><input type="number" id="cp-tot" min="0" step=".1" placeholder="0.0" oninput="calcCocProv()"></div>
-              <div class="f"><label>KG → Bodega</label><input type="number" id="cp-bod" min="0" step=".1" placeholder="0.0" oninput="calcCocProv()"></div>
-              <div class="f"><label>KG → Producción</label><div class="rb"><span class="rl2">Automático</span><span class="rv" id="cp-prod">—</span><span class="ru">ingresados − bodega</span></div></div>
-            </div>
+            <div class="card-hd" style="margin-top:4px">③ Cantidad recibida</div>
+            <div class="al ai" style="margin-bottom:14px">📦 Todo lo que llega del proveedor entra primero a <strong>Bodega</strong>. Cuando se necesite para cocinar, se retira desde la pestaña <strong>Desde Bodega</strong>.</div>
             <div class="fg c2">
-              <div class="f"><label>Merma (KG)</label><input type="number" id="cp-mer" min="0" step=".1" placeholder="0.0" oninput="calcCocProv()"></div>
-              <div class="f"><label>✅ KG Limpio</label><div class="rb" style="border-color:var(--gold)"><span class="rl2">Para producción</span><span class="rv" id="cp-limp" style="font-size:30px">—</span><span class="ru" id="cp-pct"></span></div></div>
-            </div>
-            <div id="cp-mv" class="hidden">
-              <div class="mv">
-                <div class="mvi"><div class="mvn" id="mv-tot" style="color:var(--txm)">0</div><div class="mvl">Total</div></div>
-                <div class="mva">→</div>
-                <div class="mvi"><div class="mvn" id="mv-bod" style="color:var(--txd)">0</div><div class="mvl">Bodega</div></div>
-                <div class="mva">+</div>
-                <div class="mvi"><div class="mvn" id="mv-mer" style="color:var(--red)">0</div><div class="mvl">Merma</div></div>
-                <div class="mva">→</div>
-                <div class="mvi"><div class="mvn" id="mv-limp" style="color:var(--gold)">0</div><div class="mvl">Limpio</div></div>
-              </div>
+              <div class="f"><label>KG Ingresados a Bodega</label><input type="number" id="cp-bod" min="0" step=".1" placeholder="0.0" oninput="calcCocProv()"></div>
+              <div class="f"><label>✅ Quedará en Bodega</label><div class="rb" style="border-color:var(--gold)"><span class="rl2">Stock proyectado</span><span class="rv" id="cp-resultante" style="font-size:30px">—</span><span class="ru">kg</span></div></div>
             </div>
           </div>
           <div id="blq-bod" class="hidden">
             <div class="al aib" id="bod-info" style="margin-bottom:14px">📦 Stock en bodega: <strong id="bod-kgd">—</strong> kg disponibles</div>
+
             <div class="fg c2">
               <div class="f"><label>KG desde Bodega → Producción</label><input type="number" id="cb-prod" min="0" step=".1" placeholder="0.0" oninput="calcCocBod()"></div>
               <div class="f"><label>Merma (KG)</label><input type="number" id="cb-mer" min="0" step=".1" placeholder="0.0" oninput="calcCocBod()"></div>
@@ -864,11 +850,12 @@ let origCoc='';
 function setOrig(o){origCoc=o;document.getElementById('ob-prov').classList.toggle('on',o==='prov');document.getElementById('ob-bod').classList.toggle('on',o==='bod');document.getElementById('blq-prov').classList.toggle('hidden',o!=='prov');document.getElementById('blq-bod').classList.toggle('hidden',o!=='bod');document.getElementById('blq-save').classList.remove('hidden');setAl('ci-al',null);}
 function chkBodegaStock(){const ins=document.getElementById('ci-ins').value;const s=ins&&DB.bodega[ins]?DB.bodega[ins].kg:0;document.getElementById('ob-bod-stock').textContent=`Stock: ${s.toFixed(1)} kg`;document.getElementById('bod-kgd').textContent=s.toFixed(2);}
 function calcCocProv(){
-  const tot=parseFloat(document.getElementById('cp-tot').value)||0;const bod=parseFloat(document.getElementById('cp-bod').value)||0;const mer=parseFloat(document.getElementById('cp-mer').value)||0;
-  const prod=Math.max(0,tot-bod),limp=Math.max(0,prod-mer),pct=prod>0?mer/prod:0;
-  document.getElementById('cp-prod').textContent=fKg(prod);document.getElementById('cp-limp').textContent=fKg(limp);document.getElementById('cp-pct').textContent=prod>0?`Merma: ${fPct(pct)}`:'';
-  if(tot>0){document.getElementById('cp-mv').classList.remove('hidden');['mv-tot','mv-bod','mv-mer','mv-limp'].forEach((id,i)=>document.getElementById(id).textContent=fKg([tot,bod,mer,limp][i]));}
-  if(pct>0.35)setAl('ci-al',`⚠️ Merma alta: ${fPct(pct)}. ¿Problema con el insumo?`,'aw');else if(limp>0)setAl('ci-al',`✅ ${fKg(limp)} kg listos para producción`,'aok');else setAl('ci-al',null);
+  const ins=document.getElementById('ci-ins').value;
+  const stActual=ins&&DB.bodega[ins]?DB.bodega[ins].kg:0;
+  const bod=parseFloat(document.getElementById('cp-bod').value)||0;
+  const resultante=stActual+bod;
+  document.getElementById('cp-resultante').textContent=fKg(resultante);
+  if(bod>0)setAl('ci-al',`✅ ${fKg(bod)} kg listos para sumar a Bodega`,'aok');else setAl('ci-al',null);
 }
 function calcCocBod(){
   const ins=document.getElementById('ci-ins').value;const st=ins&&DB.bodega[ins]?DB.bodega[ins].kg:0;
@@ -882,19 +869,21 @@ function guardarCocIngreso(){
   if(!fecha||!ins){toast('Completa fecha e insumo','terr');return;}if(!origCoc){toast('Elige el origen','terr');return;}
   const origenActual=origCoc;
   let kgProd,mer,limp,bod=0,kgDeBodega=0;
-  if(origenActual==='prov'){const tot=parseFloat(document.getElementById('cp-tot').value)||0;bod=parseFloat(document.getElementById('cp-bod').value)||0;mer=parseFloat(document.getElementById('cp-mer').value)||0;kgProd=Math.max(0,tot-bod);limp=Math.max(0,kgProd-mer);if(!DB.bodega[ins])DB.bodega[ins]={kg:0};DB.bodega[ins].kg+=bod;}
-  else{kgDeBodega=parseFloat(document.getElementById('cb-prod').value)||0;mer=parseFloat(document.getElementById('cb-mer').value)||0;kgProd=kgDeBodega;limp=Math.max(0,kgProd-mer);if(DB.bodega[ins])DB.bodega[ins].kg=Math.max(0,DB.bodega[ins].kg-kgProd);}
   if(origenActual==='prov'){
-    const totChk=parseFloat(document.getElementById('cp-tot').value)||0;
-    if(totChk<=0){toast('Ingresa los KG totales recibidos','terr');return;}
+    bod=parseFloat(document.getElementById('cp-bod').value)||0;
+    mer=0;kgProd=0;limp=0;
+    if(bod<=0){toast('Ingresa los KG ingresados a bodega','terr');return;}
+    if(!DB.bodega[ins])DB.bodega[ins]={kg:0};DB.bodega[ins].kg+=bod;
   } else {
+    kgDeBodega=parseFloat(document.getElementById('cb-prod').value)||0;mer=parseFloat(document.getElementById('cb-mer').value)||0;kgProd=kgDeBodega;limp=Math.max(0,kgProd-mer);
     if(kgProd<=0){toast('Ingresa los KG desde bodega','terr');return;}
+    if(DB.bodega[ins])DB.bodega[ins].kg=Math.max(0,DB.bodega[ins].kg-kgProd);
   }
   const pct=kgProd>0?mer/kgProd:0;
-  DB.cocIngresos.push({fecha,ins,origen:origenActual,kgProd,mer,limp,pct});renderCocLog();
-  origCoc='';['ob-prov','ob-bod'].forEach(id=>document.getElementById(id).classList.remove('on'));['blq-prov','blq-bod','blq-save'].forEach(id=>document.getElementById(id).classList.add('hidden'));['cp-tot','cp-bod','cp-mer','cb-prod','cb-mer'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('ci-ins').value='';setAl('ci-al',null);
-  callScript('guardarCocIngreso',{fecha,insumo:ins,origen:origenActual==='prov'?'proveedor':'bodega',kgTotal:origenActual==='prov'?kgProd+bod:kgDeBodega,kgBodega:origenActual==='prov'?bod:0,kgDeBodega:origenActual==='bod'?kgDeBodega:0,merma:mer,kgLimpio:limp,proveedor:document.getElementById('ci-prov')?.value||'',usuario:USER});
-  toast(kgProd>0?`${ins} · ${fKg(limp)} kg limpios`:`${ins} · ${fKg(bod||kgDeBodega)} kg enviados a bodega`,'tok');
+  DB.cocIngresos.push({fecha,ins,origen:origenActual,kgProd:origenActual==='prov'?bod:kgProd,mer,limp,pct});renderCocLog();
+  origCoc='';['ob-prov','ob-bod'].forEach(id=>document.getElementById(id).classList.remove('on'));['blq-prov','blq-bod','blq-save'].forEach(id=>document.getElementById(id).classList.add('hidden'));['cp-bod','cb-prod','cb-mer'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});document.getElementById('ci-ins').value='';setAl('ci-al',null);
+  callScript('guardarCocIngreso',{fecha,insumo:ins,origen:origenActual==='prov'?'proveedor':'bodega',kgTotal:origenActual==='prov'?bod:kgDeBodega,kgBodega:origenActual==='prov'?bod:0,kgDeBodega:origenActual==='bod'?kgDeBodega:0,merma:mer,kgLimpio:limp,proveedor:document.getElementById('ci-prov')?.value||'',usuario:USER});
+  toast(origenActual==='prov'?`${ins} · ${fKg(bod)} kg ingresados a bodega`:`${ins} · ${fKg(limp)} kg limpios para producción`,'tok');
 }
 function renderCocLog(){
   const f=document.getElementById('ci-fecha').value||new Date().toISOString().split('T')[0];
